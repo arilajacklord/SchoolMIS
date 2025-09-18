@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('invoices', function (Blueprint $table) {
+            $table->id('invoice_id');
+            $table->unsignedBigInteger('enroll_id');
+            $table->decimal('amount', 10, 2);
+            $table->string('status')->default('unpaid');
+            $table->decimal('insurance', 10, 2)->default(0);
+            $table->decimal('sanitation', 10, 2)->default(0);
+            $table->decimal('balance', 10, 2)->default(0);
+            $table->timestamps();
+
+            // Foreign key constraint
+            $table->foreign('enroll_id')->references('enroll_id')->on('enrollments')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('invoices');
+    }
+};
