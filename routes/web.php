@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\SchoolyearController;
+use App\Http\Controllers\EnrollmentController;
+
+use App\Http\Controllers\RegistrationController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,6 +18,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::resource('subjects', SubjectController::class);
+Route::resource('schoolyears', SchoolyearController::class);
+Route::resource('enrollments', EnrollmentController::class);
+
+
 
 Route::get('/', function () {
     return view('welcome');
