@@ -1,9 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolyearController;
 use App\Http\Controllers\EnrollmentController;
+
+use App\Http\Controllers\RegistrationController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,5 +38,9 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+
+Route::resource('registration', RegistrationController::class);
+
 
 
