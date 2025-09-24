@@ -25,24 +25,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($book as $book)
-                    <tr>
-                        <td>{{ $book->id }}</td>
-                        <td>{{ $book->title }}</td>
-                        <td>{{ $book->author }}</td>
-                        <td>{{ $book->published_year }}</td>
-                        <td>{{ $book->status }}</td>
-                        <td>{{ $book->date_purchased }}</td>
-                        <td>
-                            <a href="{{ route('books.edit', $book->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                            <form action="{{ route('books.destroy', $book->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
+                   @foreach($books as $book)
+    <tr>
+        <td>{{ $book->id }}</td>
+        <td>{{ $book->title }}</td>
+        <td>{{ $book->author }}</td>
+        <td>{{ $book->published_year }}</td>
+        <td>{{ $book->status }}</td>
+        <td>{{ $book->date_purchased }}</td>
+       <td>
+    <form action="{{ route('books.destroy', $book->book_id) }}" method="POST" style="display:inline-block;">    
+    <!-- Edit -->
+    <a href="{{ route('books.edit', $book->book_id) }}" class="btn btn-warning btn-sm">Edit</a>
+
+    <!-- View -->
+    <a href="{{ route('books.show', $book->book_id) }}" class="btn btn-info btn-sm">View</a>
+
+    <!-- Delete -->
+    
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+            Delete
+        </button>
+    </form>
+</td>
+    </tr>
+@endforeach
+
                 </tbody>
             </table>
         </div>
@@ -59,7 +69,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="{{ route('book.store') }}" method="POST">
+       <form method="POST" action="{{ route('books.store') }}">
             @csrf
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
@@ -69,9 +79,9 @@
                 <label for="author" class="form-label">Author</label>
                 <input type="text" class="form-control" id="author" name="author" required>
             </div>
-            <div class="mb-3">
-                <label for="published_year" class="form-label">Published Year</label>
-                <input type="number" class="form-control" id="published_year" name="published_year" required>
+                <div class="mb-3">
+                <label for="date_pub" class="form-label">Date Published</label>
+                <input type="date" class="form-control" id="date_pub" name="date_pub" required>
             </div>
             <div class="mb-3">
                 <label for="status" class="form-label">Status</label>
@@ -91,18 +101,5 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="editBookModal" tabindex="-1" aria-labelledby="editBookModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editBookModalLabel">Edit Book</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body edit-book-form">
-        <!-- Edit form will be loaded here via JavaScript -->   
-        </div>
-    </div>
-    </div>
-    </div>
 </x-app-layout>
 
