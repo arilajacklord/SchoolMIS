@@ -1,13 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
+=======
 
+>>>>>>> 1c56243f0becb70b402b6cea53a4d05ff114701c
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolyearController;
 use App\Http\Controllers\EnrollmentController;
 
+<<<<<<< HEAD
+=======
 use App\Http\Controllers\RegistrationController;
 
+>>>>>>> 1c56243f0becb70b402b6cea53a4d05ff114701c
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,10 +24,6 @@ use App\Http\Controllers\RegistrationController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::resource('subjects', SubjectController::class);
-Route::resource('schoolyears', SchoolyearController::class);
-Route::resource('enrollments', EnrollmentController::class);
 
 
 
@@ -46,10 +48,17 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+Route::resource('subjects', SubjectController::class);
+Route::resource('schoolyears', SchoolyearController::class);
+Route::resource('enrollments', EnrollmentController::class);
 });
+<<<<<<< HEAD
+=======
 
 
 Route::resource('registration', RegistrationController::class);
 
 
 
+>>>>>>> 1c56243f0becb70b402b6cea53a4d05ff114701c

@@ -2,6 +2,15 @@
     <div class="card mt-5">
         <h2 class="card-header">Add New Enrollment</h2>
         <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
                 <a class="btn btn-primary btn-sm" href="{{ route('enrollments.index') }}">
@@ -18,7 +27,7 @@
                     <select name="subject_id" id="subject_id" class="form-select @error('subject_id') is-invalid @enderror">
                         <option value="">-- Select Subject --</option>
                         @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}" {{ old('subject_id') == $subject->id ? 'selected' : '' }}>
+                            <option value="{{ $subject->subject_id }}" {{ old('subject_id') == $subject->subject_id ? 'selected' : '' }}>
                                 {{ $subject->subject_id }} - {{ $subject->descriptive_title }}
                             </option>
                         @endforeach
@@ -50,7 +59,7 @@
                     <select name="user_id" id="user_id" class="form-select @error('user_id') is-invalid @enderror">
                         <option value="">-- Select User --</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                            <option value="{{ $user->id }}" {{ old('id') == $user->id ? 'selected' : '' }}>
                                 {{ $user->name }}
                             </option>
                         @endforeach
