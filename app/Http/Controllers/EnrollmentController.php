@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Http\Requests\EnrollmentStoreRequest;
 use App\Http\Requests\EnrollmentUpdateRequest;
+use Illuminate\Support\Facades\DB;
 
 class EnrollmentController extends Controller
 {
@@ -19,8 +20,15 @@ class EnrollmentController extends Controller
      */
     public function index(): View
     {
-        $enrollments = Enrollment::with(['subject', 'schoolyear', 'user'])->latest()->paginate(10);
-        return view('enrollments.index', compact('enrollments'))
+        $enrollments = "Select * from enrollments e INNER JOIN subjects s on e.subject_id = s.subject_id 
+            INNER JOIN schoolyears sy on e.schoolyear_id = sy.schoolyear_id INNER JOIN users u on e.user_id = u.id";
+        //
+        // $enrollments = Enrollment::with(['subject', 'schoolyear', 'user'])->get();
+        //
+        $result = DB::select($enrollments);
+        $enroll_list = collect($result);
+    //dd($enrollments);
+        return view('enrollments.index', compact('enroll_list'))
             ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 

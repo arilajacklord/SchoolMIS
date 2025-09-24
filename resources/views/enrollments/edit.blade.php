@@ -45,16 +45,16 @@
 
                 {{-- User --}}
                 <div class="mb-3">
-                    <label for="user_id" class="form-label"><strong>User:</strong></label>
-                    <select name="user_id" id="user_id" class="form-select @error('user_id') is-invalid @enderror">
+                    <label for="id" class="form-label"><strong>User:</strong></label>
+                    <select name="id" id="id" class="form-select @error('id') is-invalid @enderror">
                         <option value="">-- Select User --</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ $enrollment->user_id == $user->id ? 'selected' : '' }}>
+                            <option value="{{ $user->id }}" {{ $enrollment->id == $user->id ? 'selected' : '' }}>
                                 {{ $user->name }}
                             </option>
                         @endforeach
                     </select>
-                    @error('user_id')
+                    @error('id')
                         <div class="form-text text-danger">{{ $message }}</div>
                     @enderror
                 </div>

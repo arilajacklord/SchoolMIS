@@ -33,7 +33,7 @@
                                 <td>{{ $schoolyear->semester }}</td>
                                 <td>
                                     <a href="{{ route('schoolyears.edit', $schoolyear->schoolyear_id) }}" class="btn btn-warning btn-sm">
-                                        <i class="fa fa-edit"></i>
+                                        <i class="fa fa-edit">EDIT</i>
                                     </a>
 
                                     <form action="{{ route('schoolyears.destroy', $schoolyear->schoolyear_id) }}" method="POST" class="d-inline"
@@ -41,7 +41,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fa fa-trash"></i>
+                                            <i class="fa fa-trash">DELETE</i>
                                         </button>
                                     </form>
                                 </td>
