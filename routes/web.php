@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\SchoolyearController;
-use App\Http\Controllers\EnrollmentController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,5 +32,3 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
-
-

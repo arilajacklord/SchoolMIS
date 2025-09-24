@@ -1,14 +1,16 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Create Registration') }}
+        </h2>
+    </x-slot>
 
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
-
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 bg-white border-b border-gray-200">
+                <form method="POST" action="{{ route('registration.store') }}">
+                    @csrf
+ 
             {{-- Student Information --}}
             <div class="mt-6 pt-4">
                 <h3 class="font-semibold text-lg mb-2">Student Information</h3>
@@ -173,5 +175,8 @@
                 </x-button>
             </div>
         </form>
-    </x-authentication-card>
-</x-guest-layout>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
+                                  
