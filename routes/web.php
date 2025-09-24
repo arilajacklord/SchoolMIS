@@ -1,10 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1c56243f0becb70b402b6cea53a4d05ff114701c
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolyearController;
 use App\Http\Controllers\EnrollmentController;
 
+<<<<<<< HEAD
+=======
+use App\Http\Controllers\RegistrationController;
+
+>>>>>>> 1c56243f0becb70b402b6cea53a4d05ff114701c
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +30,15 @@ use App\Http\Controllers\EnrollmentController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::resource('books', App\Http\Controllers\bookController::class);
+Route::resource('book', bookController::class);
+Route::get('/book', [bookController::class, 'index'])->name('book.index');
+Route::get('/book/create', [bookController::class, 'create'])->name('book.create');
+Route::post('/book', [bookController::class, 'store'])->name('book.store');
+Route::get('/book/{book}', [bookController::class, 'show'])->name('book.show');
+Route::get('/book/{book}/edit', [bookController::class, 'edit'])->name('book.edit');
+Route::put('/book/{book}', [bookController::class, 'update'])->name('book.update');
+Route::delete('/book/{book}', [bookController::class, 'destroy'])->name('book.destroy');
 
 Route::middleware([
     'auth:sanctum',
@@ -35,3 +53,12 @@ Route::resource('subjects', SubjectController::class);
 Route::resource('schoolyears', SchoolyearController::class);
 Route::resource('enrollments', EnrollmentController::class);
 });
+<<<<<<< HEAD
+=======
+
+
+Route::resource('registration', RegistrationController::class);
+
+
+
+>>>>>>> 1c56243f0becb70b402b6cea53a4d05ff114701c
