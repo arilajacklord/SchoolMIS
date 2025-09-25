@@ -1,182 +1,373 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Registration') }}
-        </h2>
-    </x-slot>
+    
+    <div class="card mt-5">
+       <h2 class="card-header d-flex justify-content-between align-items-center">
+        Student Registration
+        <a href="{{ route('registration.index') }}" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </h2>
+        <div class="card-body">
+            <form id="registrationForm" action="{{ route('registration.store') }}" method="POST">
+                @csrf
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 bg-white border-b border-gray-200">
-                <form method="POST" action="{{ route('registration.store') }}">
-                    @csrf
- 
-            {{-- Student Information --}}
-            <div class="mt-6 pt-4">
-                <h3 class="font-semibold text-lg mb-2">Student Information</h3>
+                {{-- STEP 1 - Student Info --}}
+                <div class="form-step" id="step-1">
+                    <h5 class="mb-3"><i class="fa fa-user-graduate text-primary"></i> Student Information</h5>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <x-label for="name" value="{{ __('Name') }}" />
-                        <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-                    </div>
-
-                    <div>
-                        <x-label for="email" value="{{ __('Email') }}" />
-                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-                    </div>
-
-                    <div>
-                        <x-label for="password" value="{{ __('Password') }}" />
-                        <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-                    </div>
-
-                    <div>
-                        <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                        <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-                    </div>
-
-                    <div>
-                        <x-label for="course_level" value="Course Level" />
-                        <x-input id="course_level" class="block mt-1 w-full" type="text" name="course_level" :value="old('course_level')" required />
-                    </div>
-
-                    <div>
-                        <x-label for="student_address" value="Address" />
-                        <x-input id="student_address" class="block mt-1 w-full" type="text" name="student_address" :value="old('student_address')" required />
-                    </div>
-
-                    <div>
-                        <x-label for="student_phone" value="Phone" />
-                        <x-input id="student_phone" class="block mt-1 w-full" type="text" name="student_phone" :value="old('student_phone')" required />
-                    </div>
-
-                    <div>
-                        <x-label for="student_status" value="Status" />
-                        <x-input id="student_status" class="block mt-1 w-full" type="text" name="student_status" :value="old('student_status')" required />
-                    </div>
-
-                    <div>
-                        <x-label for="student_citizenship" value="Citizenship" />
-                        <x-input id="student_citizenship" class="block mt-1 w-full" type="text" name="student_citizenship" :value="old('student_citizenship')" required />
-                    </div>
-
-                    <div>
-                        <x-label for="student_birthdate" value="Birthdate" />
-                        <x-input id="student_birthdate" class="block mt-1 w-full" type="date" name="student_birthdate" :value="old('student_birthdate')" required />
-                    </div>
-
-                    <div>
-                        <x-label for="student_religion" value="Religion" />
-                        <x-input id="student_religion" class="block mt-1 w-full" type="text" name="student_religion" :value="old('student_religion')" />
-                    </div>
-
-                    <div>
-                        <x-label for="student_age" value="Age" />
-                        <x-input id="student_age" class="block mt-1 w-full" type="number" min="0" name="student_age" :value="old('student_age')" />
-                    </div>
-                </div>
-            </div>
-
-            {{-- Father Information --}}
-            <div class="mt-6 pt-4 border-t">
-                <h3 class="font-semibold text-lg mb-2">Father Information</h3>
-
-                <div class="grid grid-cols-3 gap-4">
-                    <x-input placeholder="First Name" name="father_Fname" :value="old('father_Fname')" />
-                    <x-input placeholder="Middle Name" name="father_Mname" :value="old('father_Mname')" />
-                    <x-input placeholder="Last Name" name="father_Lname" :value="old('father_Lname')" />
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mt-4">
-                    <div>
-                        <x-label for="father_address" value="Address" />
-                        <x-input id="father_address" class="block mt-1 w-full" type="text" name="father_address" :value="old('father_address')" />
-                    </div>
-
-                    <div>
-                        <x-label for="father_cell_no" value="Cell No." />
-                        <x-input id="father_cell_no" class="block mt-1 w-full" type="text" name="father_cell_no" :value="old('father_cell_no')" />
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-4 mt-4">
-                    <x-input placeholder="Age" type="number" min="0" name="father_age" :value="old('father_age')" />
-                    <x-input placeholder="Religion" name="father_religion" :value="old('father_religion')" />
-                    <x-input placeholder="Birthdate" type="date" name="father_birthdate" :value="old('father_birthdate')" />
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mt-4">
-                    <x-input placeholder="Profession" name="father_profession" :value="old('father_profession')" />
-                    <x-input placeholder="Occupation" name="father_occupation" :value="old('father_occupation')" />
-                </div>
-            </div>
-
-            {{-- Mother Information --}}
-            <div class="mt-6 pt-4 border-t">
-                <h3 class="font-semibold text-lg mb-2">Mother Information</h3>
-
-                <div class="grid grid-cols-3 gap-4">
-                    <x-input placeholder="First Name" name="mother_Fname" :value="old('mother_Fname')" />
-                    <x-input placeholder="Middle Name" name="mother_Mname" :value="old('mother_Mname')" />
-                    <x-input placeholder="Last Name" name="mother_Lname" :value="old('mother_Lname')" />
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mt-4">
-                    <div>
-                        <x-label for="mother_address" value="Address" />
-                        <x-input id="mother_address" class="block mt-1 w-full" type="text" name="mother_address" :value="old('mother_address')" />
-                    </div>
-
-                    <div>
-                        <x-label for="mother_cell_no" value="Cell No." />
-                        <x-input id="mother_cell_no" class="block mt-1 w-full" type="text" name="mother_cell_no" :value="old('mother_cell_no')" />
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-4 mt-4">
-                    <x-input placeholder="Age" type="number" min="0" name="mother_age" :value="old('mother_age')" />
-                    <x-input placeholder="Religion" name="mother_religion" :value="old('mother_religion')" />
-                    <x-input placeholder="Birthdate" type="date" name="mother_birthdate" :value="old('mother_birthdate')" />
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mt-4">
-                    <x-input placeholder="Profession" name="mother_profession" :value="old('mother_profession')" />
-                    <x-input placeholder="Occupation" name="mother_occupation" :value="old('mother_occupation')" />
-                </div>
-            </div>
-
-            {{-- Terms and Policies --}}
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <div class="mt-4">
-                    <x-label for="terms">
-                        <div class="flex items-center">
-                            <x-checkbox name="terms" id="terms" required />
-
-                            <div class="ms-2">
-                                {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Terms of Service').'</a>',
-                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Privacy Policy').'</a>',
-                                ]) !!}
-                            </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label><strong>Full Name</strong></label>
+                            <input type="text" name="student_name" class="form-control"
+                                value="{{ old('student_name') }}" required>
                         </div>
-                    </x-label>
+                        <div class="col-md-6">
+                            <label><strong>Email</strong></label>
+                            <input type="email" name="email" class="form-control"
+                                value="{{ old('email') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label><strong>Password</strong></label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Confirm Password</strong></label>
+                            <input type="password" name="password_confirmation" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label><strong>Course Level</strong></label>
+                            <input type="text" name="course_level" class="form-control"
+                                value="{{ old('course_level') }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Address</strong></label>
+                            <input type="text" name="student_address" class="form-control"
+                                value="{{ old('student_address') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label><strong>Phone Number</strong></label>
+                            <input type="text" name="student_phone_num" class="form-control"
+                                value="{{ old('student_phone_num') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Status</strong></label>
+                            <input type="text" name="student_status" class="form-control"
+                                value="{{ old('student_status') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Citizenship</strong></label>
+                            <input type="text" name="student_citizenship" class="form-control"
+                                value="{{ old('student_citizenship') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label><strong>Birthdate</strong></label>
+                            <input type="date" name="student_birthdate" class="form-control"
+                                value="{{ old('student_birthdate') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Religion</strong></label>
+                            <input type="text" name="student_religion" class="form-control"
+                                value="{{ old('student_religion') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Age</strong></label>
+                            <input type="number" name="student_age" class="form-control"
+                                value="{{ old('student_age') }}" min="0">
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-primary next-step">Next</button>
+                    </div>
                 </div>
-            @endif
 
-            {{-- Submit --}}
-            <div class="flex items-center justify-end mt-6">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
+                {{-- STEP 2 - Father Info --}}
+                <div class="form-step d-none" id="step-2">
+                    <h5 class="mb-3"><i class="fas fa-male text-success"></i> Father Information</h5>
 
-                <x-button class="ms-4">
-                    {{ __('Register') }}
-                </x-button>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label><strong>First Name</strong></label>
+                            <input type="text" name="father_Fname" class="form-control"
+                                value="{{ old('father_Fname') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Middle Name</strong></label>
+                            <input type="text" name="father_Mname" class="form-control"
+                                value="{{ old('father_Mname') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Last Name</strong></label>
+                            <input type="text" name="father_Lname" class="form-control"
+                                value="{{ old('father_Lname') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label><strong>Address</strong></label>
+                            <input type="text" name="father_address" class="form-control"
+                                value="{{ old('father_address') }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Cell No.</strong></label>
+                            <input type="text" name="father_cell_no" class="form-control"
+                                value="{{ old('father_cell_no') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label><strong>Age</strong></label>
+                            <input type="number" name="father_age" class="form-control"
+                                value="{{ old('father_age') }}" min="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Religion</strong></label>
+                            <input type="text" name="father_religion" class="form-control"
+                                value="{{ old('father_religion') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Birthdate</strong></label>
+                            <input type="date" name="father_birthdate" class="form-control"
+                                value="{{ old('father_birthdate') }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label><strong>Profession</strong></label>
+                            <input type="text" name="father_profession" class="form-control"
+                                value="{{ old('father_profession') }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Occupation</strong></label>
+                            <input type="text" name="father_occupation" class="form-control"
+                                value="{{ old('father_occupation') }}">
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <button type="button" class="btn btn-secondary prev-step">Back</button>
+                        <button type="button" class="btn btn-primary next-step">Next</button>
+                    </div>
+                </div>
+
+                {{-- STEP 3 - Mother Info --}}
+                <div class="form-step d-none" id="step-3">
+                    <h5 class="mb-3"><i class="fas fa-female text-pink-600"></i> Mother Information</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label><strong>First Name</strong></label>
+                            <input type="text" name="mother_Fname" class="form-control"
+                                value="{{ old('mother_Fname') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Middle Name</strong></label>
+                            <input type="text" name="mother_Mname" class="form-control"
+                                value="{{ old('mother_Mname') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Last Name</strong></label>
+                            <input type="text" name="mother_Lname" class="form-control"
+                                value="{{ old('mother_Lname') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label><strong>Address</strong></label>
+                            <input type="text" name="mother_address" class="form-control"
+                                value="{{ old('mother_address') }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Cell No.</strong></label>
+                            <input type="text" name="mother_cell_no" class="form-control"
+                                value="{{ old('mother_cell_no') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label><strong>Age</strong></label>
+                            <input type="number" name="mother_age" class="form-control"
+                                value="{{ old('mother_age') }}" min="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Religion</strong></label>
+                            <input type="text" name="mother_religion" class="form-control"
+                                value="{{ old('mother_religion') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Birthdate</strong></label>
+                            <input type="date" name="mother_birthdate" class="form-control"
+                                value="{{ old('mother_birthdate') }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label><strong>Profession</strong></label>
+                            <input type="text" name="mother_profession" class="form-control"
+                                value="{{ old('mother_profession') }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Occupation</strong></label>
+                            <input type="text" name="mother_occupation" class="form-control"
+                                value="{{ old('mother_occupation') }}">
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <button type="button" class="btn btn-secondary prev-step">Back</button>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+   {{-- Modal Popup for Validation Warning --}}
+<div class="modal fade" id="validationModal" tabindex="-1" aria-labelledby="validationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </form>
+           <div class="modal-body">
+    <div class="mb-3">
+        <i class="fa fa-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+    </div>
+    <h5 class="fw-bold text-danger">Please fill out all required fields</h5>
+    <p class="text-muted">Some fields are missing. Kindly complete them before proceeding.</p>
+</div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Go Back</button>
             </div>
         </div>
     </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const steps = document.querySelectorAll(".form-step");
+        const nextBtns = document.querySelectorAll(".next-step");
+        const prevBtns = document.querySelectorAll(".prev-step");
+        let currentStep = 0;
+
+        const validationModal = new bootstrap.Modal(document.getElementById('validationModal'));
+
+        function showStep(step) {
+            steps.forEach((s, i) => {
+                s.classList.toggle("d-none", i !== step);
+            });
+        }
+
+        function validateStep(step) {
+            const inputs = steps[step].querySelectorAll("input[required]");
+            for (let input of inputs) {
+                if (!input.value.trim()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        nextBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (validateStep(currentStep)) {
+                    if (currentStep < steps.length - 1) {
+                        currentStep++;
+                        showStep(currentStep);
+                    }
+                } else {
+                    validationModal.show();
+                }
+            });
+        });
+
+        prevBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        showStep(currentStep);
+    });
+</script>
+
+    {{-- Step Navigation Script --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const steps = document.querySelectorAll(".form-step");
+            const nextBtns = document.querySelectorAll(".next-step");
+            const prevBtns = document.querySelectorAll(".prev-step");
+            const form = document.getElementById("registrationForm");
+            const toastEl = document.getElementById("formToast");
+            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            let currentStep = 0;
+
+            function showStep(step) {
+                steps.forEach((s, i) => {
+                    s.classList.toggle("d-none", i !== step);
+                });
+            }
+
+            function validateStep(step) {
+                const inputs = steps[step].querySelectorAll("input[required]");
+                for (let input of inputs) {
+                    if (!input.value.trim()) {
+                        toast.show();
+                        input.focus();
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            nextBtns.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    if (validateStep(currentStep)) {
+                        if (currentStep < steps.length - 1) {
+                            currentStep++;
+                            showStep(currentStep);
+                        }
+                    }
+                });
+            });
+
+            prevBtns.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    if (currentStep > 0) {
+                        currentStep--;
+                        showStep(currentStep);
+                    }
+                });
+            });
+
+            form.addEventListener("submit", function (e) {
+                if (!validateStep(currentStep)) {
+                    e.preventDefault();
+                }
+            });
+
+            showStep(currentStep);
+        });
+    </script>
 </x-app-layout>
-                                  

@@ -17,7 +17,7 @@ class Registration extends Model
         'student_name',
         'course_level',
         'student_address',
-        'student_phone',
+        'student_phone_num',
         'student_status',
         'student_citizenship',
         'student_birthdate',
@@ -44,4 +44,11 @@ class Registration extends Model
         'mother_profession',
         'mother_occupation',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
+
+
