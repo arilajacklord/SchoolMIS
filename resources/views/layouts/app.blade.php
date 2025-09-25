@@ -129,7 +129,7 @@
                         </a>
                         <ul id="ddmenu_4" class="collapse dropdown-nav">
                             <li>
-                                <a href="#"> Sample Page </a>
+                                <a href="{{route('invoices.index')}}"> invoice  </a>
                             </li>
                             <li>
                                 <a href="#"> Sample Page </a>
@@ -271,6 +271,7 @@
             <!-- ========== section start ========== -->
             <section class="section">
                 <div class="container-fluid">
+                    {{$slot}}
                     <!-- ========== title-wrapper start ========== -->
                     <!-- ... dashboard content unchanged ... -->
                     <!-- You can replace the dashboard content with @yield('content') if you want to use Blade sections -->
@@ -305,7 +306,11 @@
                 </div>
                 <!-- end container -->
             </footer>
+
+            
+
             {{$slot}}
+
             <!-- ========== footer end =========== -->
             
         </main>
