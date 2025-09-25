@@ -307,7 +307,7 @@
             </footer>
             {{$slot}}
             <!-- ========== footer end =========== -->
-             {{$slot}}
+            
         </main>
         <!-- ======== main-wrapper end =========== -->
 

@@ -13,12 +13,11 @@ class Books extends Model
     protected $primaryKey = 'book_id';
 
 
-    protected $fillable = [
-
-        'author',
-        'title',
-        'date_pub',
-        'status',
-        'date_purchased	',
-    ];
+protected $fillable = [
+    'title',
+    'author',
+    'date_pub',
+    'status',
+    'date_purchased',
+];
 }

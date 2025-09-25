@@ -34,13 +34,25 @@ class BookController extends Controller
      */
    public function store(Request $request)
 {
+    $date= $request->input('date_purchased');
+    $date_purchased = date('Y-m-d', strtotime($date));
+    if ($date_purchased > date('Y-m-d')) {
+        return redirect()->back()->withErrors(['date_purchased' => 'The date purchased cannot
+    be in the future.'])->withInput();
+    }
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'author' => 'required|string|max:255',
+        'date_pub' => 'required|date',
+        'status' => 'required|string',
+        'date_purchased' => 'required|date',
+    ]);
 
-    // create record
-    Books::create($request->all());
+    Books::create($validated);
 
-    // redirect back with success message
-    return redirect()->route('books.index')->with('success', 'Book added successfully!');
+    return redirect()->route('books.index')->with('success', 'Book added successfully.');
 }
+
 
     /**
      * Display the specified resource.
@@ -62,17 +74,26 @@ public function edit($book_id)
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Books $books)
-    {
-        $books->update($request->validated());
-      return redirect()->route('books.index')->with('success', 'Book updated successfully.');
+    public function update(Request $request, $id)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'author' => 'required|string|max:255',
+        'date_pub' => 'required|date',
+        'status' => 'required|string',
+        'date_purchased' => 'required|date',
+    ]);
 
-    }
+    $book = Books::findOrFail($id);
+    $book->update($validated);
+
+    return redirect()->route('books.index')->with('success', 'Book updated successfully.');
+}
 
     /**
      * Remove the specified resource from storage.
      */
-   public function destroy(Books $book)
+   public function destroy(Books $books)
 {
     $books->delete();
 
