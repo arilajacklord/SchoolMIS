@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class bookUpdateRequest extends FormRequest
+class BookUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,11 @@ class bookUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'publisher' => 'nullable|string|max:255',
-            'year_published' => 'nullable|integer|min:0',
-            'isbn' => 'nullable|string|max:13|unique:books,isbn,' . $this->book?->id,
-            'genre' => 'nullable|string|max:100',
-            'description' => 'nullable|string',
+           'author' => 'required|string|max:255',
+        'title' => 'required|string|max:255',
+        'date_pub' => 'required|date',
+        'status' => 'required|string|max:100',
+        'date_purchased	' => 'required|date',
         ];
     }
 }
