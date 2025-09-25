@@ -156,7 +156,7 @@
                         </a>
                         <ul id="ddmenu_5" class="collapse dropdown-nav">
                             <li>
-                                <a href="#"> Sample Page</a>
+                                <a href="{{route('books.index')}}"> Book</a>
                             </li>
                             <li>
                                 <a href="#"> Sample Page </a>
@@ -305,8 +305,9 @@
                 </div>
                 <!-- end container -->
             </footer>
+            {{$slot}}
             <!-- ========== footer end =========== -->
-             {{$slot}}
+            
         </main>
         <!-- ======== main-wrapper end =========== -->
 
