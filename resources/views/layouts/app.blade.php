@@ -69,11 +69,15 @@
                             <span class="text">Enrollment</span>
                         </a>
                         <ul id="ddmenu_2" class="collapse dropdown-nav">
+
                             <li>
-                                <a href="#"> Sample Page </a>
+                               <a href="{{ route('enrollments.index') }}"> Enrollments </a>
                             </li>
                             <li>
-                                <a href="#"> Sample Page </a>
+                                 <a href="{{ route('subjects.index') }}"> Subject </a>
+                            </li>
+                            <li>
+                               <a href="{{ route('schoolyears.index') }}"> Schoolyear </a>
                             </li>
                         </ul>
                     </li>
@@ -303,6 +307,7 @@
             </footer>
             {{$slot}}
             <!-- ========== footer end =========== -->
+             {{$slot}}
         </main>
         <!-- ======== main-wrapper end =========== -->
 

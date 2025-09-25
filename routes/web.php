@@ -1,15 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolyearController;
 
 
 use App\Http\Controllers\EnrollmentController;
-use App\Http\Controllers\RegistrationController;
 
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\RegistrationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +19,6 @@ use App\Http\Controllers\BookController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::resource('subjects', SubjectController::class);
-Route::resource('schoolyears', SchoolyearController::class);
-Route::resource('enrollments', EnrollmentController::class);
 
 
 
@@ -43,15 +37,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-
-    Route::resource('registration', RegistrationController::class);
-     Route::resource('books', BookController::class);   
 });
 
 
-
-
+Route::resource('registration', RegistrationController::class);
 
 
 

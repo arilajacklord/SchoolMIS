@@ -40,11 +40,11 @@
         </dl>
 
         <div class="mt-4">
-            <a href="{{ route('subjects.edit', $subject->id) }}" class="btn btn-warning btn-sm">
+            <a href="{{ route('subjects.edit', $subject->subject_id) }}" class="btn btn-warning btn-sm">
                 <i class="fa fa-edit"></i> Edit
             </a>
 
-            <form action="{{ route('subjects.destroy', $subject->id) }}" method="POST" class="d-inline"
+            <form action="{{ route('subjects.destroy', $subject->subject_id) }}" method="POST" class="d-inline"
                 onsubmit="return confirm('Are you sure you want to delete this subject?');">
                 @csrf
                 @method('DELETE')
