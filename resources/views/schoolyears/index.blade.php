@@ -32,6 +32,11 @@
                                 <td>{{ $schoolyear->schoolyear }}</td>
                                 <td>{{ $schoolyear->semester }}</td>
                                 <td>
+
+                                <a href="{{ route('schoolyears.show', $schoolyear->schoolyear_id) }}" class="btn btn-info btn-sm">
+                                        <i class="fa fa-eye"></i> View
+                                    </a>
+                                    
                                     <a href="{{ route('schoolyears.edit', $schoolyear->schoolyear_id) }}" class="btn btn-warning btn-sm">
                                         <i class="fa fa-edit">EDIT</i>
                                     </a>

@@ -2,7 +2,7 @@
 
 <div class="card mt-5">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h2>Subjects List</h2>
+        <h2>Course List</h2>
         <a href="{{ route('subjects.create') }}" class="btn btn-success btn-sm">
             <i class="fa fa-plus"></i> Add Subject
         </a>
@@ -19,7 +19,7 @@
                     <tr>
                         <th>#</th>
                         <th>Subject ID</th>
-                        <th>Course Code</th>
+                        <th>Subject Code</th>
                         <th>Title</th>
                         <th>Lecture Units</th>
                         <th>Lab Units</th>
@@ -42,15 +42,23 @@
                             <td>{{ $subject->co_requisite }}</td>
                             <td>{{ $subject->pre_requisite }}</td>
                             <td>
-                                <a href="{{ route('subjects.edit', $subject->subject_id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fa fa-edit">EDIT</i>
+
+                             {{-- View Button --}}
+                                <a href="{{ route('subjects.show', $subject->subject_id) }}" class="btn btn-info btn-sm" title="View">
+                                    <i class="fa fa-eye">View</i>
                                 </a>
-                                <form action="{{ route('subjects.destroy', $subject->subject_id) }}" method="POST" class="d-inline"
-                                    onsubmit="return confirm('Are you sure you want to delete this subject?');">
+
+                                {{-- Edit Button --}}
+                                <a href="{{ route('subjects.edit', $subject->subject_id) }}" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-edit">Edit</i> 
+                                </a>
+
+                                {{-- Delete Form --}}
+                                <form action="{{ route('subjects.destroy', $subject->subject_id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this subject?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fa fa-trash">DELETE</i>
+                                        <i class="fa fa-trash">Delete</i> 
                                     </button>
                                 </form>
                             </td>
