@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/materialdesignicons.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/fullcalendar.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
+        
     </head>
     <body>
         <!-- ======== Preloader =========== -->
@@ -309,7 +310,7 @@
 
             
 
-            {{$slot}}
+           
 
             <!-- ========== footer end =========== -->
             

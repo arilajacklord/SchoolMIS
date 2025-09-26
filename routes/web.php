@@ -76,6 +76,11 @@ Route::resource('payments', PaymentController::class);
 // Print Payment
 Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
     ->name('payments.print');    
-});
 
 Route::resource('registration', RegistrationController::class);
+
+
+
+// SUBJECT MODAL ROUTE
+use App\Http\Controllers\SubjectModalController;
+Route::resource('/subjectmodals', SubjectModalController::class);
