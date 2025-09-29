@@ -7,6 +7,7 @@ use App\Http\Controllers\SchoolyearController;
 use App\Http\Controllers\EnrollmentController;
 
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\GradeController;
 
 /*
 |--------------------------------------------------------------------------
