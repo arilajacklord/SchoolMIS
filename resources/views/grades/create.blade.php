@@ -3,16 +3,16 @@
 @section('content')
 <div class="container">
     <h2>Add Grade</h2>
-    <form method="POST" action="{{ route('grades.store') }}">
+
+    <form action="{{ route('grades.store') }}" method="POST">
         @csrf
 
         <div class="mb-3">
-            <label>Enrollment</label>
+            <label for="enroll_id" class="form-label">Enrollment</label>
             <select name="enroll_id" class="form-control" required>
+                <option value="">-- Select Enrollment --</option>
                 @foreach($enrollments as $enroll)
-                    <option value="{{ $enroll->enroll_id }}">
-                        {{ $enroll->user->fname }} {{ $enroll->user->lname }} - {{ $enroll->subject->course_code }}
-                    </option>
+                    <option value="{{ $enroll->id }}">{{ $enroll->id }}</option>
                 @endforeach
             </select>
         </div>
@@ -37,7 +37,8 @@
             <input type="number" step="0.01" name="final" class="form-control">
         </div>
 
-        <button type="submit" class="btn btn-primary">Save Grade</button>
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{{ route('grades.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

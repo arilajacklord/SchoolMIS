@@ -3,76 +3,174 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grade;
-use App\Models\Subject;
-use App\Models\Schoolyear;
 use App\Models\Enrollment;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class GradeController extends Controller
 {
     /**
-     * Show grade management page
+     * Display a listing of grades.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $subjects = Subject::all();
-        $schoolyears = Schoolyear::all();
-        $students = [];
-
-        if ($request->has('subject_id') && $request->has('schoolyear_id')) {
-            $students = Enrollment::with('student')
-                ->where('subject_id', $request->subject_id)
-                ->where('schoolyear_id', $request->schoolyear_id)
-                ->get()
-                ->pluck('student'); // Get only the student objects
-        }
-
-        return view('grades.index', compact('subjects', 'schoolyears', 'students'));
+        $grades = Grade::with('enrollment.student', 'enrollment.subject')->get();
+        return view('grades.index', compact('grades'));
     }
 
     /**
-     * Store or update grades
+     * Show the form for creating a new grade.
+     */
+    public function create()
+    {
+        $enrollments = Enrollment::with('student', 'subject')->get();
+        return view('grades.create', compact('enrollments'));
+    }
+
+    /**
+     * Store a newly created grade.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,user_id',
-            'subject_id' => 'required|exists:subjects,subject_id',
-            'schoolyear_id' => 'required|exists:schoolyears,schoolyear_id',
-            'prelim' => 'required|numeric|min:0|max:100',
-            'midterm' => 'required|numeric|min:0|max:100',
-            'semifinal' => 'required|numeric|min:0|max:100',
-            'final' => 'required|numeric|min:0|max:100',
+            'enroll_id' => 'required|exists:enrollments,id',
+            'prelim'    => 'nullable|numeric',
+            'midterm'   => 'nullable|numeric',
+            'semifinal' => 'nullable|numeric',
+            'final'     => 'nullable|numeric',
         ]);
 
-        // Check if grade already exists
-        $grade = Grade::where('user_id', $request->user_id)
-            ->where('subject_id', $request->subject_id)
-            ->where('schoolyear_id', $request->schoolyear_id)
-            ->first();
+        Grade::create($request->all());
 
-        if ($grade) {
-            // Update existing grade
-            $grade->update([
-                'prelim' => $request->prelim,
-                'midterm' => $request->midterm,
-                'semifinal' => $request->semifinal,
-                'final' => $request->final,
-            ]);
-        } else {
-            // Create new grade record
-            Grade::create([
-                'user_id' => $request->user_id,
-                'subject_id' => $request->subject_id,
-                'schoolyear_id' => $request->schoolyear_id,
-                'prelim' => $request->prelim,
-                'midterm' => $request->midterm,
-                'semifinal' => $request->semifinal,
-                'final' => $request->final,
-            ]);
-        }
+        return redirect()->route('grades.index')->with('success', 'Grade added successfully.');
+    }
 
-        return redirect()->back()->with('success', 'Grade saved successfully.');
+    /**
+     * Display the specified grade.
+     */
+    public function show(Grade $grade)
+    {
+        $grade->load('enrollment.student', 'enrollment.subject');
+        return view('grades.show', compact('grade'));
+    }
+
+    /**
+     * Show the form for editing the specified grade.
+     */
+    public function edit(Grade $grade)
+    {
+        $enrollments = Enrollment::with('student', 'subject')->get();
+        return view('grades.edit', compact('grade', 'enrollments'));
+    }
+
+    /**
+     * Update the specified grade.
+     */
+    public function update(Request $request, Grade $grade)
+    {
+        $request->validate([
+            'enroll_id' => 'required|exists:enrollments,id',
+            'prelim'    => 'nullable|numeric',
+            'midterm'   => 'nullable|numeric',<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Grade;
+use App\Models\Enrollment;
+use Illuminate\Http\Request;
+
+class GradeController extends Controller
+{
+    /**
+     * Display a listing of grades.
+     */
+    public function index()
+    {
+        $grades = Grade::with('enrollment')->get();
+        return view('grades.index', compact('grades'));
+    }
+
+    /**
+     * Show the form for creating a new grade.
+     */
+    public function create()
+    {
+        $enrollments = Enrollment::all(); // For dropdown
+        return view('grades.create', compact('enrollments'));
+    }
+
+    /**
+     * Store a newly created grade.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'enroll_id' => 'required|exists:enrollments,id',
+            'prelim' => 'nullable|numeric',
+            'midterm' => 'nullable|numeric',
+            'semifinal' => 'nullable|numeric',
+            'final' => 'nullable|numeric',
+        ]);
+
+        Grade::create($request->all());
+
+        return redirect()->route('grades.index')
+                         ->with('success', 'Grade added successfully.');
+    }
+
+    /**
+     * Show the form for editing a grade.
+     */
+    public function edit(Grade $grade)
+    {
+        $enrollments = Enrollment::all();
+        return view('grades.edit', compact('grade', 'enrollments'));
+    }
+
+    /**
+     * Update the specified grade.
+     */
+    public function update(Request $request, Grade $grade)
+    {
+        $request->validate([
+            'enroll_id' => 'required|exists:enrollments,id',
+            'prelim' => 'nullable|numeric',
+            'midterm' => 'nullable|numeric',
+            'semifinal' => 'nullable|numeric',
+            'final' => 'nullable|numeric',
+        ]);
+
+        $grade->update($request->all());
+
+        return redirect()->route('grades.index')
+                         ->with('success', 'Grade updated successfully.');
+    }
+
+    /**
+     * Remove the specified grade.
+     */
+    public function destroy(Grade $grade)
+    {
+        $grade->delete();
+        return redirect()->route('grades.index')
+                         ->with('success', 'Grade deleted successfully.');
+    }
+}
+
+            'semifinal' => 'nullable|numeric',
+            'final'     => 'nullable|numeric',
+        ]);
+
+        $grade->update($request->all());
+
+        return redirect()->route('grades.index')->with('success', 'Grade updated successfully.');
+    }
+
+    /**
+     * Remove the specified grade.
+     */
+    public function destroy(Grade $grade)
+    {
+        $grade->delete();
+        return redirect()->route('grades.index')->with('success', 'Grade deleted successfully.');
     }
 }

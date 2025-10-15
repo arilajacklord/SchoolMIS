@@ -6,11 +6,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Enrollment;
 
 class Subject extends Model
 {
     use HasFactory;
 
+    protected $table="subjects";
     protected $fillable = [
         'subject_id',
         'course_code',
@@ -23,4 +25,12 @@ class Subject extends Model
         
 
     ];
+    protected $primaryKey = 'subject_id';
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'subject_id');
+    }
+    public function user(){
+        
+    }
 }
