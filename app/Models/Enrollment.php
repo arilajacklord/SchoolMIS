@@ -21,7 +21,7 @@ class Enrollment extends Model
     // An enrollment belongs to one subject
     // Enrollment.php
 
-public function user()
+public function student()
 {
     return $this->belongsTo(User::class); // defaults to 'user_id' foreign key
 }
@@ -34,6 +34,11 @@ public function subject()
 public function schoolyear()
 {
     return $this->belongsTo(Schoolyear::class); // defaults to 'schoolyear_id'
+}
+
+public function grade(){
+
+    return $this->belongsTo(Grade::class);
 }
 
 

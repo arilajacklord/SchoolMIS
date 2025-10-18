@@ -8,6 +8,14 @@ use App\Http\Controllers\SchoolyearController;
 use App\Http\Controllers\EnrollmentController;
 
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\GradeController;
+
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentController;
+
+use App\Http\Controllers\BookController;
+
+
 
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
@@ -78,6 +86,26 @@ Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
     ->name('payments.print');    
 
 Route::resource('registration', RegistrationController::class);
+
+Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
+
+
+// Print Invoice
+Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])
+    ->name('invoices.print');
+
+Route::resource('payments', PaymentController::class);
+// Print Payment
+Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
+    ->name('payments.print');    
+
+Route::resource('registration', RegistrationController::class);
+
+
+Route::resource('grades', GradeController::class);
+// Route::get('/grades/{subject_id}/getStudent', [GradeController::class,'getStudent']);
+
+
 
 
 
