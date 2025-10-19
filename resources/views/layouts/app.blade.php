@@ -272,8 +272,6 @@
             <!-- ========== section start ========== -->
             <section class="section">
                 <div class="container-fluid">
-                    @yield('content')
-
                     <!-- ========== title-wrapper start ========== -->
                     <!-- ... dashboard content unchanged ... -->
                     <!-- You can replace the dashboard content with @yield('content') if you want to use Blade sections -->

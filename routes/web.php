@@ -10,13 +10,6 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\GradeController;
 
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\PaymentController;
-
-use App\Http\Controllers\BookController;
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -88,7 +81,3 @@ Route::resource('grades', GradeController::class);
 
 
 
-
-// SUBJECT MODAL ROUTE
-use App\Http\Controllers\SubjectModalController;
-Route::resource('/subjectmodals', SubjectModalController::class);

@@ -8,14 +8,16 @@ use App\Http\Requests\RegistrationStoreRequest;
 use App\Http\Requests\RegistrationUpdateRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Exception;
 
 class RegistrationController extends Controller
 {
     /**
-     * Display a listing of the registrations.
+     * Display a listing of registrations.
      */
-    public function index()
+    public function index(): View
     {
         $registrations = Registration::latest()->get();
         return view('registration.index', compact('registrations'));
@@ -24,7 +26,7 @@ class RegistrationController extends Controller
     /**
      * Show the form for creating a new registration.
      */
-    public function create()
+    public function create(): View
     {
         return view('registration.create');
     }
@@ -32,81 +34,77 @@ class RegistrationController extends Controller
     /**
      * Store a newly created registration in storage.
      */
-    public function store(RegistrationStoreRequest $request)
+    public function store(RegistrationStoreRequest $request): RedirectResponse
     {
-       // dd($request->all());
-      
-            // Step 1: Create User account first
-            try {
-                $user = User::create([
-                    'name'     => $request->student_name,
-                    'email'    => $request->email,
-                    'password' => Hash::make($request->password),
-                ]);
-            } catch (Exception $e) {
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->with('errors', 'Failed to create user: ' . $e->getMessage());
-            }
+        try {
+            // ✅ Step 1: Create User account first
+            $user = User::create([
+                'name'     => $request->student_name,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-            // Step 2: Create Registration record linked to the user
-            try {
-                Registration::create([
-                    'user_id'             => $user->id,
-                    'student_name'        => $request->student_name,
-                    'course_level'        => $request->course_level,
-                    'student_address'     => $request->student_address,
-                    'student_phone_num'   => $request->student_phone_num,
-                    'student_status'      => $request->student_status,
-                    'student_citizenship' => $request->student_citizenship,
-                    'student_birthdate'   => $request->student_birthdate,
-                    'student_religion'    => $request->student_religion,
-                    'student_age'         => $request->student_age,
+            // ✅ Step 2: Create Registration record linked to the user
+            Registration::create([
+                'user_id'             => $user->id,
+                'student_name'        => $request->student_name,
+                'course_level'        => $request->course_level,
+                'student_address'     => $request->student_address,
+                'student_phone_num'   => $request->student_phone_num,
+                'student_status'      => $request->student_status,
+                'student_citizenship' => $request->student_citizenship,
+                'student_birthdate'   => $request->student_birthdate,
+                'student_religion'    => $request->student_religion,
+                'student_age'         => $request->student_age,
 
-                    // Father info
-                    'father_Fname'        => $request->father_Fname,
-                    'father_Mname'        => $request->father_Mname,
-                    'father_Lname'        => $request->father_Lname,
-                    'father_address'      => $request->father_address,
-                    'father_cell_no'      => $request->father_cell_no,
-                    'father_age'          => $request->father_age,
-                    'father_religion'     => $request->father_religion,
-                    'father_birthdate'    => $request->father_birthdate,
-                    'father_profession'   => $request->father_profession,
-                    'father_occupation'   => $request->father_occupation,
+                // Father info
+                'father_Fname'        => $request->father_Fname,
+                'father_Mname'        => $request->father_Mname,
+                'father_Lname'        => $request->father_Lname,
+                'father_address'      => $request->father_address,
+                'father_cell_no'      => $request->father_cell_no,
+                'father_age'          => $request->father_age,
+                'father_religion'     => $request->father_religion,
+                'father_birthdate'    => $request->father_birthdate,
+                'father_profession'   => $request->father_profession,
+                'father_occupation'   => $request->father_occupation,
 
-                    // Mother info
-                    'mother_Fname'        => $request->mother_Fname,
-                    'mother_Mname'        => $request->mother_Mname,
-                    'mother_Lname'        => $request->mother_Lname,
-                    'mother_address'      => $request->mother_address,
-                    'mother_cell_no'      => $request->mother_cell_no,
-                    'mother_age'          => $request->mother_age,
-                    'mother_religion'     => $request->mother_religion,
-                    'mother_birthdate'    => $request->mother_birthdate,
-                    'mother_profession'   => $request->mother_profession,
-                    'mother_occupation'   => $request->mother_occupation,
-                ]);
-            } catch (Exception $e) {
-                // Rollback user if registration fails
-                $user->delete();
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->with('errors', 'Failed to create registration: ' . $e->getMessage());
-            }
-  
+                // Mother info
+                'mother_Fname'        => $request->mother_Fname,
+                'mother_Mname'        => $request->mother_Mname,
+                'mother_Lname'        => $request->mother_Lname,
+                'mother_address'      => $request->mother_address,
+                'mother_cell_no'      => $request->mother_cell_no,
+                'mother_age'          => $request->mother_age,
+                'mother_religion'     => $request->mother_religion,
+                'mother_birthdate'    => $request->mother_birthdate,
+                'mother_profession'   => $request->mother_profession,
+                'mother_occupation'   => $request->mother_occupation,
+            ]);
+
             return redirect()
                 ->route('registration.index')
                 ->with('success', 'Registration created successfully.');
-    
+
+        } catch (Exception $e) {
+            // Rollback user if registration creation fails
+            if (isset($user)) {
+                $user->delete();
+            }
+
+            Log::error('Registration store failed: ' . $e->getMessage());
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Failed to create registration: ' . $e->getMessage());
+        }
     }
 
     /**
      * Display the specified registration.
      */
-    public function show(Registration $registration)
+    public function show(Registration $registration): View
     {
         return view('registration.show', compact('registration'));
     }
@@ -114,22 +112,22 @@ class RegistrationController extends Controller
     /**
      * Show the form for editing the specified registration.
      */
-    public function edit($id)
-{
-    $student = Registration::findOrFail($id); // fetch the student record
-    return view('registration.edit', compact('student'));
-}
+    public function edit($id): View
+    {
+        $student = Registration::findOrFail($id);
+        return view('registration.edit', compact('student'));
+    }
 
     /**
      * Update the specified registration in storage.
      */
-    public function update(RegistrationUpdateRequest $request, Registration $registration)
+    public function update(RegistrationUpdateRequest $request, Registration $registration): RedirectResponse
     {
         try {
-            // Update Registration record
+            // ✅ Update Registration record
             $registration->update($request->only($registration->getFillable()));
 
-            // Update linked User account (keep password if not changed)
+            // ✅ Update linked User account (keep password if not changed)
             if ($registration->user) {
                 $registration->user->update([
                     'name'     => $request->student_name,
@@ -143,6 +141,7 @@ class RegistrationController extends Controller
             return redirect()
                 ->route('registration.index')
                 ->with('success', 'Registration updated successfully.');
+
         } catch (Exception $e) {
             Log::error('Registration update failed: ' . $e->getMessage());
 
@@ -156,10 +155,10 @@ class RegistrationController extends Controller
     /**
      * Remove the specified registration from storage.
      */
-    public function destroy(Registration $registration)
+    public function destroy(Registration $registration): RedirectResponse
     {
         try {
-            // Delete linked user first
+            // ✅ Delete linked user first
             if ($registration->user) {
                 $registration->user->delete();
             }
@@ -169,6 +168,7 @@ class RegistrationController extends Controller
             return redirect()
                 ->route('registration.index')
                 ->with('success', 'Registration deleted successfully.');
+
         } catch (Exception $e) {
             Log::error('Registration delete failed: ' . $e->getMessage());
 

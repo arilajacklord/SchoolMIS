@@ -12,37 +12,46 @@ class Enrollment extends Model
 {
     use HasFactory;
 
+    protected $table = 'enrollments'; // optional, but recommended for consistency
+
+    protected $primaryKey = 'enroll_id'; // adjust if your table uses a custom PK
+
+    public $timestamps = false; // disable if your table doesn’t use created_at/updated_at
+
     protected $fillable = [
         'subject_id',
         'schoolyear_id',
-        'user_id'
+        'user_id',
     ];
 
-    // An enrollment belongs to one subject
-    // Enrollment.php
+    // 🔗 Relationships
 
-public function student()
+    /**
+     * Each enrollment belongs to one user (student)
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function registration()
 {
-    return $this->belongsTo(User::class); // defaults to 'user_id' foreign key
+    return $this->belongsTo(Registration::class, 'user_id', 'id');
 }
 
-public function subject()
-{
-    return $this->belongsTo(Subject::class); // defaults to 'subject_id'
+    /**
+     * Each enrollment belongs to one subject
+     */
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class, 'subject_id', 'subject_id');
+    }
+
+    /**
+     * Each enrollment belongs to one school year
+     */
+    public function schoolyear()
+    {
+        return $this->belongsTo(Schoolyear::class, 'schoolyear_id', 'schoolyear_id');
+    }
 }
-
-public function schoolyear()
-{
-    return $this->belongsTo(Schoolyear::class); // defaults to 'schoolyear_id'
-}
-
-public function grade(){
-
-    return $this->belongsTo(Grade::class);
-}
-
-
-
-
-}
-    
