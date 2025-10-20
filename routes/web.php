@@ -17,12 +17,6 @@ use App\Http\Controllers\BookController;
 
 
 
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\PaymentController;
-
-use App\Http\Controllers\BookController;
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
