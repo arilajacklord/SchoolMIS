@@ -65,7 +65,7 @@ class User extends Authenticatable
     public function registration()
     {
         return $this->hasOne(Registration::class);
-
+    }
   public function enrollments()
     {
         return $this->hasMany(Enrollment::class, 'user_id', 'id');
