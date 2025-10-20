@@ -11,7 +11,6 @@ class PaymentUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-       
         return true;
     }
 
@@ -23,13 +22,10 @@ class PaymentUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-
-            'invoice_id'    => ['required', 'exists:invoices,invoice_id'],
-            'date'          => ['required', 'date'],
-            'total_amount'  => ['required', 'numeric', 'min:0'],
-
-            // Payment type (limit to fixed values if needed, e.g. cash, card, gcash)
-            'paymenttype'   => ['required', 'string', 'max:50'],
+            'invoice_id'   => ['nullable', 'exists:invoices,id'], // optional invoice
+            'date'         => ['required', 'date'],               // will be auto-set if hidden
+            'total_amount' => ['required', 'numeric', 'min:0'],  // editable by user
+            'paymenttype'  => ['required', 'in:cash,card,online'], // editable by user
         ];
     }
 }

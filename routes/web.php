@@ -3,19 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolyearController;
-
-
 use App\Http\Controllers\EnrollmentController;
-
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\GradeController;
-
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
-
 use App\Http\Controllers\BookController;
-
-
+use App\Http\Controllers\SubjectModalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +45,6 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-
     
 Route::resource('enrollments', EnrollmentController::class);
 Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
@@ -60,49 +53,38 @@ Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects.ind
 Route::resource('subjects', SubjectController::class);
 Route::get('/schoolyears', [SchoolYearController::class, 'index'])->name('schoolyears.index');
 
-});
+
+
+
+
+Route::resource('registration', RegistrationController::class);
+Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
+Route::get('/register', function (\Illuminate\Http\Request $request) {
+    // Pass selected type to the view
+    $type = $request->query('type');
+    return view('auth.register', compact('type'));
+})->name('register');
 
 
 Route::resource('invoices', InvoiceController::class);
 
-Route::resource('registration', RegistrationController::class);
+Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
 
-Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
-
-
-// Print Invoice
-Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])
-    ->name('invoices.print');
-
-Route::resource('payments', PaymentController::class);
-// Print Payment
-Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
-    ->name('payments.print');    
-
-Route::resource('registration', RegistrationController::class);
-
-Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
 
 
 // Print Invoice
 Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])
-    ->name('invoices.print');
-
-Route::resource('payments', PaymentController::class);
+        ->name('invoices.print');
 // Print Payment
 Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
     ->name('payments.print');    
-
-Route::resource('registration', RegistrationController::class);
 
 
 Route::resource('grades', GradeController::class);
-// Route::get('/grades/{subject_id}/getStudent', [GradeController::class,'getStudent']);
-
-
-
-
+Route::get('/grades/{subject_id}/getStudent', [GradeController::class,'getStudent']);
 
 // SUBJECT MODAL ROUTE
-use App\Http\Controllers\SubjectModalController;
 Route::resource('/subjectmodals', SubjectModalController::class);
+
+});

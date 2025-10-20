@@ -12,41 +12,47 @@
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <table class="table table-bordered table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>School Year</th>
-                        <th>Semester</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($schoolyears as $schoolyear)
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="table-dark">
                         <tr>
-                            <td>{{ $schoolyear->schoolyear ?? 'N/A' }}</td>
-                            <td>{{ $schoolyear->semester ?? 'N/A' }}</td>
-                            <td>
-                                <a href="{{ route('schoolyears.show', $schoolyear->schoolyear_id) }}" class="btn btn-info btn-sm" title="View">
-                                    <i class="lni lni-eye"></i>
-                                </a>
-                                <a href="{{ route('schoolyears.edit', $schoolyear->schoolyear_id) }}" class="btn btn-warning btn-sm" title="Edit">
-                                    <i class="lni lni-pencil"></i>
-                                </a>
-                                <form action="{{ route('schoolyears.destroy', $schoolyear->schoolyear_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this school year?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete">
-                                        <i class="lni lni-trash-can"></i>
-                                    </button>
-                                </form>
-                            </td>
+                            <th>#</th>
+                            <th>School Year ID</th>
+                            <th>School Year</th>
+                            <th>Semester</th>
+                            <th>Actions</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @forelse($schoolyears as $index => $schoolyear)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $schoolyear->schoolyear_id }}</td>
+                                <td>{{ $schoolyear->schoolyear }}</td>
+                                <td>{{ $schoolyear->semester }}</td>
+                                <td>
+                                    <a href="{{ route('schoolyears.edit', $schoolyear->schoolyear_id) }}" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
 
-            {{-- Pagination if available --}}
-            {{ $schoolyears->links() }}
+                                    <form action="{{ route('schoolyears.destroy', $schoolyear->schoolyear_id) }}" method="POST" class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to delete this school year?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center">No school years found.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </x-app-layout>

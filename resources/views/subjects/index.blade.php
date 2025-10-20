@@ -41,35 +41,17 @@
                             <td>{{ $subject->co_requisite }}</td>
                             <td>{{ $subject->pre_requisite }}</td>
                             <td>
-
-                                {{-- View (modal trigger) --}}
-                                <button 
-                                    class="btn btn-info btn-sm view-btn" 
-                                    data-subject='@json($subject)'
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#subjectModal"
-                                    title="View">
-                                    <i class="lni lni-eye"></i>
-                                </button>
-
-                                {{-- Edit --}}
-                                 <button 
-                                    class="btn btn-primary btn-sm edit-btn" 
-                                    data-subject='@json($subject)'
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#editSubjectModal" 
-                                    title="Edit">
-                                    <i class="lni lni-library"></i>
-                                </button>
-
-                                {{-- Delete --}}
-                                 <form action="{{ route('subjects.destroy', $subject->subject_id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="lni lni-trash-can"></i>
-                                        </button>
-                                    </form>
+                                <a href="{{ route('subjects.edit', $subject->subject_id) }}" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <form action="{{ route('subjects.destroy', $subject->subject_id) }}" method="POST" class="d-inline"
+                                    onsubmit="return confirm('Are you sure you want to delete this subject?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @empty
