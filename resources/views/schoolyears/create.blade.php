@@ -1,19 +1,16 @@
 <x-app-layout>
-
-    <div class="card mt-5">
-        <h2 class="card-header">Add New School Year</h2>
-        <div class="card-body">
-
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a class="btn btn-primary btn-sm" href="{{ route('schoolyears.index') }}">
-                    <i class="fa fa-arrow-left"></i> Back
-                </a>
-            </div>
-
-            <form action="{{ route('schoolyears.store') }}" method="POST">
+    <!-- Modal -->
+    <div class="modal fade" id="addSchoolYearModal" tabindex="-1" aria-labelledby="addSchoolYearModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addSchoolYearModalLabel">Add New School Year</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ route('schoolyears.store') }}" method="POST" id="addSchoolYearForm">
                 @csrf
 
-                {{-- Schoolyear ID --}}
                 <div class="mb-3">
                     <label for="schoolyear_id" class="form-label"><strong>School Year ID:</strong></label>
                     <input
@@ -28,7 +25,6 @@
                     @enderror
                 </div>
 
-                {{-- School Year Dropdown --}}
                 <div class="mb-3">
                     <label for="schoolyear" class="form-label"><strong>School Year:</strong></label>
                     <select
@@ -36,16 +32,17 @@
                         id="schoolyear"
                         class="form-select @error('schoolyear') is-invalid @enderror">
                         <option value="">-- Select School Year --</option>
-                        <option value="2023-2024" {{ old('schoolyear') == '2023-2024' ? 'selected' : '' }}>2023-2024</option>
-                        <option value="2024-2025" {{ old('schoolyear') == '2024-2025' ? 'selected' : '' }}>2024-2025</option>
-                        <option value="2025-2026" {{ old('schoolyear') == '2025-2026' ? 'selected' : '' }}>2025-2026</option>
+                        @foreach(['2023-2024', '2024-2025', '2025-2026'] as $year)
+                            <option value="{{ $year }}" {{ old('schoolyear') == $year ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
+                        @endforeach
                     </select>
                     @error('schoolyear')
                         <div class="form-text text-danger">{{ $message }}</div>
                     @enderror
                 </div>
 
-                {{-- Semester Dropdown --}}
                 <div class="mb-3">
                     <label for="semester" class="form-label"><strong>Semester:</strong></label>
                     <select
@@ -53,9 +50,11 @@
                         id="semester"
                         class="form-select @error('semester') is-invalid @enderror">
                         <option value="">-- Select Semester --</option>
-                        <option value="1st" {{ old('semester') == '1st' ? 'selected' : '' }}>1st Semester</option>
-                        <option value="2nd" {{ old('semester') == '2nd' ? 'selected' : '' }}>2nd Semester</option>
-                        <option value="Summer" {{ old('semester') == 'Summer' ? 'selected' : '' }}>Summer</option>
+                        @foreach(['1st Semester', '2nd Semester', 'Summer'] as $sem)
+                            <option value="{{ $sem }}" {{ old('semester') == $sem ? 'selected' : '' }}>
+                                {{ $sem }}
+                            </option>
+                        @endforeach
                     </select>
                     @error('semester')
                         <div class="form-text text-danger">{{ $message }}</div>
@@ -66,8 +65,17 @@
                     <i class="fa-solid fa-floppy-disk"></i> Submit
                 </button>
             </form>
-
+          </div>
         </div>
+      </div>
     </div>
 
+    {{-- Script to show modal on page load --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modalElement = document.getElementById('addSchoolYearModal');
+            var modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        });
+    </script>
 </x-app-layout>

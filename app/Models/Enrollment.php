@@ -10,6 +10,8 @@ use App\Models\Schoolyear;
 
 class Enrollment extends Model
 {
+
+
     use HasFactory;
 
     protected $primaryKey = 'enroll_id';

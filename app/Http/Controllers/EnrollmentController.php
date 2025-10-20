@@ -59,21 +59,26 @@ class EnrollmentController extends Controller
      * Display the specified enrollment.
      */
     public function show(Enrollment $enrollment): View
-    {
-        return view('enrollments.show', compact('enrollment'));
-    }
+{
+    $enrollment->load(['subject', 'schoolyear', 'user']); // eager load relations
+    return view('enrollments.show', compact('enrollment'));
+}
+
 
     /**
      * Show the form for editing the specified enrollment.
      */
-    public function edit(Enrollment $enrollment): View
-    {
-        $subjects = Subject::all();
-        $schoolyears = Schoolyear::all();
-        $users = User::all();
+   public function edit(Enrollment $enrollment): View
+{
+    $enrollment->load(['subject', 'schoolyear', 'user']); // eager load relations
 
-        return view('enrollments.edit', compact('enrollment', 'subjects', 'schoolyears', 'users'));
-    }
+    $subjects = Subject::all();
+    $schoolyears = Schoolyear::all();
+    $users = User::all();
+
+    return view('enrollments.edit', compact('enrollment', 'subjects', 'schoolyears', 'users'));
+}
+
 
     /**
      * Update the specified enrollment in storage.

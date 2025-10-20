@@ -3,14 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolyearController;
-
-
 use App\Http\Controllers\EnrollmentController;
-
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\GradeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\SubjectModalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,14 +71,20 @@ Route::resource('invoices', InvoiceController::class);
 Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
 Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
 
+
+
 // Print Invoice
 Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])
-    ->name('invoices.print');
-Route::resource('payments', PaymentController::class);
+        ->name('invoices.print');
 // Print Payment
 Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
     ->name('payments.print');    
+
+
+Route::resource('grades', GradeController::class);
+Route::get('/grades/{subject_id}/getStudent', [GradeController::class,'getStudent']);
+
+// SUBJECT MODAL ROUTE
+Route::resource('/subjectmodals', SubjectModalController::class);
+
 });
-
-
-Route::resource('registration', RegistrationController::class);

@@ -67,6 +67,7 @@ class User extends Authenticatable
     public function registration()
     {
         return $this->hasOne(Registration::class);
+
     }
     
     public function enrollments()
@@ -92,3 +93,4 @@ class User extends Authenticatable
         return $this->type === 'student';
     }
 }
+

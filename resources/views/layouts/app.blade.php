@@ -13,10 +13,11 @@
         <link rel="stylesheet" href="{{ asset('assets/css/materialdesignicons.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/fullcalendar.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
+        
     </head>
     <body>
         <!-- ======== Preloader =========== -->
-        <div id="preloader">
+        <div id="preloader">    
             <div class="spinner"></div>
         </div>
         <!-- ======== Preloader =========== -->
@@ -102,7 +103,7 @@
                         </a>
                         <ul id="ddmenu_3" class="collapse dropdown-nav">
                             <li>
-                                <a href="#"> Sample Page </a>
+                                <a href= "{{route('grades.index')}}">grade</a>
                             </li>
                             <li>
                                 <a href="#"> Sample Page </a>
@@ -271,7 +272,10 @@
             <!-- ========== section start ========== -->
             <section class="section">
                 <div class="container-fluid">
+                    @yield('content')
+                    
                     {{$slot}}
+
                     <!-- ========== title-wrapper start ========== -->
                     <!-- ... dashboard content unchanged ... -->
                     <!-- You can replace the dashboard content with @yield('content') if you want to use Blade sections -->
@@ -287,9 +291,9 @@
                         <div class="col-md-6 order-last order-md-first">
                             <div class="copyright text-center text-md-start">
                                 <p class="text-sm">
-                                    Designed and Developed by
+                                    Designed and Developed by 
                                     <a href="https://plainadmin.com" rel="nofollow" target="_blank">
-                                        PlainAdmin
+                                       Andrew Cutie. 
                                     </a>
                                 </p>
                             </div>
@@ -306,6 +310,7 @@
                 </div>
                 <!-- end container -->
             </footer>
+            
             <!-- ========== footer end =========== -->
             
         </main>

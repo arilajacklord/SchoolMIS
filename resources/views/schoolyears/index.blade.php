@@ -1,8 +1,7 @@
 <x-app-layout>
-
     <div class="card mt-5">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h2>School Years</h2>
+            <h2>School Year List</h2>
             <a href="{{ route('schoolyears.create') }}" class="btn btn-success btn-sm">
                 <i class="fa fa-plus"></i> Add School Year
             </a>
@@ -33,7 +32,7 @@
                                 <td>{{ $schoolyear->semester }}</td>
                                 <td>
                                     <a href="{{ route('schoolyears.edit', $schoolyear->schoolyear_id) }}" class="btn btn-warning btn-sm">
-                                        <i class="fa fa-edit">EDIT</i>
+                                        <i class="fa fa-edit"></i>
                                     </a>
 
                                     <form action="{{ route('schoolyears.destroy', $schoolyear->schoolyear_id) }}" method="POST" class="d-inline"
@@ -41,7 +40,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fa fa-trash">DELETE</i>
+                                            <i class="fa fa-trash"></i>
                                         </button>
                                     </form>
                                 </td>
@@ -56,5 +55,4 @@
             </div>
         </div>
     </div>
-
 </x-app-layout>
