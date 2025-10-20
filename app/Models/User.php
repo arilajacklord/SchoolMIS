@@ -60,36 +60,13 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    /**
-     * Relationships
-     */
     public function registration()
     {
         return $this->hasOne(Registration::class);
-
     }
-    
+
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class, 'user_id', 'id');
     }
-
-    /**
-     * Role Helpers
-     */
-    public function isAdmin(): bool
-    {
-        return $this->type === 'admin';
-    }
-
-    public function isTeacher(): bool
-    {
-        return $this->type === 'teacher';
-    }
-
-    public function isStudent(): bool
-    {
-        return $this->type === 'student';
-    }
 }
-

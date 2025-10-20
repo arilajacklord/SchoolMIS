@@ -20,15 +20,26 @@ class EnrollmentController extends Controller
      */
     public function index(): View
     {
-        $enrollments = "Select * from enrollments e INNER JOIN subjects s on e.subject_id = s.subject_id 
-            INNER JOIN schoolyears sy on e.schoolyear_id = sy.schoolyear_id INNER JOIN users u on e.user_id = u.id";
-        //
-        // $enrollments = Enrollment::with(['subject', 'schoolyear', 'user'])->get();
-        //
+        // Raw SQL to fetch enrollments joined with related tables
+        $enrollments = "SELECT 
+            e.enroll_id, e.subject_id, e.schoolyear_id, e.user_id, 
+            s.descriptive_title, 
+            CONCAT(sy.schoolyear, ' - ', sy.semester) as schoolyear, 
+            u.name 
+        FROM enrollments e 
+        INNER JOIN subjects s ON e.subject_id = s.subject_id 
+        INNER JOIN schoolyears sy ON e.schoolyear_id = sy.schoolyear_id 
+        INNER JOIN users u ON e.user_id = u.id";
+
         $result = DB::select($enrollments);
         $enroll_list = collect($result);
-    //dd($enrollments);
-        return view('enrollments.index', compact('enroll_list'))
+
+        // Fetch data for dropdowns/forms
+        $subjects = Subject::all();
+        $schoolyears = Schoolyear::all();
+        $users = User::all();
+
+        return view('enrollments.index', compact('enroll_list', 'subjects', 'schoolyears', 'users'))
             ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
@@ -59,26 +70,24 @@ class EnrollmentController extends Controller
      * Display the specified enrollment.
      */
     public function show(Enrollment $enrollment): View
-{
-    $enrollment->load(['subject', 'schoolyear', 'user']); // eager load relations
-    return view('enrollments.show', compact('enrollment'));
-}
-
+    {
+        $enrollment->load(['subject', 'schoolyear', 'user']); // eager load relations
+        return view('enrollments.show', compact('enrollment'));
+    }
 
     /**
      * Show the form for editing the specified enrollment.
      */
-   public function edit(Enrollment $enrollment): View
-{
-    $enrollment->load(['subject', 'schoolyear', 'user']); // eager load relations
+    public function edit(Enrollment $enrollment): View
+    {
+        $enrollment->load(['subject', 'schoolyear', 'user']); // eager load relations
 
-    $subjects = Subject::all();
-    $schoolyears = Schoolyear::all();
-    $users = User::all();
+        $subjects = Subject::all();
+        $schoolyears = Schoolyear::all();
+        $users = User::all();
 
-    return view('enrollments.edit', compact('enrollment', 'subjects', 'schoolyears', 'users'));
-}
-
+        return view('enrollments.edit', compact('enrollment', 'subjects', 'schoolyears', 'users'));
+    }
 
     /**
      * Update the specified enrollment in storage.
@@ -100,5 +109,26 @@ class EnrollmentController extends Controller
 
         return redirect()->route('enrollments.index')
                         ->with('success', 'Enrollment deleted successfully');
+    }
+
+    // Return JSON for editing modal
+    public function apiEdit($id)
+    {
+        $enrollment = Enrollment::findOrFail($id);
+        return response()->json($enrollment);
+    }
+
+    // Return JSON for viewing modal (fixed to include related data)
+    public function apiShow($id)
+    {
+        $enrollment = Enrollment::with(['subject', 'schoolyear', 'user'])->findOrFail($id);
+
+        return response()->json([
+            'enroll_id' => $enrollment->enroll_id,
+            'subject' => $enrollment->subject->descriptive_title ?? 'N/A',
+            'schoolyear' => $enrollment->schoolyear->schoolyear ?? 'N/A',
+            'semester' => $enrollment->schoolyear->semester ?? 'N/A',
+            'user' => $enrollment->user->name ?? 'N/A',
+        ]);
     }
 }

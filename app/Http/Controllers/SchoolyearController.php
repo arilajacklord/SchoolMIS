@@ -4,56 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Models\Schoolyear;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Requests\SchoolyearStoreRequest;
-use App\Http\Requests\SchoolyearUpdateRequest;
 
 class SchoolyearController extends Controller
 {
+    // Show paginated list of school years
     public function index(): View
     {
         $schoolyears = Schoolyear::latest()->paginate(5);
 
         return view('schoolyears.index', compact('schoolyears'))
-               ->with('i', (request()->input('page', 1) - 1) * 5);
+            ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-    public function create(): View
+    // Store new school year
+    public function store(Request $request): RedirectResponse
     {
-        return view('schoolyears.create');
-    }
+        $validated = $request->validate([
+            'schoolyear' => 'required|string|max:20',
+            'semester' => 'required|string|in:1st Semester,2nd Semester,Summer',
+        ]);
 
-    public function store(SchoolyearStoreRequest $request): RedirectResponse
-    {
-        Schoolyear::create($request->validated());
+        Schoolyear::create($validated);
 
         return redirect()->route('schoolyears.index')
-                         ->with('success', 'Schoolyear created successfully.');
+            ->with('success', 'School Year created successfully.');
     }
 
-    public function show(Schoolyear $schoolyear): View
+    // Update school year
+    public function update(Request $request, Schoolyear $schoolyear): RedirectResponse
     {
-        return view('schoolyears.show', compact('schoolyear'));
-    }
+        $validated = $request->validate([
+            'schoolyear' => 'required|string|max:20',
+            'semester' => 'required|string|in:1st Semester,2nd Semester,Summer',
+        ]);
 
-    public function edit(Schoolyear $schoolyear): View
-    {
-        return view('schoolyears.edit', compact('schoolyear'));
-    }
-
-    public function update(SchoolyearUpdateRequest $request, Schoolyear $schoolyear): RedirectResponse
-    {
-        $schoolyear->update($request->validated());
+        $schoolyear->update($validated);
 
         return redirect()->route('schoolyears.index')
-                         ->with('success', 'Schoolyear updated successfully');
+            ->with('success', 'School Year updated successfully.');
     }
 
+    // Delete school year
     public function destroy(Schoolyear $schoolyear): RedirectResponse
     {
         $schoolyear->delete();
 
         return redirect()->route('schoolyears.index')
-                         ->with('success', 'Schoolyear deleted successfully');
+            ->with('success', 'School Year deleted successfully.');
+    }
+
+    // API method to show school year JSON data (for modal View)
+    public function apiShow($id)
+    {
+        $schoolyear = Schoolyear::findOrFail($id);
+        return response()->json($schoolyear);
+    }
+
+    // API method to show school year JSON data (for modal Edit)
+    public function apiEdit($id)
+    {
+        return $this->apiShow($id);
     }
 }
