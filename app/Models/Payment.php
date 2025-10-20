@@ -9,8 +9,16 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id'; // default is "id", change if you use "payment_id"
+    // Correct primary key
+    protected $primaryKey = 'payment_id';
 
+    // If your primary key is auto-incrementing (default is true)
+    public $incrementing = true;
+
+    // If your primary key type is integer (default is 'int')
+    protected $keyType = 'int';
+
+    // Mass assignable fields
     protected $fillable = [
         'invoice_id',
         'date',

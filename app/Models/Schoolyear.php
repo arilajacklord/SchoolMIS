@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Enrollment;
 
 class Schoolyear extends Model
 {
@@ -15,4 +16,9 @@ class Schoolyear extends Model
          'semester',
 
     ];
+    protected $primaryKey = 'schoolyear_id';
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'schoolyear_id', 'schoolyear_id');
+    }
 }

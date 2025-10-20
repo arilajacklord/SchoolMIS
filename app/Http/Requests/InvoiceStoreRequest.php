@@ -26,16 +26,17 @@ class InvoiceStoreRequest extends FormRequest
             'invoice_id' => ['nullable', 'integer'],  
 
             // Foreign key validation  
-            'enroll_id' => ['required', 'exists:enrollments,enrollment_id'],  
+            'enroll_id' => ['required', 'exists:enrollments,enroll_id'],  
 
             // Required fields  
             'amount' => ['required', 'numeric', 'min:0'],  
-            'status' => ['required', 'in:paid,unpaid,overdue'],  
-            'due_date' => ['required', 'date'],  
+            'status' => ['nullable', 'in:paid,unpaid,overdue'],  
+             
 
             // Optional extra charges  
             'insurance' => ['nullable', 'numeric', 'min:0'],  
-            'sanitation' => ['nullable', 'numeric', 'min:0'],  
+            'sanitation' => ['nullable', 'numeric', 'min:0'], 
+            'scholarship' => ['nullable', 'numeric', 'min:0'], 
 
             // Computed / remaining balance  
             'balance' => ['nullable', 'numeric', 'min:0'],  
