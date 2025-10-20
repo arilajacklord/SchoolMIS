@@ -9,7 +9,6 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Enrollment;
-use App\Models\Registration;
 
 class User extends Authenticatable
 {
