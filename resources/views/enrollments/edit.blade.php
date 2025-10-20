@@ -1,29 +1,20 @@
 <x-app-layout>
-    <div class="card mt-5">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h2>Edit Enrollment</h2>
-            <!-- Removed the button since modal will open automatically -->
-        </div>
-
-        <div class="card-body">
-            {{-- You can place any content here if needed --}}
-        </div>
-    </div>
-
-    <!-- Edit Enrollment Modal (always open on page load) -->
-    <div class="modal fade show d-block" id="editEnrollmentModal" tabindex="-1" aria-labelledby="editEnrollmentModalLabel" aria-modal="true" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+    <!-- Modal shown directly on page load -->
+    <div class="modal fade show d-block" id="editEnrollmentModal" tabindex="-1" aria-labelledby="editEnrollmentModalLabel" aria-modal="true" role="dialog" style="background-color: rgba(0, 0, 0, 0.5);">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('enrollments.update', $enrollment->enroll_id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Enrollment</h5>
+                    <a href="{{ route('enrollments.index') }}" class="btn-close" aria-label="Close"></a>
+                </div>
 
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editEnrollmentModalLabel">Edit Enrollment</h5>
-                        <a href="{{ route('enrollments.index') }}" class="btn-close" aria-label="Close"></a>
-                    </div>
+                <!-- Body with form -->
+                <div class="modal-body">
+                    <form action="{{ route('enrollments.update', $enrollment->enroll_id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
 
-                    <div class="modal-body">
                         {{-- Subject --}}
                         <div class="mb-3">
                             <label for="subject_id" class="form-label"><strong>Subject:</strong></label>
@@ -71,19 +62,24 @@
                                 <div class="form-text text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
-                        <a href="{{ route('enrollments.index') }}" class="btn btn-secondary">
-                            Cancel
-                        </a>
-                        <button type="submit" class="btn btn-success">
-                            <i class="fa fa-save"></i> Update
-                        </button>
-                    </div>
-
-                </form>
+                        <!-- Footer -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ route('enrollments.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fa fa-save"></i> Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Prevent background scroll -->
+    <style>
+        body {
+            overflow: hidden;
+        }
+    </style>
 </x-app-layout>

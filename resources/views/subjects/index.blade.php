@@ -1,5 +1,4 @@
 <x-app-layout>
-
 <div class="card mt-5">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h2>Course List</h2>
@@ -43,24 +42,34 @@
                             <td>{{ $subject->pre_requisite }}</td>
                             <td>
 
-                             {{-- View Button --}}
-                                <a href="{{ route('subjects.show', $subject->subject_id) }}" class="btn btn-info btn-sm" title="View">
-                                    <i class="fa fa-eye">View</i>
-                                </a>
+                                {{-- View (modal trigger) --}}
+                                <button 
+                                    class="btn btn-info btn-sm view-btn" 
+                                    data-subject='@json($subject)'
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#subjectModal"
+                                    title="View">
+                                    <i class="lni lni-eye"></i>
+                                </button>
 
-                                {{-- Edit Button --}}
-                                <a href="{{ route('subjects.edit', $subject->subject_id) }}" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-edit">Edit</i> 
-                                </a>
+                                {{-- Edit --}}
+                                 <button 
+                                    class="btn btn-primary btn-sm edit-btn" 
+                                    data-subject='@json($subject)'
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editSubjectModal" 
+                                    title="Edit">
+                                    <i class="lni lni-library"></i>
+                                </button>
 
-                                {{-- Delete Form --}}
-                                <form action="{{ route('subjects.destroy', $subject->subject_id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this subject?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fa fa-trash">Delete</i> 
-                                    </button>
-                                </form>
+                                {{-- Delete --}}
+                                 <form action="{{ route('subjects.destroy', $subject->subject_id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="lni lni-trash-can"></i>
+                                        </button>
+                                    </form>
                             </td>
                         </tr>
                     @empty
@@ -73,5 +82,53 @@
         </div>
     </div>
 </div>
+
+{{-- Subject Detail Modal --}}
+<div class="modal fade" id="subjectModal" tabindex="-1" aria-labelledby="subjectModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="subjectModalLabel">Subject Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+            <tr><th>Subject ID</th><td id="modal-subject-id"></td></tr>
+            <tr><th>Subject Code</th><td id="modal-course-code"></td></tr>
+            <tr><th>Title</th><td id="modal-title"></td></tr>
+            <tr><th>Lecture Units</th><td id="modal-led-units"></td></tr>
+            <tr><th>Lab Units</th><td id="modal-lab-units"></td></tr>
+            <tr><th>Total Units</th><td id="modal-total-units"></td></tr>
+            <tr><th>Co-Requisite</th><td id="modal-co-requisite"></td></tr>
+            <tr><th>Pre-Requisite</th><td id="modal-pre-requisite"></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- JavaScript to populate modal --}}
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewButtons = document.querySelectorAll('.view-btn');
+
+        viewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const subject = JSON.parse(button.getAttribute('data-subject'));
+
+                document.getElementById('modal-subject-id').textContent = subject.subject_id ?? 'N/A';
+                document.getElementById('modal-course-code').textContent = subject.course_code ?? 'N/A';
+                document.getElementById('modal-title').textContent = subject.descriptive_title ?? 'N/A';
+                document.getElementById('modal-led-units').textContent = subject.led_units ?? '0';
+                document.getElementById('modal-lab-units').textContent = subject.lab_units ?? '0';
+                document.getElementById('modal-total-units').textContent = subject.total_units ?? '0';
+                document.getElementById('modal-co-requisite').textContent = subject.co_requisite ?? 'None';
+                document.getElementById('modal-pre-requisite').textContent = subject.pre_requisite ?? 'None';
+            });
+        });
+    });
+</script>
+@endpush
 
 </x-app-layout>

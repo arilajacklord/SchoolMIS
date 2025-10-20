@@ -1,33 +1,16 @@
 <x-app-layout>
- <div class="card mt-5">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h2>Add New Enrollment</h2>
-        <a href="{{ route('enrollments.index') }}" class="btn btn-secondary btn-sm">
-            <i class="fa fa-arrow-left"></i> Back
-        </a>
-    </div>
-
-    <!-- Modal: Add New Enrollment - shown on page load -->
-    <div class="modal fade show d-block"
-         id="addEnrollmentModal"
-         tabindex="-1"
-         aria-labelledby="addEnrollmentModalLabel"
-         aria-modal="true"
-         role="dialog"
-         style="background-color: rgba(0,0,0,0.5);"
-    >
+    <!-- Auto-open Modal on Page Load -->
+    <div class="modal fade show d-block" id="addEnrollmentModal" tabindex="-1" aria-labelledby="addEnrollmentModalLabel" aria-modal="true" role="dialog" style="background-color: rgba(0, 0, 0, 0.5);">
         <div class="modal-dialog">
             <div class="modal-content">
-
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h5 class="modal-title" id="addEnrollmentModalLabel">Add New Enrollment</h5>
-                    <a href="{{ route('enrollments.index') }}" class="btn-close" aria-label="Close"></a>
+                    <a href="{{ route('enrollments.index') }}" class="btn-close"></a>
                 </div>
 
-                <!-- Modal Body -->
+                <!-- Modal Body with Form -->
                 <div class="modal-body">
-
                     <!-- Validation Errors -->
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -39,7 +22,6 @@
                         </div>
                     @endif
 
-                    <!-- Form -->
                     <form action="{{ route('enrollments.store') }}" method="POST" id="addEnrollmentForm">
                         @csrf
 
@@ -91,21 +73,24 @@
                             @enderror
                         </div>
 
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ route('enrollments.index') }}" class="btn btn-secondary btn-sm">
+                                <i class="fa fa-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fa fa-floppy-disk"></i> Submit
+                            </button>
+                        </div>
                     </form>
                 </div>
-
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <a href="{{ route('enrollments.index') }}" class="btn btn-secondary btn-sm">
-                        <i class="fa fa-arrow-left"></i> Back
-                    </a>
-                    <button type="submit" form="addEnrollmentForm" class="btn btn-success">
-                        <i class="fa fa-floppy-disk"></i> Submit
-                    </button>
-                </div>
-
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Prevent background scrolling -->
+    <style>
+        body {
+            overflow: hidden;
+        }
+    </style>
 </x-app-layout>
