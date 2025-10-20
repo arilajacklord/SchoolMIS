@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Subject;
+use App\Models\Course;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,11 +17,12 @@ class SubjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-   public function index()
+  public function index()
 {
-    $subjects = Subject::all(); // or paginate, or whatever you need
+    $subjects = Subject::all();
     return view('subjects.index', compact('subjects'));
 }
+
 
 
     /**
@@ -29,8 +31,10 @@ class SubjectController extends Controller
     public function create()
 {
     $subjects = Subject::all(); 
+    $courses = Course::all();
 
-    return view('subjects.create', compact('subjects'));
+
+    return view('subjects.create', compact('courses'));
    
 }
 
@@ -58,9 +62,15 @@ class SubjectController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Subject $subject): View
-    {
-        return view('subjects.edit',compact('subject'));
-    }
+{
+    $courses = Course::all();
+    $subjects = Subject::all(); 
+
+    return view('subjects.edit', compact('subject', 'courses', 'subjects'));
+}
+
+
+
 
     /**
      * Update the specified resource in storage.
@@ -68,17 +78,10 @@ class SubjectController extends Controller
     public function update(SubjectUpdateRequest $request, Subject $subject): RedirectResponse
     {
        // var_dump("dfghjkl.;");
-       if($request->validated()){
-        echo "failed";
-       }
-       else{
-        echo "success";
-       }
-
         $subject->update($request->validated());
 
         return redirect()->route('subjects.index')
-                        ->with('success','Product updated successfully');
+                         ->with('success', 'Subject updated successfully');
     }
 
     /**

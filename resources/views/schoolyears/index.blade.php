@@ -1,8 +1,7 @@
 <x-app-layout>
-
     <div class="card mt-5">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h2>School Years</h2>
+            <h2>School Year List</h2>
             <a href="{{ route('schoolyears.create') }}" class="btn btn-success btn-sm">
                 <i class="fa fa-plus"></i> Add School Year
             </a>
@@ -13,48 +12,41 @@
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped table-hover">
-                    <thead class="table-dark">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>School Year</th>
+                        <th>Semester</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($schoolyears as $schoolyear)
                         <tr>
-                            <th>#</th>
-                            <th>School Year ID</th>
-                            <th>School Year</th>
-                            <th>Semester</th>
-                            <th>Actions</th>
+                            <td>{{ $schoolyear->schoolyear ?? 'N/A' }}</td>
+                            <td>{{ $schoolyear->semester ?? 'N/A' }}</td>
+                            <td>
+                                <a href="{{ route('schoolyears.show', $schoolyear->schoolyear_id) }}" class="btn btn-info btn-sm" title="View">
+                                    <i class="lni lni-eye"></i>
+                                </a>
+                                <a href="{{ route('schoolyears.edit', $schoolyear->schoolyear_id) }}" class="btn btn-warning btn-sm" title="Edit">
+                                    <i class="lni lni-pencil"></i>
+                                </a>
+                                <form action="{{ route('schoolyears.destroy', $schoolyear->schoolyear_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this school year?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                        <i class="lni lni-trash-can"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($schoolyears as $index => $schoolyear)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $schoolyear->schoolyear_id }}</td>
-                                <td>{{ $schoolyear->schoolyear }}</td>
-                                <td>{{ $schoolyear->semester }}</td>
-                                <td>
-                                    <a href="{{ route('schoolyears.edit', $schoolyear->schoolyear_id) }}" class="btn btn-warning btn-sm">
-                                        <i class="fa fa-edit">EDIT</i>
-                                    </a>
+                    @endforeach
+                </tbody>
+            </table>
 
-                                    <form action="{{ route('schoolyears.destroy', $schoolyear->schoolyear_id) }}" method="POST" class="d-inline"
-                                          onsubmit="return confirm('Are you sure you want to delete this school year?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fa fa-trash">DELETE</i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center">No school years found.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+            {{-- Pagination if available --}}
+            {{ $schoolyears->links() }}
         </div>
     </div>
-
 </x-app-layout>

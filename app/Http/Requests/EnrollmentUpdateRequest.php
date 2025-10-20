@@ -24,7 +24,7 @@ class EnrollmentUpdateRequest extends FormRequest
         return [
              'subject_id' => ['required', 'exists:subjects,subject_id'],
         'schoolyear_id' => ['required', 'exists:schoolyears,schoolyear_id'],
-        'user_id' => ['required', 'exists:users,user_id'],
+        'user_id' => ['required', 'exists:users,id'],
         ];
     }
 }
