@@ -12,32 +12,7 @@ use App\Http\Requests\SubjectUpdateRequest;
 
 class SubjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-   public function index()
-{
-    $subjects = Subject::all(); // or paginate, or whatever you need
-    return view('subjects.index', compact('subjects'));
-}
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-{
-    $subjects = Subject::all(); 
-
-    return view('subjects.create', compact('subjects'));
-   
-}
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(SubjectStoreRequest $request): RedirectResponse
+    public function index()
     {
         Subject::create($request->validated());
 
@@ -53,39 +28,46 @@ class SubjectController extends Controller
         return view('subjects.show', compact('subject'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Subject $subject): View
+    public function store(Request $request)
     {
-        return view('subjects.edit',compact('subject'));
+        $data = $request->validate([
+            'course_code' => 'required|string|max:255',
+            'descriptive_title' => 'required|string|max:255',
+            'led_units' => 'required|integer|min:0',
+            'lab_units' => 'required|integer|min:0',
+            'total_units' => 'required|integer|min:0',
+            'pre_requisite' => 'nullable|string|max:255',
+            'co_requisite' => 'nullable|string|max:255',
+        ]);
+
+        if ($request->subject_id) {
+            $subject = Subject::findOrFail($request->subject_id);
+            $subject->update($data);
+            return redirect()->route('subjects.index')->with('success', 'Subject updated!');
+        } else {
+            Subject::create($data);
+            return redirect()->route('subjects.index')->with('success', 'Subject added!');
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Fix: Laravel expects an update method for PUT/PATCH.
+     * Delegate update call to existing store() method.
      */
-    public function update(SubjectUpdateRequest $request, Subject $subject): RedirectResponse
+    public function update(Request $request, $id)
     {
-       // var_dump("dfghjkl.;");
-       if($request->validated()){
-        echo "failed";
-       }
-       else{
-        echo "success";
-       }
+        // Inject the subject_id into the request so store() knows it's an update
+        $request->merge(['subject_id' => $id]);
 
-        $subject->update($request->validated());
-
-        return redirect()->route('subjects.index')
-                        ->with('success','Product updated successfully');
+        // Call the store method which handles both create & update
+        return $this->store($request);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Subject $subject): RedirectResponse
+    public function destroy(Subject $subject)
     {
         $subject->delete();
+        return redirect()->route('subjects.index')->with('success', 'Subject deleted!');
+    }
 
         return redirect()->route('subjects.index')
                          ->with('success', 'Subject deleted successfully.');

@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Schoolyear;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Requests\SchoolyearStoreRequest;
-use App\Http\Requests\SchoolyearUpdateRequest;
 
 class SchoolyearController extends Controller
 {
@@ -18,7 +17,7 @@ class SchoolyearController extends Controller
         $schoolyears = Schoolyear::orderBy('schoolyear_id', 'desc')->paginate(5);
 
         return view('schoolyears.index', compact('schoolyears'))
-               ->with('i', (request()->input('page', 1) - 1) * 5);
+            ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -26,8 +25,10 @@ class SchoolyearController extends Controller
      */
     public function create(): View
     {
-        return view('schoolyears.create');
-    }
+        $validated = $request->validate([
+            'schoolyear' => 'required|string|max:20',
+            'semester' => 'required|string|in:1st Semester,2nd Semester,Summer',
+        ]);
 
     /**
      * Store a newly created resource in storage.
@@ -37,7 +38,7 @@ class SchoolyearController extends Controller
         Schoolyear::create($request->validated());
 
         return redirect()->route('schoolyears.index')
-                         ->with('success', 'Schoolyear created successfully.');
+            ->with('success', 'School Year created successfully.');
     }
 
     /**
@@ -45,8 +46,10 @@ class SchoolyearController extends Controller
      */
     public function show(Schoolyear $schoolyear): View
     {
-        return view('schoolyears.show', compact('schoolyear'));
-    }
+        $validated = $request->validate([
+            'schoolyear' => 'required|string|max:20',
+            'semester' => 'required|string|in:1st Semester,2nd Semester,Summer',
+        ]);
 
     /**
      * Show the form for editing the specified resource.

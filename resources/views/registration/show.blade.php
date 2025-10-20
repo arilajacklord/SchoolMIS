@@ -1,11 +1,11 @@
 <x-app-layout>
     <div class="card mt-5">
         <h2 class="card-header d-flex justify-content-between align-items-center">
-            View Student
+            Student Information
             {{-- Back button on top right --}}
-            <a href="{{ route('registration.index') }}" class="btn btn-secondary btn-sm">
+            <!-- <a href="{{ route('registration.index') }}" class="btn btn-secondary btn-sm">
                 <i class="fas fa-arrow-left"></i> Back to List
-            </a>
+            </a> -->
         </h2>
 
         <div class="card-body">

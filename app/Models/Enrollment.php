@@ -11,6 +11,8 @@ use App\Models\Grade;
 
 class Enrollment extends Model
 {
+
+
     use HasFactory;
 
     protected $table = 'enrollments';

@@ -95,4 +95,25 @@ class EnrollmentController extends Controller
 
         return redirect()->route('enrollments.index')->with('success', 'Enrollment deleted successfully.');
     }
+
+    // Return JSON for editing modal
+    public function apiEdit($id)
+    {
+        $enrollment = Enrollment::findOrFail($id);
+        return response()->json($enrollment);
+    }
+
+    // Return JSON for viewing modal (fixed to include related data)
+    public function apiShow($id)
+    {
+        $enrollment = Enrollment::with(['subject', 'schoolyear', 'user'])->findOrFail($id);
+
+        return response()->json([
+            'enroll_id' => $enrollment->enroll_id,
+            'subject' => $enrollment->subject->descriptive_title ?? 'N/A',
+            'schoolyear' => $enrollment->schoolyear->schoolyear ?? 'N/A',
+            'semester' => $enrollment->schoolyear->semester ?? 'N/A',
+            'user' => $enrollment->user->name ?? 'N/A',
+        ]);
+    }
 }
