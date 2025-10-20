@@ -22,12 +22,13 @@ class Subject extends Model
         'co_requisite',
         'pre_requisite',
     ];
+    
 
-
-public function enrollments()
-{
-    return $this->hasMany(Enrollment::class, 'subject_id', 'subject_id');
-}
-
-
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'subject_id');
+    }
+    public function user(){
+        
+    }
 }

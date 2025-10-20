@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Grade;
 use App\Models\Enrollment;
-use Illuminate\Http\Request;
 
 class GradeController extends Controller
 {
     /**
      * Display a listing of grades.
      */
-    public function index()
+     public function index()
     {
-        $grades = Grade::with(['enrollment.user', 'enrollment.subject', 'enrollment.schoolyear'])->get();
-        return view('grades.index', compact('grades'));
+        // Get all grades with related enrollment data
+        $grades = Grade::with(['enrollment.registration', 'enrollment.subject', 'enrollment.schoolyear'])->get();
+
+        // Get all enrollments for the Add Grade modal dropdown
+        $enrollments = Enrollment::with(['registration', 'subject', 'schoolyear'])->get();
+
+        // Pass both to the view
+        return view('grades.index', compact('grades', 'enrollments'));
     }
 
     /**
@@ -22,7 +28,7 @@ class GradeController extends Controller
      */
     public function create()
     {
-        $enrollments = Enrollment::with(['user', 'subject', 'schoolyear'])->get();
+        $enrollments = Enrollment::with(['registration', 'subject', 'schoolyear'])->get();
         return view('grades.create', compact('enrollments'));
     }
 
@@ -54,10 +60,11 @@ class GradeController extends Controller
      * Display the specified grade.
      */
     public function show($id)
-    {
-        $grade = Grade::with(['enrollment.user', 'enrollment.subject', 'enrollment.schoolyear'])->findOrFail($id);
-        return view('grades.show', compact('grade'));
-    }
+{
+    $grade = Grade::with('enrollment.registration', 'enrollment.subject', 'enrollment.schoolyear')->findOrFail($id);
+    return view('grades.show', compact('grade'));
+}
+
 
     /**
      * Show the form for editing the specified grade.
@@ -65,7 +72,8 @@ class GradeController extends Controller
     public function edit($id)
     {
         $grade = Grade::findOrFail($id);
-        $enrollments = Enrollment::with(['user', 'subject', 'schoolyear'])->get();
+        $enrollments = Enrollment::with(['registration', 'subject', 'schoolyear'])->get();
+
         return view('grades.edit', compact('grade', 'enrollments'));
     }
 

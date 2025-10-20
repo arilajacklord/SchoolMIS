@@ -2,39 +2,42 @@
 
 @section('content')
 <div class="container mt-4">
-    <div class="card shadow border-0">
-        <div class="card-header bg-info text-white">
-            <h4 class="mb-0">📄 Grade Details</h4>
+    <div class="card shadow border-0 rounded-3">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Grade Details</h4>
+            <a href="{{ route('grades.index') }}" class="btn btn-light btn-sm">Back</a>
         </div>
+
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5 class="fw-bold">Student:</h5>
-                    <p>{{ $grade->enrollment->user->name ?? 'N/A' }}</p>
-                </div>
-                <div class="col-md-6">
-                    <h5 class="fw-bold">Subject:</h5>
-                    <p>{{ $grade->enrollment->subject->descriptive_title ?? 'N/A' }}</p>
-                </div>
-                <div class="col-md-6">
-                    <h5 class="fw-bold">School Year:</h5>
-                    <p>{{ $grade->enrollment->schoolyear->schoolyear ?? '' }} ({{ $grade->enrollment->schoolyear->semester ?? '' }})</p>
-                </div>
-            </div>
+            <p><b>Student:</b> {{ $grade->enrollment->registration->student_name ?? 'N/A' }}</p>
+            <p><b>Subject:</b> {{ $grade->enrollment->subject->descriptive_title ?? 'N/A' }}</p>
+            <p><b>School Year / Semester:</b> {{ $grade->enrollment->schoolyear->schoolyear ?? 'N/A' }} 
+                {{ $grade->enrollment->schoolyear->semester ? ' - ' . $grade->enrollment->schoolyear->semester : '' }}
+            </p>
 
             <hr>
 
-            <h5 class="fw-bold">Grade Breakdown:</h5>
-            <table class="table table-bordered w-50">
-                <tr><th>Prelim</th><td>{{ $grade->prelim }}</td></tr>
-                <tr><th>Midterm</th><td>{{ $grade->midterm }}</td></tr>
-                <tr><th>Semifinal</th><td>{{ $grade->semifinal }}</td></tr>
-                <tr><th>Final</th><td>{{ $grade->final }}</td></tr>
-            </table>
+            {{-- Edit Form --}}
+            <form method="POST" action="{{ route('grades.update', $grade->grade_id) }}">
+                @csrf
+                @method('PUT')
+                <div class="row mb-3">
+                    @foreach (['prelim', 'midterm', 'semifinal', 'final'] as $term)
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label"><b>{{ ucfirst($term) }}</b></label>
+                            <input type="number" step="0.01" class="form-control" name="{{ $term }}" value="{{ $grade->$term }}">
+                        </div>
+                    @endforeach
+                </div>
+                <button type="submit" class="btn btn-primary">Update Grade</button>
+            </form>
 
-            <div class="text-end">
-                <a href="{{ route('grades.index') }}" class="btn btn-secondary">Back</a>
-            </div>
+            {{-- Delete Form --}}
+            <form method="POST" action="{{ route('grades.destroy', $grade->grade_id) }}" class="mt-3">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Delete Grade</button>
+            </form>
         </div>
     </div>
 </div>

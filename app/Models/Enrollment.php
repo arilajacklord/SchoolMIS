@@ -4,54 +4,41 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use App\Models\Registration;
 use App\Models\Subject;
 use App\Models\Schoolyear;
+use App\Models\Grade;
 
 class Enrollment extends Model
 {
     use HasFactory;
 
-    protected $table = 'enrollments'; // optional, but recommended for consistency
-
-    protected $primaryKey = 'enroll_id'; // adjust if your table uses a custom PK
-
-    public $timestamps = false; // disable if your table doesn’t use created_at/updated_at
+    protected $table = 'enrollments';
+    protected $primaryKey = 'enroll_id';
 
     protected $fillable = [
+        'user_id',
         'subject_id',
         'schoolyear_id',
-        'user_id',
     ];
 
-    // 🔗 Relationships
-
-    /**
-     * Each enrollment belongs to one user (student)
-     */
-    public function user()
+    public function registration()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(Registration::class, 'user_id', 'id');
     }
 
-    public function registration()
-{
-    return $this->belongsTo(Registration::class, 'user_id', 'id');
-}
-
-    /**
-     * Each enrollment belongs to one subject
-     */
     public function subject()
     {
         return $this->belongsTo(Subject::class, 'subject_id', 'subject_id');
     }
 
-    /**
-     * Each enrollment belongs to one school year
-     */
     public function schoolyear()
     {
         return $this->belongsTo(Schoolyear::class, 'schoolyear_id', 'schoolyear_id');
+    }
+
+    public function grade()
+    {
+        return $this->hasOne(Grade::class, 'enroll_id', 'enroll_id');
     }
 }

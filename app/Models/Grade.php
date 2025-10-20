@@ -38,10 +38,10 @@ class Grade extends Model
     /**
      * 🔗 Shortcut relationship: Access student (user) through enrollment
      */
-    public function user()
+    public function registration()
     {
         return $this->hasOneThrough(
-            User::class,
+            Registration::class,
             Enrollment::class,
             'enroll_id',   // Foreign key on enrollments table
             'user_id',     // Foreign key on users table
