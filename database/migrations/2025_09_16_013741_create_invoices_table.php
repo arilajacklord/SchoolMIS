@@ -18,11 +18,15 @@ return new class extends Migration
             $table->string('status')->default('unpaid');
             $table->decimal('insurance', 10, 2)->default(0);
             $table->decimal('sanitation', 10, 2)->default(0);
+            $table->decimal('scholarship', 10, 2)->default(0); // ✅ added here
             $table->decimal('balance', 10, 2)->default(0);
             $table->timestamps();
 
             // Foreign key constraint
-            $table->foreign('enroll_id')->references('enroll_id')->on('enrollments')->onDelete('cascade');
+            $table->foreign('enroll_id')
+                  ->references('enroll_id')
+                  ->on('enrollments')
+                  ->onDelete('cascade');
         });
     }
 

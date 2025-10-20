@@ -30,10 +30,4 @@ class Subject extends Model
     {
         return $this->hasMany(Enrollment::class, 'subject_id');
     }
-
-    public function getRouteKeyName()
-{
-    return 'subject_id';
-}
-
 }

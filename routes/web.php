@@ -3,16 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolyearController;
-
-
 use App\Http\Controllers\EnrollmentController;
-
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\GradeController;
-
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
-
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\SubjectModalController;
 
@@ -51,7 +46,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
 
     
 Route::resource('enrollments', EnrollmentController::class);
