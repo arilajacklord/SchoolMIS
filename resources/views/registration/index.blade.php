@@ -1,85 +1,69 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-xl font-semibold text-gray-800">
-            {{ __('Student Registration') }}
-        </h2>
-    </x-slot>
+    <div class="card mt-5">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2>Registration List</h2>
+            <a href="{{ route('registration.create') }}" class="btn btn-success btn-sm">
+                <i class="fa fa-plus"></i> New Registration
+            </a>
+        </div>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+        <div class="card-body">
             {{-- Flash success message --}}
             @if(session('success'))
-                <div class="mb-4 px-4 py-2 rounded bg-green-100 text-green-700">
-                    {{ session('success') }}
-                </div>
+                <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <div class="mb-4 flex justify-end">
-                <a href="{{ route('registration.create') }}" class="btn btn-primary">
-                    New Registration
-                </a>
-            </div>
-
-            <div class="overflow-x-auto bg-white border border-gray-200 rounded">
-                <table class="min-w-full text-left text-gray-700">
-                    <thead class="bg-gray-50 uppercase text-xs font-medium text-gray-600">
+            <table class="table table-bordered table-hover text-center">
+                <thead class="table-white">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Address</th>
+                        <th>Citizenship</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($registrations as $reg)
                         <tr>
-                            <th class="px-4 py-2">#</th>
-                            <th class="px-4 py-2">Student Name</th>
-                            <th class="px-4 py-2">Course Level</th>
-                            <th class="px-4 py-2">Status</th>
-                            <th class="px-4 py-2">Address</th>
-                            <th class="px-4 py-2">Citizenship</th>
-                            <th class="px-4 py-2 text-right">Actions</th>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $reg->student_name }}</td>
+                            <td>{{ ucfirst($reg->type ?? 'student') }}</td>
+                            <td>
+                                <span class="badge 
+                                    @if($reg->student_status === 'active') bg-success 
+                                    @elseif($reg->student_status === 'inactive') bg-danger 
+                                    @else bg-warning @endif">
+                                    {{ ucfirst($reg->student_status) }}
+                                </span>
+                            </td>
+                            <td>{{ $reg->student_address }}</td>
+                            <td>{{ $reg->student_citizenship }}</td>
+                            <td>
+                                <a href="{{ route('registration.show', $reg) }}" class="btn btn-info btn-sm">
+                                    <i class="fa fa-eye"></i> View
+                                </a>
+                                <a href="{{ route('registration.edit', $reg) }}" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-edit"></i> Edit
+                                </a>
+                                <form action="{{ route('registration.destroy', $reg) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this registration?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($registrations as $reg)
-                            <tr class="border-t hover:bg-gray-50">
-                                <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                                <td class="px-4 py-2 font-medium">{{ $reg->student_name }}</td>
-                                <td class="px-4 py-2">{{ $reg->course_level }}</td>
-                                <td class="px-4 py-2">{{ ucfirst($reg->student_status) }}</td>
-                                <td class="px-4 py-2">{{ $reg->student_address }}</td>
-                                <td class="px-4 py-2">{{ $reg->student_citizenship }} </td>
-                               <td class="px-4 py-2 text-right">
-    <div class="flex justify-end items-center space-x-1 flex-nowrap">
-        <button type="button" 
-                class="btn btn-info btn-sm"
-                onclick="window.location='{{ route('registration.show', $reg) }}'">
-            View
-        </button>
-
-        <button type="button" 
-                class="btn btn-warning btn-sm"
-                onclick="window.location='{{ route('registration.edit', $reg) }}'">
-            Edit
-        </button>
-
-        <form action="{{ route('registration.destroy', $reg) }}" method="POST" class="inline">
-            @csrf
-            @method('DELETE')
-            <button type="submit" 
-                    class="btn btn-danger btn-sm"
-                    onclick="return confirm('Are you sure you want to delete this registration?')">
-                Delete
-            </button>
-        </form>
-    </div>
-</td>
-
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="px-4 py-3 text-center text-gray-500">
-                                    No registrations found.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center">No registrations found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </x-app-layout>

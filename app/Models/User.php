@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Enrollment;
-use App\Models\Registration;
 
 class User extends Authenticatable
 {
@@ -29,6 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type', // 👈 Added type so it can be mass assigned
     ];
 
     /**
@@ -61,15 +59,17 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-
     public function registration()
     {
         return $this->hasOne(Registration::class);
     }
+<<<<<<< HEAD
   public function enrollments()
-    {
-        return $this->hasMany(Enrollment::class, 'user_id', 'id');
+=======
 
+    public function enrollments()
+>>>>>>> 2b24e5ae9f136ab15c24d08d008338698880683c
+    {
+        return $this->hasMany(Enrollment::class, 'user_id');
     }
 }
-
