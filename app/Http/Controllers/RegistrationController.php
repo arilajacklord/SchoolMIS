@@ -7,21 +7,22 @@ use App\Models\User;
 use App\Http\Requests\RegistrationStoreRequest;
 use App\Http\Requests\RegistrationUpdateRequest;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
 class RegistrationController extends Controller
 {
     /**
-     * Display a listing of registration records.
+     * Display a listing of the registrations.
      */
     public function index()
     {
-        $registrations = Registration::with('user')->latest()->get();
+        $registrations = Registration::latest()->get();
         return view('registration.index', compact('registrations'));
     }
 
     /**
-     * Show the form for creating a new registration record.
+     * Show the form for creating a new registration.
      */
     public function create()
     {
@@ -29,108 +30,151 @@ class RegistrationController extends Controller
     }
 
     /**
-     * Store a newly created registration record in storage.
+     * Store a newly created registration in storage.
      */
     public function store(RegistrationStoreRequest $request)
     {
-        // ✅ Create linked User
-        $user = User::create([
-            'name'     => $request->student_name,
-            'email'    => $request->email, // make sure your form includes email
-            'password' => Hash::make(Str::random(12)), // or request a password
-        ]);
+       // dd($request->all());
+      
+            // Step 1: Create User account first
+            try {
+                $user = User::create([
+                    'name'     => $request->student_name,
+                    'email'    => $request->email,
+                    'password' => Hash::make($request->password),
+                ]);
+            } catch (Exception $e) {
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('errors', 'Failed to create user: ' . $e->getMessage());
+            }
 
-        // ✅ Create Registration with student + parent info
-        Registration::create([
-            'user_id'           => $user->id,
-            'student_name'      => $request->student_name,
-            'course_level'      => $request->course_level,
-            'student_address'   => $request->student_address,
-            'student_phone'     => $request->student_phone,
-            'student_status'    => $request->student_status,
-            'student_citizenship' => $request->student_citizenship,
-            'student_birthdate' => $request->student_birthdate,
-            'student_religion'  => $request->student_religion,
-            'student_age'       => $request->student_age,
-            'father_Fname'      => $request->father_Fname,
-            'father_Mname'      => $request->father_Mname,
-            'father_Lname'      => $request->father_Lname,
-            'father_address'    => $request->father_address,
-            'father_cell_no'    => $request->father_cell_no,
-            'father_age'        => $request->father_age,
-            'father_religion'   => $request->father_religion,
-            'father_birthdate'  => $request->father_birthdate,
-            'father_profession' => $request->father_profession,
-            'father_occupation' => $request->father_occupation,
-            'mother_Fname'      => $request->mother_Fname,
-            'mother_Mname'      => $request->mother_Mname,
-            'mother_Lname'      => $request->mother_Lname,
-            'mother_address'    => $request->mother_address,
-            'mother_cell_no'    => $request->mother_cell_no,
-            'mother_age'        => $request->mother_age,
-            'mother_religion'   => $request->mother_religion,
-            'mother_birthdate'  => $request->mother_birthdate,
-            'mother_profession' => $request->mother_profession,
-            'mother_occupation' => $request->mother_occupation,
-        ]);
+            // Step 2: Create Registration record linked to the user
+            try {
+                Registration::create([
+                    'user_id'             => $user->id,
+                    'student_name'        => $request->student_name,
+                    'course_level'        => $request->course_level,
+                    'student_address'     => $request->student_address,
+                    'student_phone_num'   => $request->student_phone_num,
+                    'student_status'      => $request->student_status,
+                    'student_citizenship' => $request->student_citizenship,
+                    'student_birthdate'   => $request->student_birthdate,
+                    'student_religion'    => $request->student_religion,
+                    'student_age'         => $request->student_age,
 
-        return redirect()
-            ->route('registration.index')
-            ->with('success', 'Registration created successfully.');
+                    // Father info
+                    'father_Fname'        => $request->father_Fname,
+                    'father_Mname'        => $request->father_Mname,
+                    'father_Lname'        => $request->father_Lname,
+                    'father_address'      => $request->father_address,
+                    'father_cell_no'      => $request->father_cell_no,
+                    'father_age'          => $request->father_age,
+                    'father_religion'     => $request->father_religion,
+                    'father_birthdate'    => $request->father_birthdate,
+                    'father_profession'   => $request->father_profession,
+                    'father_occupation'   => $request->father_occupation,
+
+                    // Mother info
+                    'mother_Fname'        => $request->mother_Fname,
+                    'mother_Mname'        => $request->mother_Mname,
+                    'mother_Lname'        => $request->mother_Lname,
+                    'mother_address'      => $request->mother_address,
+                    'mother_cell_no'      => $request->mother_cell_no,
+                    'mother_age'          => $request->mother_age,
+                    'mother_religion'     => $request->mother_religion,
+                    'mother_birthdate'    => $request->mother_birthdate,
+                    'mother_profession'   => $request->mother_profession,
+                    'mother_occupation'   => $request->mother_occupation,
+                ]);
+            } catch (Exception $e) {
+                // Rollback user if registration fails
+                $user->delete();
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('errors', 'Failed to create registration: ' . $e->getMessage());
+            }
+  
+            return redirect()
+                ->route('registration.index')
+                ->with('success', 'Registration created successfully.');
+    
     }
 
     /**
-     * Display the specified registration record.
+     * Display the specified registration.
      */
     public function show(Registration $registration)
     {
-        $registration->load('user');
         return view('registration.show', compact('registration'));
     }
 
     /**
-     * Show the form for editing the specified registration record.
+     * Show the form for editing the specified registration.
      */
-    public function edit(Registration $registration)
-    {
-        $registration->load('user');
-        return view('registration.edit', compact('registration'));
-    }
+    public function edit($id)
+{
+    $student = Registration::findOrFail($id); // fetch the student record
+    return view('registration.edit', compact('student'));
+}
 
     /**
-     * Update the specified registration record in storage.
+     * Update the specified registration in storage.
      */
     public function update(RegistrationUpdateRequest $request, Registration $registration)
     {
-        // ✅ Update Registration fields
-        $registration->update($request->only($registration->getFillable()));
+        try {
+            // Update Registration record
+            $registration->update($request->only($registration->getFillable()));
 
-        // ✅ Update linked User
-        if ($registration->user) {
-            $registration->user->update([
-                'name'  => $request->student_name,
-                'email' => $request->email ?? $registration->user->email,
-            ]);
+            // Update linked User account (keep password if not changed)
+            if ($registration->user) {
+                $registration->user->update([
+                    'name'     => $request->student_name,
+                    'email'    => $request->email ?? $registration->user->email,
+                    'password' => $request->filled('password')
+                        ? Hash::make($request->password)
+                        : $registration->user->password,
+                ]);
+            }
+
+            return redirect()
+                ->route('registration.index')
+                ->with('success', 'Registration updated successfully.');
+        } catch (Exception $e) {
+            Log::error('Registration update failed: ' . $e->getMessage());
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Failed to update registration.');
         }
-
-        return redirect()
-            ->route('registration.index')
-            ->with('success', 'Registration updated successfully.');
     }
 
     /**
-     * Remove the specified registration record from storage.
+     * Remove the specified registration from storage.
      */
     public function destroy(Registration $registration)
     {
-        if ($registration->user) {
-            $registration->user->delete();
+        try {
+            // Delete linked user first
+            if ($registration->user) {
+                $registration->user->delete();
+            }
+
+            $registration->delete();
+
+            return redirect()
+                ->route('registration.index')
+                ->with('success', 'Registration deleted successfully.');
+        } catch (Exception $e) {
+            Log::error('Registration delete failed: ' . $e->getMessage());
+
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to delete registration.');
         }
-
-        $registration->delete();
-
-        return redirect()
-            ->route('registration.index')
-            ->with('success', 'Registration deleted successfully.');
     }
 }

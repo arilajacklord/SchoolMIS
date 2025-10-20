@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Enrollment;
+use App\Models\Registration;
 
 class User extends Authenticatable
 {
@@ -60,9 +61,15 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+
+    public function registration()
+    {
+        return $this->hasOne(Registration::class);
+
   public function enrollments()
     {
         return $this->hasMany(Enrollment::class, 'user_id', 'id');
+
     }
 }
 
