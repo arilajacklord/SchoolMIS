@@ -7,11 +7,7 @@
             <h5 class="modal-title" id="schoolYearDetailsModalLabel">School Year Details</h5>
             <a href="{{ route('schoolyears.index') }}" class="btn-close" aria-label="Close"></a>
           </div>
-          <div class="modal-body">
-            <div class="mb-3">
-                <label class="form-label"><strong>School Year ID:</strong></label>
-                <div class="form-control-plaintext">{{ $schoolyear->schoolyear_id }}</div>
-            </div>
+        
 
             <div class="mb-3">
                 <label class="form-label"><strong>School Year:</strong></label>
