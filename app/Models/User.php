@@ -8,7 +8,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Enrollment;
 
 class User extends Authenticatable
 {
@@ -67,6 +66,6 @@ class User extends Authenticatable
 
     public function enrollments()
     {
-        return $this->hasMany(Enrollment::class, 'user_id', 'id');
+        return $this->hasMany(Enrollment::class, 'user_id');
     }
 }

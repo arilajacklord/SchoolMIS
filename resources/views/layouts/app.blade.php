@@ -273,8 +273,6 @@
             <section class="section">
                 <div class="container-fluid">
                     @yield('content')
-                    
-                    {{$slot}}
 
                     <!-- ========== title-wrapper start ========== -->
                     <!-- ... dashboard content unchanged ... -->

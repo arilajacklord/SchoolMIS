@@ -14,8 +14,18 @@ class SubjectController extends Controller
 {
     public function index()
     {
-        $subjects = Subject::all();
-        return view('subjects.index', compact('subjects'));
+        Subject::create($request->validated());
+
+        return redirect()->route('subjects.index')
+                         ->with('success', 'Subject created successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Subject $subject): View
+    {
+        return view('subjects.show', compact('subject'));
     }
 
     public function store(Request $request)
@@ -59,13 +69,7 @@ class SubjectController extends Controller
         return redirect()->route('subjects.index')->with('success', 'Subject deleted!');
     }
 
-    public function apiEdit($id)
-    {
-        return Subject::findOrFail($id);
-    }
-
-    public function apiShow($id)
-    {
-        return Subject::findOrFail($id);
+        return redirect()->route('subjects.index')
+                         ->with('success', 'Subject deleted successfully.');
     }
 }

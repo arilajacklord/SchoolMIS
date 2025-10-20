@@ -1,9 +1,11 @@
 <x-app-layout>
-
-  <!-- Include jQuery and DataTables CSS/JS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css" />
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+<div class="card mt-5">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2>Course List</h2>
+        <a href="{{ route('subjects.create') }}" class="btn btn-success btn-sm">
+            <i class="fa fa-plus"></i> Add Subject
+        </a>
+    </div>
 
   <div class="container-xxl flex-grow-1 container-p-y mt-4">
     <div class="row">
@@ -21,52 +23,72 @@
           </div>
         @endif
 
-        <div class="card">
-          <h5 class="card-header text-bg-danger d-flex justify-content-between align-items-center">
-            List of Subjects
-            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#subjectModal" id="addSubjectBtn">
-              <i class="lni lni-add-files"></i> Add New Subject
-            </button>
-          </h5>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Subject ID</th>
+                        <th>Subject Code</th>
+                        <th>Title</th>
+                        <th>Lecture Units</th>
+                        <th>Lab Units</th>
+                        <th>Total Units</th>
+                        <th>Co-Requisite</th>
+                        <th>Pre-Requisite</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($subjects as $index => $subject)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $subject->subject_id }}</td>
+                            <td>{{ $subject->course_code }}</td>
+                            <td>{{ $subject->descriptive_title }}</td>
+                            <td>{{ $subject->led_units }}</td>
+                            <td>{{ $subject->lab_units }}</td>
+                            <td>{{ $subject->total_units }}</td>
+                            <td>{{ $subject->co_requisite }}</td>
+                            <td>{{ $subject->pre_requisite }}</td>
+                            <td>
 
-          <div class="card-body">
-            <table id="subjectsTable" class="table table-striped display" style="width:100%">
-              <thead>
-                <tr>
-                  <th>Subject Code</th>
-                  <th>Descriptive Title</th>
-                  <th>Lecture Units</th>
-                  <th>Lab Units</th>
-                  <th>Total Units</th>
-                  <th>Co-Requisite</th>
-                  <th>Pre-Requisite</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($subjects as $subject)
-                <tr>
-                  <td>{{ $subject->course_code }}</td>
-                  <td>{{ $subject->descriptive_title }}</td>
-                  <td>{{ $subject->led_units }}</td>
-                  <td>{{ $subject->lab_units }}</td>
-                  <td>{{ $subject->total_units }}</td>
-                  <td>{{ $subject->co_requisite }}</td>
-                  <td>{{ $subject->pre_requisite }}</td>
-                  <td>
-                    <button class="btn btn-info btn-sm viewSubjectBtn" data-id="{{ $subject->subject_id }}">
-                      <i class="lni lni-eye"></i> View
-                    </button>
-                    <button class="btn btn-warning btn-sm editSubjectBtn" data-id="{{ $subject->subject_id }}">
-                      <i class="lni lni-brush-alt"></i> Edit
-                    </button>
-                    <button class="btn btn-danger btn-sm deleteSubjectBtn" data-id="{{ $subject->subject_id }}">
-                      <i class="lni lni-trash-can"></i> Delete
-                    </button>
-                  </td>
-                </tr>
-                @endforeach
-              </tbody>
+                                {{-- View (modal trigger) --}}
+                                <button 
+                                    class="btn btn-info btn-sm view-btn" 
+                                    data-subject='@json($subject)'
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#subjectModal"
+                                    title="View">
+                                    <i class="lni lni-eye"></i>
+                                </button>
+
+                                {{-- Edit --}}
+                                 <button 
+                                    class="btn btn-primary btn-sm edit-btn" 
+                                    data-subject='@json($subject)'
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editSubjectModal" 
+                                    title="Edit">
+                                    <i class="lni lni-library"></i>
+                                </button>
+
+                                {{-- Delete --}}
+                                 <form action="{{ route('subjects.destroy', $subject->subject_id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="lni lni-trash-can"></i>
+                                        </button>
+                                    </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="10" class="text-center">No subjects found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
             </table>
           </div>
         </div>
@@ -250,5 +272,53 @@
     });
   });
   </script>
+
+{{-- Subject Detail Modal --}}
+<div class="modal fade" id="subjectModal" tabindex="-1" aria-labelledby="subjectModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="subjectModalLabel">Subject Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+            <tr><th>Subject ID</th><td id="modal-subject-id"></td></tr>
+            <tr><th>Subject Code</th><td id="modal-course-code"></td></tr>
+            <tr><th>Title</th><td id="modal-title"></td></tr>
+            <tr><th>Lecture Units</th><td id="modal-led-units"></td></tr>
+            <tr><th>Lab Units</th><td id="modal-lab-units"></td></tr>
+            <tr><th>Total Units</th><td id="modal-total-units"></td></tr>
+            <tr><th>Co-Requisite</th><td id="modal-co-requisite"></td></tr>
+            <tr><th>Pre-Requisite</th><td id="modal-pre-requisite"></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- JavaScript to populate modal --}}
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewButtons = document.querySelectorAll('.view-btn');
+
+        viewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const subject = JSON.parse(button.getAttribute('data-subject'));
+
+                document.getElementById('modal-subject-id').textContent = subject.subject_id ?? 'N/A';
+                document.getElementById('modal-course-code').textContent = subject.course_code ?? 'N/A';
+                document.getElementById('modal-title').textContent = subject.descriptive_title ?? 'N/A';
+                document.getElementById('modal-led-units').textContent = subject.led_units ?? '0';
+                document.getElementById('modal-lab-units').textContent = subject.lab_units ?? '0';
+                document.getElementById('modal-total-units').textContent = subject.total_units ?? '0';
+                document.getElementById('modal-co-requisite').textContent = subject.co_requisite ?? 'None';
+                document.getElementById('modal-pre-requisite').textContent = subject.pre_requisite ?? 'None';
+            });
+        });
+    });
+</script>
+@endpush
 
 </x-app-layout>

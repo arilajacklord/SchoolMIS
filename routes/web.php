@@ -84,4 +84,4 @@ Route::post('/register-student', [RegistrationController::class, 'store'])->name
 // Grades
 Route::resource('grades', GradeController::class);
 
-});
+

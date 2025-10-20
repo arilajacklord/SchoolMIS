@@ -1,67 +1,49 @@
 <x-app-layout>
 
-  <!-- Include DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css" />
-  <!-- Include jQuery and DataTables JS -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+        <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
 
-  <div class="container-xxl flex-grow-1 container-p-y mt-4">
-    <div class="row">
-      <div class="col-lg-12">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        
+                        <th>Subject</th>
+                        <th>School Year</th>
+                        <th>User</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 @foreach($enroll_list as $enrollment)
+                        <tr>
+                           
+                            <td>{{ $enrollment->descriptive_title ?? 'N/A' }}</td>
+                            <td>{{ $enrollment->schoolyear ?? 'N/A' }}</td>
+                            <td>{{ $enrollment->name ?? 'N/A' }}</td>
+                                   
+                            <td>
+                                
+                                <a href="{{ route('enrollments.show', $enrollment->enroll_id) }}" class="btn btn-info btn-sm">
+                                 <i class="lni lni-eye"></i>
+                            </a>
+                            <a href="{{ route('enrollments.edit', $enrollment->enroll_id) }}" class="btn btn-warning btn-sm">
+                                <i class="lni lni-library"></i>
+                            </a>
+                            <form action="{{ route('enrollments.destroy', $enrollment->enroll_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this enrollment?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="lni lni-trash-can"></i>
+                                </button>
+                            </form>
 
-        {{-- Success & Error Messages --}}
-        @if(session('success'))
-          <div class="alert alert-success alert-dismissible" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        @endif
-        @if(session('error'))
-          <div class="alert alert-danger alert-dismissible" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        @endif
-
-        <div class="card">
-          <h5 class="card-header text-bg-primary d-flex justify-content-between align-items-center">
-            Enrollment List
-            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#enrollmentModal" id="addEnrollmentBtn">
-              <i class="lni lni-add-files"></i> Add Enrollment
-            </button>
-          </h5>
-
-          <div class="card-body">
-            <table id="enrollmentsTable" class="table table-striped display" style="width:100%">
-              <thead>
-                <tr>
-                  <th>Subject</th>
-                  <th>School Year</th>
-                  <th>User</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($enroll_list as $enrollment)
-                <tr>
-                  <td>{{ $enrollment->descriptive_title ?? 'N/A' }}</td>
-                  <td>{{ $enrollment->schoolyear ?? 'N/A' }}</td>
-                  <td>{{ $enrollment->name ?? 'N/A' }}</td>
-                  <td>
-                    <button class="btn btn-info btn-sm viewEnrollmentBtn" data-id="{{ $enrollment->enroll_id }}">
-                      <i class="lni lni-eye"></i> View
-                    </button>
-                    <button class="btn btn-warning btn-sm editEnrollmentBtn" data-id="{{ $enrollment->enroll_id }}">
-                      <i class="lni lni-library"></i> Edit
-                    </button>
-                    <button class="btn btn-danger btn-sm deleteEnrollmentBtn" data-id="{{ $enrollment->enroll_id }}">
-                      <i class="lni lni-trash-can"></i> Delete
-                    </button>
-                  </td>
-                </tr>
-                @endforeach
-              </tbody>
+                            </td>
+                        </tr>
+                  
+                    @endforeach
+                </tbody>
             </table>
           </div>
         </div>
