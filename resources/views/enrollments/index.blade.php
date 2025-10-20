@@ -27,26 +27,25 @@
                         <tr>
                            
                             <td>{{ $enrollment->descriptive_title ?? 'N/A' }}</td>
-                            <td>{{ $enrollment->schoolyear ?? 'N/A' }} - {{ $enrollment->schoolyear ?? 'N/A' }}</td>
+                            <td>{{ $enrollment->schoolyear ?? 'N/A' }}</td>
                             <td>{{ $enrollment->name ?? 'N/A' }}</td>
-                      
-                         
-                          
+                                   
                             <td>
                                 
-                                <a href="{{ route('enrollments.show', $enrollment->id) }}" class="btn btn-info btn-sm">
-                                    <i class="fa fa-eye">VIEW</i>
-                                </a>
-                                <a href="{{ route('enrollments.edit', $enrollment->id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fa fa-edit">EDIT</i>
-                                </a>
-                                <form action="{{ route('enrollments.destroy', $enrollment->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this enrollment?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fa fa-trash">DELETE</i>
-                                    </button>
-                                </form>
+                                <a href="{{ route('enrollments.show', $enrollment->enroll_id) }}" class="btn btn-info btn-sm">
+                                 <i class="lni lni-eye"></i>
+                            </a>
+                            <a href="{{ route('enrollments.edit', $enrollment->enroll_id) }}" class="btn btn-warning btn-sm">
+                                <i class="lni lni-library"></i>
+                            </a>
+                            <form action="{{ route('enrollments.destroy', $enrollment->enroll_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this enrollment?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="lni lni-trash-can"></i>
+                                </button>
+                            </form>
+
                             </td>
                         </tr>
                   

@@ -10,6 +10,9 @@ use App\Models\Schoolyear;
 
 class Enrollment extends Model
 {
+
+      protected $primaryKey = 'enroll_id';
+
     use HasFactory;
 
     protected $fillable = [
@@ -21,27 +24,20 @@ class Enrollment extends Model
     // An enrollment belongs to one subject
     // Enrollment.php
 
-public function student()
-{
-    return $this->belongsTo(User::class); // defaults to 'user_id' foreign key
-}
-
 public function subject()
 {
-    return $this->belongsTo(Subject::class); // defaults to 'subject_id'
+    return $this->belongsTo(Subject::class, 'subject_id', 'subject_id');
 }
 
 public function schoolyear()
 {
-    return $this->belongsTo(Schoolyear::class); // defaults to 'schoolyear_id'
+    return $this->belongsTo(Schoolyear::class, 'schoolyear_id', 'schoolyear_id');
 }
 
-public function grade(){
-
-    return $this->belongsTo(Grade::class);
+public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
 }
-
-
 
 
 }
