@@ -160,7 +160,13 @@
                                 <a href="{{route('books.index')}}"> Book</a>
                             </li>
                             <li>
-                                <a href="#"> Sample Page </a>
+                                <a href="{{route('borrow.index')}}"> Borrow</a>
+                            </li>
+                            <li>
+                                <a href="{{route('return.index')}}"> Return</a>
+                            </li>
+                                                        <li>
+                                <a href="{{route('history.index')}}"> History</a>
                             </li>
                         </ul>
                     </li>
@@ -274,7 +280,7 @@
                 <div class="container-fluid">
                     @yield('content')
                     
-                    {{$slot}}
+                    
 
                     <!-- ========== title-wrapper start ========== -->
                     <!-- ... dashboard content unchanged ... -->
@@ -311,9 +317,6 @@
                 <!-- end container -->
             </footer>
 
-            
-
-           
 
             <!-- ========== footer end =========== -->
             

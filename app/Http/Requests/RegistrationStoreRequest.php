@@ -50,7 +50,7 @@ class RegistrationStoreRequest extends FormRequest
             'mother_cell_no'    => ['nullable', 'string', 'max:20'],
             'mother_age'        => ['nullable', 'integer', 'min:0'],
             'mother_religion'   => ['nullable', 'string', 'max:50'],
-            'mother_birthdate'  => ['nullable', 'date'],
+            'mother_birthdate'  => ['nullable', 'date'],    
             'mother_profession' => ['nullable', 'string', 'max:100'],
             'mother_occupation' => ['nullable', 'string', 'max:100'],
         ];

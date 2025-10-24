@@ -48,5 +48,6 @@
             {{-- Pagination if available --}}
             {{ $schoolyears->links() }}
         </div>
+      </div>
     </div>
 </x-app-layout>
