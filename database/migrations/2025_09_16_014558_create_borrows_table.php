@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('borrows', function (Blueprint $table) {
-            $table->id('borrow_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('book_id');
-            $table->date('date_borrowed');
-            $table->timestamps();
+    $table->id('borrow_id');
+    $table->unsignedBigInteger('book_id');
+    $table->unsignedBigInteger('user_id');
+    $table->date('date_borrowed');
+    $table->date('date_returned')->nullable();
+    $table->timestamps();
 
-            // Foreign keys
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('book_id')->references('book_id')->on('books')->onDelete('cascade');
-        });
+    $table->foreign('book_id')->references('book_id')->on('books')->onDelete('cascade');
+    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+});
     }
 
     /**

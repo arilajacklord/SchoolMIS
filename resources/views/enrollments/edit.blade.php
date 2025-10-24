@@ -15,21 +15,21 @@
                         @csrf
                         @method('PUT')
 
-                {{-- User --}}
-                <div class="mb-3">
-                    <label for="id" class="form-label"><strong>User:</strong></label>
-                    <select name="id" id="id" class="form-select @error('id') is-invalid @enderror">
-                        <option value="">-- Select User --</option>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ $enrollment->id == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id')
-                        <div class="form-text text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
+                        {{-- Subject --}}
+                        <div class="mb-3">
+                            <label for="subject_id" class="form-label"><strong>Subject:</strong></label>
+                            <select name="subject_id" id="subject_id" class="form-select @error('subject_id') is-invalid @enderror">
+                                <option value="">-- Select Subject --</option>
+                                @foreach($subjects as $subject)
+                                    <option value="{{ $subject->subject_id }}" {{ $enrollment->subject_id == $subject->subject_id ? 'selected' : '' }}>
+                                        {{ $subject->subject_id }} - {{ $subject->descriptive_title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('subject_id')
+                                <div class="form-text text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         {{-- School Year --}}
                         <div class="mb-3">

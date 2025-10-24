@@ -11,6 +11,19 @@
             <form action="{{ route('schoolyears.store') }}" method="POST" id="addSchoolYearForm">
                 @csrf
 
+                <div class="mb-3">
+                    <label for="schoolyear_id" class="form-label"><strong>School Year ID:</strong></label>
+                    <input
+                        type="text"
+                        name="schoolyear_id"
+                        id="schoolyear_id"
+                        class="form-control @error('schoolyear_id') is-invalid @enderror"
+                        value="{{ old('schoolyear_id') }}"
+                        placeholder="Enter School Year ID">
+                    @error('schoolyear_id')
+                        <div class="form-text text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
                 <div class="mb-3">
                     <label for="schoolyear" class="form-label"><strong>School Year:</strong></label>

@@ -9,62 +9,75 @@ use Illuminate\View\View;
 
 class SchoolyearController extends Controller
 {
-    // Show paginated list of school years
+    /**
+     * Display a listing of the resource.
+     */
     public function index(): View
     {
-        $schoolyears = Schoolyear::latest()->paginate(5);
+        $schoolyears = Schoolyear::orderBy('schoolyear_id', 'desc')->paginate(5);
 
         return view('schoolyears.index', compact('schoolyears'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-    // Store new school year
-    public function store(Request $request): RedirectResponse
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(): View
     {
         $validated = $request->validate([
             'schoolyear' => 'required|string|max:20',
             'semester' => 'required|string|in:1st Semester,2nd Semester,Summer',
         ]);
 
-        Schoolyear::create($validated);
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(SchoolyearStoreRequest $request): RedirectResponse
+    {
+        Schoolyear::create($request->validated());
 
         return redirect()->route('schoolyears.index')
             ->with('success', 'School Year created successfully.');
     }
 
-    // Update school year
-    public function update(Request $request, Schoolyear $schoolyear): RedirectResponse
+    /**
+     * Display the specified resource.
+     */
+    public function show(Schoolyear $schoolyear): View
     {
         $validated = $request->validate([
             'schoolyear' => 'required|string|max:20',
             'semester' => 'required|string|in:1st Semester,2nd Semester,Summer',
         ]);
 
-        $schoolyear->update($validated);
-
-        return redirect()->route('schoolyears.index')
-            ->with('success', 'School Year updated successfully.');
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Schoolyear $schoolyear): View
+    {
+        return view('schoolyears.edit', compact('schoolyear'));
     }
 
-    // Delete school year
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(SchoolyearUpdateRequest $request, Schoolyear $schoolyear): RedirectResponse
+    {
+        $schoolyear->update($request->validated());
+
+        return redirect()->route('schoolyears.index')
+                         ->with('success', 'Schoolyear updated successfully.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Schoolyear $schoolyear): RedirectResponse
     {
         $schoolyear->delete();
 
         return redirect()->route('schoolyears.index')
-            ->with('success', 'School Year deleted successfully.');
-    }
-
-    // API method to show school year JSON data (for modal View)
-    public function apiShow($id)
-    {
-        $schoolyear = Schoolyear::findOrFail($id);
-        return response()->json($schoolyear);
-    }
-
-    // API method to show school year JSON data (for modal Edit)
-    public function apiEdit($id)
-    {
-        return $this->apiShow($id);
+                         ->with('success', 'Schoolyear deleted successfully.');
     }
 }

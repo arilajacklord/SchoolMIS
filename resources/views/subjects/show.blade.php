@@ -30,25 +30,15 @@
                 <dt class="col-sm-3">Co-Requisite</dt>
                 <dd class="col-sm-9">{{ $subject->co_requisite ?: 'None' }}</dd>
 
-            <dt class="col-sm-3">Pre-Requisite</dt>
-            <dd class="col-sm-9">
-                {{ $subject->pre_requisite ?: 'None' }}
-            </dd>
-        </dl>
-
-        <div class="mt-4">
-            <a href="{{ route('subjects.edit', $subject->id) }}" class="btn btn-warning btn-sm">
-                <i class="fa fa-edit"></i> Edit
+                <dt class="col-sm-3">Pre-Requisite</dt>
+                <dd class="col-sm-9">{{ $subject->pre_requisite ?: 'None' }}</dd>
+            </dl>
+          </div>
+          <div class="modal-footer">
+            <a href="{{ route('subjects.index') }}" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i> Back
             </a>
-
-            <form action="{{ route('subjects.destroy', $subject->id) }}" method="POST" class="d-inline"
-                onsubmit="return confirm('Are you sure you want to delete this subject?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-sm">
-                    <i class="fa fa-trash"></i> Delete
-                </button>
-            </form>
+          </div>
         </div>
       </div>
     </div>

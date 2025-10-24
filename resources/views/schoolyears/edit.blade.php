@@ -12,7 +12,17 @@
                 @csrf
                 @method('PUT')
 
-              
+                {{-- School Year ID (readonly) --}}
+                <div class="mb-3">
+                    <label for="schoolyear_id" class="form-label"><strong>School Year ID:</strong></label>
+                    <input
+                        type="text"
+                        name="schoolyear_id"
+                        id="schoolyear_id"
+                        class="form-control"
+                        value="{{ $schoolyear->schoolyear_id }}"
+                        readonly>
+                </div>
 
                 {{-- School Year Dropdown --}}
                 <div class="mb-3">
