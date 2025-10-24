@@ -54,11 +54,9 @@ Route::middleware([
 
     
 Route::resource('enrollments', EnrollmentController::class);
-Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
-Route::resource('schoolyear', SchoolyearController::class);
-Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects.index');
+Route::resource('schoolyears', SchoolyearController::class);
+
 Route::resource('subjects', SubjectController::class);
-Route::get('/schoolyears', [SchoolYearController::class, 'index'])->name('schoolyears.index');
 
 });
 
