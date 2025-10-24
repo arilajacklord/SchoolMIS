@@ -45,6 +45,7 @@
               <tbody>
                 @foreach($enroll_list as $enrollment)
                 <tr>
+                  
                   <td>{{ $enrollment->descriptive_title ?? 'N/A' }}</td>
                   <td>{{ $enrollment->schoolyear ?? 'N/A' }}</td>
                   <td>{{ $enrollment->name ?? 'N/A' }}</td>
