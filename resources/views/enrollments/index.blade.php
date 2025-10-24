@@ -39,11 +39,67 @@
                                 </button>
                             </form>
 
+<<<<<<< HEAD
+        {{-- Success & Error Messages --}}
+        @if(session('success'))
+          <div class="alert alert-success alert-dismissible" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        @endif
+        @if(session('error'))
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        @endif
+
+        <div class="card">
+          <h5 class="card-header text-bg-primary d-flex justify-content-between align-items-center">
+            Enrollment List
+            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#enrollmentModal" id="addEnrollmentBtn">
+              <i class="lni lni-add-files"></i> Add Enrollment
+            </button>
+          </h5>
+
+          <div class="card-body">
+            <table id="enrollmentsTable" class="table table-striped display" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>School Year</th>
+                  <th>User</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($enroll_list as $enrollment)
+                <tr>
+                  
+                  <td>{{ $enrollment->descriptive_title ?? 'N/A' }}</td>
+                  <td>{{ $enrollment->schoolyear ?? 'N/A' }}</td>
+                  <td>{{ $enrollment->name ?? 'N/A' }}</td>
+                  <td>
+                    <button class="btn btn-info btn-sm viewEnrollmentBtn" data-id="{{ $enrollment->enroll_id }}">
+                      <i class="lni lni-eye"></i> View
+                    </button>
+                    <button class="btn btn-warning btn-sm editEnrollmentBtn" data-id="{{ $enrollment->enroll_id }}">
+                      <i class="lni lni-library"></i> Edit
+                    </button>
+                    <button class="btn btn-danger btn-sm deleteEnrollmentBtn" data-id="{{ $enrollment->enroll_id }}">
+                      <i class="lni lni-trash-can"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+                @endforeach
+              </tbody>
+=======
                             </td>
                         </tr>
                   
                     @endforeach
                 </tbody>
+>>>>>>> 0bc8e6b07a7cc502d12da7b22fe31a6bba724481
             </table>
           </div>
         </div>
