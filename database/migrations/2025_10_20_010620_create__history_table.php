@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('enrollments', function (Blueprint $table) {
-            $table->id('enroll_id');
-            $table->unsignedBigInteger('subject_id');
-            $table->unsignedBigInteger('schoolyear_id');
+        Schema::create('histories', function (Blueprint $table) {
+            $table->id('history_id');
+            $table->string('action');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('book_id');
+            $table->timestamp('timestamp')->useCurrent();
             $table->timestamps();
 
-            // Foreign key constraints
-            $table->foreign('subject_id')->references('subject_id')->on('subjects')->onDelete('cascade');
-            $table->foreign('schoolyear_id')->references('schoolyear_id')->on('schoolyears')->onDelete('cascade');
+            // Optional foreign keys (if you want relational integrity)
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('book_id')->references('book_id')->on('books')->onDelete('cascade');
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('enrollments');
+        Schema::dropIfExists('histories');
     }
 };
