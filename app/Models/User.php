@@ -63,13 +63,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Registration::class);
     }
-<<<<<<< HEAD
-  public function enrollments()
-=======
-
-    public function enrollments()
->>>>>>> 2b24e5ae9f136ab15c24d08d008338698880683c
-    {
+  public function enrollments()    {
         return $this->hasMany(Enrollment::class, 'user_id');
     }
 }
