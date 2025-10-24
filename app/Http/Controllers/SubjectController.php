@@ -12,8 +12,8 @@ use App\Http\Requests\SubjectUpdateRequest;
 
 class SubjectController extends Controller
 {
-    public function index()
-    {
+  public function index()
+{
         Subject::create($request->validated());
 
         return redirect()->route('subjects.index')
@@ -69,7 +69,4 @@ class SubjectController extends Controller
         return redirect()->route('subjects.index')->with('success', 'Subject deleted!');
     }
 
-        return redirect()->route('subjects.index')
-                         ->with('success', 'Subject deleted successfully.');
-    }
 }
