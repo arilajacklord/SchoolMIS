@@ -1,30 +1,15 @@
 <?php
-<<<<<<< HEAD
-namespace App\Http\Controllers;
-
-use App\Models\Grade;
-use App\Models\Enrollment;
-use Illuminate\Http\Request;
-=======
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Grade;
 use App\Models\Enrollment;
->>>>>>> 2b24e5ae9f136ab15c24d08d008338698880683c
 
 class GradeController extends Controller
 {
     /**
      * Display a listing of grades.
      */
-<<<<<<< HEAD
-    public function index()
-    {
-        $grades = Grade::with('enrollment')->get();
-        return view('grades.index', compact('grades'));
-=======
      public function index()
     {
         // Get all grades with related enrollment data
@@ -35,7 +20,6 @@ class GradeController extends Controller
 
         // Pass both to the view
         return view('grades.index', compact('grades', 'enrollments'));
->>>>>>> 2b24e5ae9f136ab15c24d08d008338698880683c
     }
 
     /**
@@ -43,63 +27,16 @@ class GradeController extends Controller
      */
     public function create()
     {
-<<<<<<< HEAD
-        $enrollments = Enrollment::all(); // For dropdown
-=======
         $enrollments = Enrollment::with(['registration', 'subject', 'schoolyear'])->get();
->>>>>>> 2b24e5ae9f136ab15c24d08d008338698880683c
         return view('grades.create', compact('enrollments'));
     }
 
     /**
-<<<<<<< HEAD
-     * Store a newly created grade.
-=======
      * Store a newly created grade in storage.
->>>>>>> 2b24e5ae9f136ab15c24d08d008338698880683c
      */
     public function store(Request $request)
     {
         $request->validate([
-<<<<<<< HEAD
-            'enroll_id' => 'required|exists:enrollments,id',
-            'prelim' => 'nullable|numeric',
-            'midterm' => 'nullable|numeric',
-            'semifinal' => 'nullable|numeric',
-            'final' => 'nullable|numeric',
-        ]);
-
-        Grade::create($request->all());
-
-        return redirect()->route('grades.index')
-                         ->with('success', 'Grade added successfully.');
-    }
-
-    /**
-     * Show the form for editing a grade.
-     */
-    public function edit(Grade $grade)
-    {
-        $enrollments = Enrollment::all();
-        return view('grades.edit', compact('grade', 'enrollments'));
-    }
-
-    /**
-     * Update the specified grade.
-     */
-    public function update(Request $request, Grade $grade)
-    {
-        $request->validate([
-            'enroll_id' => 'required|exists:enrollments,id',
-            'prelim' => 'nullable|numeric',
-            'midterm' => 'nullable|numeric',
-            'semifinal' => 'nullable|numeric',
-            'final'     => 'nullable|numeric',
-        ]);
-
-        $grade->update($request->all());
-
-=======
             'enroll_id' => 'required|exists:enrollments,enroll_id',
             'prelim' => 'nullable|numeric|min:0|max:100',
             'midterm' => 'nullable|numeric|min:0|max:100',
@@ -161,7 +98,6 @@ class GradeController extends Controller
             'final' => $request->final,
         ]);
 
->>>>>>> 2b24e5ae9f136ab15c24d08d008338698880683c
         return redirect()->route('grades.index')->with('success', 'Grade updated successfully.');
     }
 
