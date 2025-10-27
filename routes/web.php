@@ -10,9 +10,6 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
-use App\Http\Controllers\ReturnController;
-use App\Http\Controllers\HistoryController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubjectModalController;
 
 
@@ -105,16 +102,17 @@ Route::delete('/return/{return}', [App\Http\Controllers\ReturnController::class,
 // History Routes
 Route::resource('history', App\Http\Controllers\HistoryController::class);
 Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');
-            
+  Route::resource('registration', RegistrationController::class);
+Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
+
+// Grades
+Route::resource('grades', GradeController::class);
+          
 });
   
 
 
 // Registration
-Route::resource('registration', RegistrationController::class);
-Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
 
-// Grades
-Route::resource('grades', GradeController::class);
 
     

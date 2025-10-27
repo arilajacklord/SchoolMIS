@@ -7,6 +7,7 @@ use App\Models\Enrollment;
 use App\Models\Regestration;
 use App\Models\Subject;
 use App\Models\Schoolyear;
+use App\Models\User;
 
 class EnrollmentController extends Controller
 {
@@ -16,7 +17,10 @@ class EnrollmentController extends Controller
     public function index()
     {
         $enrollments = Enrollment::with(['registration', 'subject', 'schoolyear'])->get();
-        return view('enrollments.index', compact('enrollments'));
+        $subjects = Subject::all();
+        $schoolyears = Schoolyear::all();
+        $users = User::all();
+        return view('enrollments.index', compact('enrollments', 'subjects', 'schoolyears', 'users'));
     }
 
     /**

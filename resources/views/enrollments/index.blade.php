@@ -16,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                 @foreach($enroll_list as $enrollment)
+                 @foreach($enrollments as $enrollment)
                         <tr>
                            
                             <td>{{ $enrollment->descriptive_title ?? 'N/A' }}</td>
@@ -39,7 +39,7 @@
                                 </button>
                             </form>
 
-<<<<<<< HEAD
+
         {{-- Success & Error Messages --}}
         @if(session('success'))
           <div class="alert alert-success alert-dismissible" role="alert">
@@ -93,13 +93,13 @@
                 </tr>
                 @endforeach
               </tbody>
-=======
+
                             </td>
                         </tr>
                   
                     @endforeach
                 </tbody>
->>>>>>> 0bc8e6b07a7cc502d12da7b22fe31a6bba724481
+
             </table>
           </div>
         </div>
