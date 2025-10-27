@@ -1,27 +1,38 @@
 <?php
+<<<<<<< HEAD
 
+=======
+>>>>>>> db09a29cd51f7ea0dce3c665d0362473644c7076
 namespace App\Http\Controllers;
-
 use App\Models\Grade;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
+<<<<<<< HEAD
 
 
 
 
 
+=======
+>>>>>>> db09a29cd51f7ea0dce3c665d0362473644c7076
 class GradeController extends Controller
 {
     /**
      * Display a listing of grades.
      */
 
+<<<<<<< HEAD
     public function index()
     {
         
 
      
     
+=======
+ 
+     public function index()
+    {
+>>>>>>> db09a29cd51f7ea0dce3c665d0362473644c7076
         // Get all grades with related enrollment data
         $grades = Grade::with(['enrollment.registration', 'enrollment.subject', 'enrollment.schoolyear'])->get();
 
@@ -94,6 +105,7 @@ public function update(Request $request, $id)
         'final' => 'nullable|numeric|min:0|max:100',
     ]);
 
+<<<<<<< HEAD
     $grade = Grade::findOrFail($id);
     $grade->update([
         'enroll_id' => $request->enroll_id,
@@ -102,6 +114,10 @@ public function update(Request $request, $id)
         'semifinal' => $request->semifinal,
         'final' => $request->final,
     ]);
+=======
+
+            
+>>>>>>> db09a29cd51f7ea0dce3c665d0362473644c7076
 
     return redirect()->route('grades.index')->with('success', 'Grade updated successfully.');
 }
@@ -115,6 +131,20 @@ public function show($id)
     return view('grades.show', compact('grade'));
 }
 
+<<<<<<< HEAD
+=======
+
+    /**
+     * Show the form for editing the specified grade.
+     */
+ 
+
+    /**
+     * Update the specified grade in storage.
+     */
+
+
+>>>>>>> db09a29cd51f7ea0dce3c665d0362473644c7076
     /**
      * Remove the specified grade from storage.
      */

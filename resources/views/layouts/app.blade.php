@@ -280,6 +280,7 @@
                 <div class="container-fluid">
                     @yield('content')
                     
+                    {{$slot}}
                     
 
                     <!-- ========== title-wrapper start ========== -->
