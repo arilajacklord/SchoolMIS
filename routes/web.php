@@ -10,6 +10,10 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
+use App\Http\Controllers\ReturnController;
+use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SubjectModalController;
 
 
 
@@ -44,10 +48,10 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::get('/dashboard', function () {
+    Route::resource('/users', UserController::class);
 
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+
 
 Route::resource('borrows', App\Http\Controllers\BorrowController::class);
 Route::get('/borrows', [BorrowController::class, 'index'])->name('borrow.index');
