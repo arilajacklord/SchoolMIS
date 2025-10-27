@@ -4,22 +4,13 @@ use App\Models\Grade;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
 
-
-
-
-
 class GradeController extends Controller
 {
-    /**
-     * Display a listing of grades.
-     */
-
+    
     public function index()
     {
         
-
-     
-    
+   
         // Get all grades with related enrollment data
         $grades = Grade::with(['enrollment.registration', 'enrollment.subject', 'enrollment.schoolyear'])->get();
 
@@ -30,9 +21,6 @@ class GradeController extends Controller
         return view('grades.index', compact('grades', 'enrollments'));
     }
 
-    /**
-     * Show the form for creating a new grade.
-     */
     public function create()
     {
 
