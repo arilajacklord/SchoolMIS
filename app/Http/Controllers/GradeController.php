@@ -6,11 +6,8 @@ use Illuminate\Http\Request;
 
 class GradeController extends Controller
 {
-    
     public function index()
     {
-        
-   
         // Get all grades with related enrollment data
         $grades = Grade::with(['enrollment.registration', 'enrollment.subject', 'enrollment.schoolyear'])->get();
 
@@ -25,19 +22,9 @@ class GradeController extends Controller
     {
 
         $enrollments = Enrollment::all(); // For dropdown
-
         $enrollments = Enrollment::with(['registration', 'subject', 'schoolyear'])->get();
-
         return view('grades.create', compact('enrollments'));
     }
-
-    /**
-
-     * Store a newly created grade.
-
-     * Store a newly created grade in storage.
-
-     */
     public function store(Request $request)
     {
         $request->validate([
