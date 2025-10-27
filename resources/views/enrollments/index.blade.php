@@ -16,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                 @foreach($enroll_list as $enrollment)
+                 @foreach($enrollments as $enrollment)
                         <tr>
                            
                             <td>{{ $enrollment->descriptive_title ?? 'N/A' }}</td>
