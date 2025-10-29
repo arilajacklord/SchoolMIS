@@ -13,7 +13,7 @@ class Registration extends Model
     protected $table = 'registration';
 
     // Primary key (if not 'id')
-    protected $primaryKey = 'registration_id'; // adjust if your table uses this column
+    protected $primaryKey = 'id'; // adjust if your table uses this column
 
     // Disable timestamps if your table doesn’t have created_at / updated_at
     public $timestamps = false;

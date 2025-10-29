@@ -106,7 +106,12 @@ Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])
 Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
 
 // Grades
-Route::resource('grades', GradeController::class);
+// web.php
+Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');
+Route::get('/grades/{schoolyear_id}/{subject_id}', [GradeController::class, 'showSubject'])->name('grades.showSubject');
+Route::post('/grades/store', [GradeController::class, 'store'])->name('grades.store');
+Route::get('/grades/get/{enroll_id}', [GradeController::class, 'getGrade'])->name('grades.get');
+Route::get('/grades/print/{enroll_id}', [GradeController::class, 'print'])->name('grades.print');
           
 });
   

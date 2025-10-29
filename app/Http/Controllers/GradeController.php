@@ -1,126 +1,77 @@
 <?php
+
 namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 use App\Models\Grade;
 use App\Models\Enrollment;
-use Illuminate\Http\Request;
-
-
-
-
+use App\Models\Subject;
+use App\Models\Schoolyear;
 
 class GradeController extends Controller
 {
-    /**
-     * Display a listing of grades.
-     */
-
-    public function index()
+    // Page 1: List subjects by selected school year
+    public function index(Request $request)
     {
-        
+        $schoolyears = Schoolyear::all();
+        $selectedSchoolyear = null;
+        $subjects = [];
 
-     
-    
-        // Get all grades with related enrollment data
-        $grades = Grade::with(['enrollment.registration', 'enrollment.subject', 'enrollment.schoolyear'])->get();
+        if ($request->has('schoolyear_id')) {
+            $selectedSchoolyear = Schoolyear::find($request->schoolyear_id);
+            if ($selectedSchoolyear) {
+                $subjects = Subject::orderBy('course_code', 'asc')->get();
+            }
+        }
 
-        // Get all enrollments for the Add Grade modal dropdown
-        $enrollments = Enrollment::with(['registration', 'subject', 'schoolyear'])->get();
-
-        // Pass both to the view
-        return view('grades.index', compact('grades', 'enrollments'));
-
+        return view('grades.index', compact('schoolyears', 'selectedSchoolyear', 'subjects'));
     }
 
-    /**
-     * Show the form for creating a new grade.
-     */
-    public function create()
+    // Page 2: Show students in a subject
+    public function showSubject($schoolyear_id, $subject_id)
     {
+        $schoolyear = Schoolyear::findOrFail($schoolyear_id);
+        $subject = Subject::findOrFail($subject_id);
 
-        $enrollments = Enrollment::all(); // For dropdown
+        $enrollments = Enrollment::where('schoolyear_id', $schoolyear_id)
+            ->where('subject_id', $subject_id)
+            ->with(['registration', 'grade'])
+            ->get();
 
-        $enrollments = Enrollment::with(['registration', 'subject', 'schoolyear'])->get();
-
-        return view('grades.create', compact('enrollments'));
+        return view('grades.students', compact('schoolyear', 'subject', 'enrollments'));
     }
 
-    /**
-
-     * Store a newly created grade.
-
-     * Store a newly created grade in storage.
-
-     */
+    // Store or update grades
     public function store(Request $request)
     {
         $request->validate([
-
-            'enroll_id' => 'required|exists:enrollments,id',
-            'prelim' => 'nullable|numeric',
-            'midterm' => 'nullable|numeric',
-            'semifinal' => 'nullable|numeric',
-            'final' => 'nullable|numeric',
+            'enroll_id' => 'required|exists:enrollments,enroll_id',
+            'prelim' => 'nullable|numeric|min:0|max:100',
+            'midterm' => 'nullable|numeric|min:0|max:100',
+            'semifinal' => 'nullable|numeric|min:0|max:100',
+            'final' => 'nullable|numeric|min:0|max:100',
         ]);
 
-        Grade::create($request->all());
+        $grade = Grade::firstOrNew(['enroll_id' => $request->enroll_id]);
+        $grade->fill($request->only(['prelim','midterm','semifinal','final']));
+        $grade->save();
 
-        return redirect()->route('grades.index')
-                         ->with('success', 'Grade added successfully.');
+        return redirect()->back()->with('success', 'Grade saved successfully!');
     }
 
-/**
- * Show the form for editing the specified grade.
- */
-public function edit($id)
-{
-    $grade = Grade::findOrFail($id);
-    $enrollments = Enrollment::with(['registration', 'subject', 'schoolyear'])->get();
-
-    return view('grades.edit', compact('grade', 'enrollments'));
-}
-
-/**
- * Update the specified grade in storage.
- */
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'enroll_id' => 'required|exists:enrollments,enroll_id',
-        'prelim' => 'nullable|numeric|min:0|max:100',
-        'midterm' => 'nullable|numeric|min:0|max:100',
-        'semifinal' => 'nullable|numeric|min:0|max:100',
-        'final' => 'nullable|numeric|min:0|max:100',
-    ]);
-
-    $grade = Grade::findOrFail($id);
-    $grade->update([
-        'enroll_id' => $request->enroll_id,
-        'prelim' => $request->prelim,
-        'midterm' => $request->midterm,
-        'semifinal' => $request->semifinal,
-        'final' => $request->final,
-    ]);
-
-    return redirect()->route('grades.index')->with('success', 'Grade updated successfully.');
-}
-
-/**
- * Display the specified grade.
- */
-public function show($id)
-{
-    $grade = Grade::with('enrollment.registration', 'enrollment.subject', 'enrollment.schoolyear')->findOrFail($id);
-    return view('grades.show', compact('grade'));
-}
-
-    /**
-     * Remove the specified grade from storage.
-     */
-    public function destroy($id)
+    // Fetch grade for modal via AJAX
+    public function getGrade($enroll_id)
     {
-        $grade = Grade::findOrFail($id);
-        $grade->delete();
+        $grade = Grade::where('enroll_id', $enroll_id)->first();
+        return response()->json($grade);
+    }
 
-        return redirect()->route('grades.index')->with('success', 'Grade deleted successfully.');
+    // Print single student's grade
+    public function print($enroll_id)
+    {
+        $enrollment = Enrollment::with(['registration','subject','schoolyear','grade'])
+            ->findOrFail($enroll_id);
+
+        return view('grades.print', compact('enrollment'));
     }
 }
