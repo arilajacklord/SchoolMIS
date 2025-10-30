@@ -5,28 +5,21 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+ {
     public function up(): void
     {
         Schema::create('subjects', function (Blueprint $table) {
-            $table->id('subject_id');
-            $table->string('course_code');
-            $table->string('descriptive_title');
-            $table->integer('led_units');
-            $table->integer('lab_units');
-            $table->integer('total_units');
-            $table->string('co_requisite')->nullable();
-            $table->string('pre_requisite')->nullable();
-            $table->timestamps();
+            $table->id('subject_id'); // Primary key
+            $table->string('course_code', 50);
+            $table->string('descriptive_title', 255);
+            $table->integer('lec_units')->default(0);
+            $table->integer('lab_units')->default(0);
+            $table->integer('total_units')->virtualAs('lec_units + lab_units'); // Optional for auto-calculation
+            $table->string('co_requisite', 255)->nullable();
+            $table->string('pre_requisite', 255)->nullable();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
+ 
     public function down(): void
     {
         Schema::dropIfExists('subjects');

@@ -106,7 +106,7 @@ class RegistrationController extends Controller
      */
     public function show(Registration $registration): View
     {
-        return view('registration.show', compact('registration'));
+        return view('/registration.show', compact('registration'));
     }
 
     /**
