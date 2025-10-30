@@ -14,6 +14,7 @@ use App\Http\Controllers\SubjectModalController;
 
 
 
+
 /*|--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -64,12 +65,11 @@ Route::get('history', [HistoryController::class, 'index'])->name('history.index'
 
 
     
+
 Route::resource('enrollments', EnrollmentController::class);
-Route::resource('schoolyears', SchoolyearController::class);
-
+ Route::resource('schoolyears', SchoolyearController::class);
 Route::resource('subjects', SubjectController::class);
-
-    Route::get('/schoolyears', [SchoolYearController::class, 'index'])->name('schoolyears.index');
+ 
 
 
 
@@ -100,19 +100,17 @@ Route::put('/return/{return}', [App\Http\Controllers\ReturnController::class, 'u
 Route::delete('/return/{return}', [App\Http\Controllers\ReturnController::class, 'destroy'])->name('return.destroy');
 
 // History Routes
-Route::resource('history', App\Http\Controllers\HistoryController::class);
-Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');
-  Route::resource('registration', RegistrationController::class);
+Route::resource('history', App\Http\Controllers\HistoryController::class);Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');         
+// Registration
+Route::resource('/registration', RegistrationController::class);
 Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
 
 // Grades
 Route::resource('grades', GradeController::class);
-          
+   
+
 });
   
-
-
-// Registration
 
 
     

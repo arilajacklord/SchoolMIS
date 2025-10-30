@@ -25,7 +25,7 @@ class SubjectUpdateRequest extends FormRequest
             'subject_id' => 'required',
             'course_code' => 'required',
              'descriptive_title' => 'required',
-              'led_units' => 'required',
+              'lec_units' => 'required',
                'lab_units' => 'required',
                 'total_units' => 'required',
                  'co_requisite' => 'required',

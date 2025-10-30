@@ -3,70 +3,87 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subject;
-use App\Models\Course;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use App\Http\Requests\SubjectStoreRequest;
-use App\Http\Requests\SubjectUpdateRequest;
 
 class SubjectController extends Controller
 {
-  public function index()
-{
-        Subject::create($request->validated());
-
-        return redirect()->route('subjects.index')
-                         ->with('success', 'Subject created successfully.');
+    /**
+     * Display a listing of subjects.
+     */
+    public function index(): View
+    {
+        $subjects = Subject::paginate(10);
+        return view('subjects.index', compact('subjects'));
     }
 
     /**
-     * Display the specified resource.
+     * Store a newly created subject.
      */
-    public function show(Subject $subject): View
+    public function store(Request $request): RedirectResponse
     {
-        return view('subjects.show', compact('subject'));
-    }
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
+        $validated = $request->validate([
             'course_code' => 'required|string|max:255',
             'descriptive_title' => 'required|string|max:255',
-            'led_units' => 'required|integer|min:0',
+            'lec_units' => 'required|integer|min:0',
             'lab_units' => 'required|integer|min:0',
-            'total_units' => 'required|integer|min:0',
-            'pre_requisite' => 'nullable|string|max:255',
             'co_requisite' => 'nullable|string|max:255',
+            'pre_requisite' => 'nullable|string|max:255',
         ]);
 
-        if ($request->subject_id) {
-            $subject = Subject::findOrFail($request->subject_id);
-            $subject->update($data);
-            return redirect()->route('subjects.index')->with('success', 'Subject updated!');
-        } else {
-            Subject::create($data);
-            return redirect()->route('subjects.index')->with('success', 'Subject added!');
-        }
+        $validated['total_units'] = ($validated['lec_units'] ?? 0) + ($validated['lab_units'] ?? 0);
+
+        Subject::create($validated);
+
+        return redirect()
+            ->route('subjects.index')
+            ->with('success', 'Subject created successfully.');
     }
 
     /**
-     * Fix: Laravel expects an update method for PUT/PATCH.
-     * Delegate update call to existing store() method.
+     * Display a specific subject (for AJAX).
      */
-    public function update(Request $request, $id)
+    public function show($id)
     {
-        // Inject the subject_id into the request so store() knows it's an update
-        $request->merge(['subject_id' => $id]);
-
-        // Call the store method which handles both create & update
-        return $this->store($request);
+        $subject = Subject::findOrFail($id);
+        return response()->json($subject);
     }
 
-    public function destroy(Subject $subject)
+    /**
+     * Update an existing subject.
+     */
+    public function update(Request $request, $id): RedirectResponse
+    {
+        $subject = Subject::findOrFail($id);
+
+        $validated = $request->validate([
+            'course_code' => 'required|string|max:255',
+            'descriptive_title' => 'required|string|max:255',
+            'lec_units' => 'required|integer|min:0',
+            'lab_units' => 'required|integer|min:0',
+            'total_units' => 'nullable|integer|min:0',
+            'co_requisite' => 'nullable|string|max:255',
+            'pre_requisite' => 'nullable|string|max:255',
+        ]);
+
+        $validated['total_units'] = ($validated['lec_units'] ?? 0) + ($validated['lab_units'] ?? 0);
+
+        $subject->update($validated);
+
+        return redirect()
+            ->route('subjects.index')
+            ->with('success', 'Subject updated successfully.');
+    }
+
+    /**
+     * Remove a subject.
+     */
+    public function destroy(Subject $subject): RedirectResponse
     {
         $subject->delete();
-        return redirect()->route('subjects.index')->with('success', 'Subject deleted!');
-    }
-
+        return redirect()
+            ->route('subjects.index')
+            ->with('success', 'Subject deleted successfully.');
+     }
 }
