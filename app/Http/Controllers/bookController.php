@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -15,12 +16,13 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+     public function index()
     {
-       $books = Book::paginate(10);
-       return view('books.index', compact('books'));
-    }
+        $books = Book::all();
+        $users  = User::select('id','name')->orderBy('name')->get(); // only id + name
 
+        return view('books.index', compact('books', 'users'));
+    }
     /**
      * Show the form for creating a new resource.
      */
