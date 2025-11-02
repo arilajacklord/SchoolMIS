@@ -63,7 +63,8 @@ Route::get('return', [ReturnController::class, 'index'])->name('return.index');
 Route::get('/return', [BorrowController::class, 'returned'])->name('borrow.return');
 Route::get('history', [HistoryController::class, 'index'])->name('history.index');
 
-
+Route::resource('borrowedbooks', App\Http\Controllers\BorrowedbookController::class);
+Route::get('/borrowedbooks', [App\Http\Controllers\BorrowedbookController::class, 'index'])->name('borrowedbook.index');
     
 
 Route::resource('enrollments', EnrollmentController::class);
@@ -91,7 +92,7 @@ Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
 
 // Return Routes
 Route::resource('return', App\Http\Controllers\ReturnController::class);
-Route::get('/return', [App\Http\Controllers\ReturnController::class, 'index'])->name('return.index');
+Route::get('/return', [App\Http\Controllers\ReturnController::class, 'index'])->name('returns.index');
 Route::get('/return/create', [App\Http\Controllers\ReturnController::class, 'create'])->name('return.create');
 Route::post('/return', [App\Http\Controllers\ReturnController::class, 'store'])->name('return.store');
 Route::get('/return/{return}', [App\Http\Controllers\ReturnController::class, 'show'])->name('return.show');

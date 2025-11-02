@@ -32,3 +32,4 @@ class Book extends Model
         return 'Available';
     }
 }
+   

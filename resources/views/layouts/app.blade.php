@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/materialdesignicons.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/fullcalendar.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
+
         
     </head>
     <body>
@@ -160,10 +161,10 @@
                                 <a href="{{route('books.index')}}"> Book</a>
                             </li>
                             <li>
-                                <a href="{{route('borrow.index')}}"> Borrow</a>
+                                <a href="{{route('borrow.index')}}"> Borrow Book</a>
                             </li>
                             <li>
-                                <a href="{{route('return.index')}}"> Return</a>
+                                <a href="{{route('returns.index')}}"> Return Book</a>
                             </li>
                                                         <li>
                                 <a href="{{route('history.index')}}"> History</a>
@@ -279,6 +280,7 @@
             <section class="section">
                 <div class="container-fluid">
                     @yield('content')
+                    {{$slot}}
                     
                     {{$slot}}
                     

@@ -9,44 +9,74 @@ use Illuminate\Http\Request;
 
 class BorrowController extends Controller
 {
+    // ✅ Show Borrow List Page
     public function index()
     {
-        $borrows = Borrow::with(['user', 'book'])->orderByDesc('borrow_id')->get();
+        $borrows = Borrow::with(['user', 'book'])
+            ->orderByDesc('borrow_id')
+            ->get();
+
         $users = User::all();
-        $books = Book::all();
+        $books = Book::where('status', 'Available')->get(); // Only available books
 
         return view('borrow.index', compact('borrows', 'users', 'books'));
     }
 
+    // ✅ Store New Borrow Record
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',
-            'book_id' => 'required',
+            'book_id' => 'required|exists:books,book_id',
+            'user_id' => 'required|exists:users,id',
             'date_borrowed' => 'required|date',
         ]);
 
+        // Create borrow record
         Borrow::create([
-            'user_id' => $request->user_id,
             'book_id' => $request->book_id,
+            'user_id' => $request->user_id,
             'date_borrowed' => $request->date_borrowed,
         ]);
 
-        return redirect()->back()->with('success', 'Book borrowed successfully.');
+        // Update book status to Checked Out
+        Book::where('book_id', $request->book_id)
+            ->update(['status' => 'Checked Out']);
+
+        // Redirect to Borrow List
+        return redirect()->route('borrow.index')->with('success', 'Book borrowed successfully!');
     }
 
+    // ✅ Update Borrow Record
     public function update(Request $request, $id)
     {
         $borrow = Borrow::findOrFail($id);
-        $borrow->update($request->all());
 
-        return redirect()->back()->with('success', 'Borrow record updated.');
+        $request->validate([
+            'book_id' => 'required|exists:books,book_id',
+            'user_id' => 'required|exists:users,id',
+            'date_borrowed' => 'required|date',
+        ]);
+
+        $borrow->update([
+            'book_id' => $request->book_id,
+            'user_id' => $request->user_id,
+            'date_borrowed' => $request->date_borrowed,
+        ]);
+
+        return redirect()->back()->with('success', 'Borrow record updated successfully.');
     }
 
+    // ✅ Delete Borrow Record
     public function destroy($id)
     {
-        Borrow::findOrFail($id)->delete();
-        return redirect()->back()->with('success', 'Borrow record deleted.');
+        $borrow = Borrow::findOrFail($id);
+
+        // Before deleting, set book status to Available again
+        Book::where('book_id', $borrow->book_id)->update(['status' => 'Available']);
+
+        $borrow->delete();
+
+        return redirect()->back()->with('success', 'Borrow record deleted successfully.');
     }
 
     // ✅ Mark as Returned
@@ -55,6 +85,9 @@ class BorrowController extends Controller
         $borrow = Borrow::findOrFail($id);
         $borrow->date_returned = now();
         $borrow->save();
+
+        // Return the book to Available
+        Book::where('book_id', $borrow->book_id)->update(['status' => 'Available']);
 
         return redirect()->back()->with('success', 'Book marked as returned.');
     }
