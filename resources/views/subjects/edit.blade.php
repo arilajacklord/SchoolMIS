@@ -43,11 +43,11 @@
 
                 {{-- Lecture Units --}}
                 <div class="mb-3">
-                    <label for="led_units" class="form-label"><strong>Lecture Units:</strong></label>
-                    <input type="number" step="1" name="led_units" id="led_units" 
-                           class="form-control @error('led_units') is-invalid @enderror"
-                           value="{{ old('led_units', $subject->led_units) }}" placeholder="Enter Lecture Units">
-                    @error('led_units')
+                    <label for="lec_units" class="form-label"><strong>Lecture Units:</strong></label>
+                    <input type="number" step="1" name="lec_units" id="lec_units" 
+                           class="form-control @error('lec_units') is-invalid @enderror"
+                           value="{{ old('lec_units', $subject->lec_units) }}" placeholder="Enter Lecture Units">
+                    @error('lec_units')
                         <div class="form-text text-danger">{{ $message }}</div>
                     @enderror
                 </div>
