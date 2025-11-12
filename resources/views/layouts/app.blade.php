@@ -282,7 +282,6 @@
                     @yield('content')
                     {{$slot}}
                     
-                    {{$slot}}
                     
 
                     <!-- ========== title-wrapper start ========== -->
