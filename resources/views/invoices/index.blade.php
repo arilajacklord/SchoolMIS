@@ -3,7 +3,6 @@
         <div class="card mt-5">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h2>Invoices List</h2>
-                <!-- Open Create Modal -->
                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#invoiceCreateModal">
                     <i class="fa fa-plus"></i> Add Invoice
                 </button>
@@ -19,10 +18,9 @@
                         <tr>
                             <th>#</th>
                             <th>Enroll ID</th>
+                            <th>Student Name</th>
                             <th>Amount</th>
                             <th>Status</th>
-                            <th>Insurance</th>
-                            <th>Sanitation</th>
                             <th>Scholarship</th>
                             <th>Balance</th>
                             <th>Actions</th>
@@ -33,6 +31,7 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $invoice->enrollment->enroll_id }}</td>
+                                <td>{{ $invoice->enrollment->user->name }}</td>
                                 <td>{{ number_format($invoice->amount, 2) }}</td>
                                 <td>
                                     <span class="badge 
@@ -42,9 +41,16 @@
                                         {{ ucfirst($invoice->status) }}
                                     </span>
                                 </td>
-                                <td>{{ number_format($invoice->insurance ?? 0, 2) }}</td>
-                                <td>{{ number_format($invoice->sanitation ?? 0, 2) }}</td>
-                                <td>{{ number_format($invoice->scholarship ?? 0, 2) }}</td>
+                                <!-- <td>{{ number_format($invoice->insurance ?? 0, 2) }}</td>
+                                <td>{{ number_format($invoice->sanitation ?? 0, 2) }}</td> -->
+                           
+                                <td>
+                                    @if($invoice->scholar)
+                                        {{ $invoice->scholar->name }} - {{ number_format($invoice->scholar->amount, 2) }}
+                                    @else
+                                        Custom Scholarship / None
+                                    @endif
+                                </td>
                                 <td>{{ number_format($invoice->balance ?? 0, 2) }}</td>
                                 <td>
                                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal{{ $invoice->invoice_id }}">
@@ -62,9 +68,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="9" class="text-center">No invoices found.</td>
-                            </tr>
+                            <tr><td colspan="9" class="text-center">No invoices found.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -88,53 +92,55 @@
                             {{-- Enrollment Dropdown --}}
                             <div class="mb-3">
                                 <label for="enroll_id" class="form-label"><strong>Enrollment:</strong></label>
-                                <select name="enroll_id" id="enroll_id" class="form-select @error('enroll_id') is-invalid @enderror">
+                                <select name="enroll_id" id="enroll_id" class="form-select">
                                     <option value="">-- Select Student --</option>
                                     @foreach($enrollments as $enroll)
-                                        <option value="{{ $enroll->enroll_id }}" {{ old('enroll_id') == $enroll->enroll_id ? 'selected' : '' }}>
+                                        <option value="{{ $enroll->enroll_id }}">
                                             {{ $enroll->enroll_id }} - {{ $enroll->user->name ?? 'N/A' }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('enroll_id')
-                                    <div class="form-text text-danger">{{ $message }}</div>
-                                @enderror
                             </div>
 
-                            {{-- Amount, Status, Insurance, Sanitation, Scholarship, Balance --}}
                             <div class="mb-3">
                                 <label for="amount" class="form-label"><strong>Amount:</strong></label>
-                                <input type="number" step="0.01" min="0" name="amount" id="amount" value="{{ old('amount') }}" class="form-control @error('amount') is-invalid @enderror">
+                                <input type="number" step="0.01" min="0" name="amount" id="amount" class="form-control">
                             </div>
 
                             <div class="mb-3">
                                 <label for="status" class="form-label"><strong>Status:</strong></label>
-                                <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
-                                    <option value="">-- Select Status --</option>
-                                    <option value="unpaid" {{ old('status') == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
-                                    <option value="paid" {{ old('status') == 'paid' ? 'selected' : '' }}>Paid</option>
-                                    <option value="partial" {{ old('status') == 'partial' ? 'selected' : '' }}>Partial</option>
+                                <select name="status" id="status" class="form-select">
+                                    <option value="unpaid">Unpaid</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="partial">Partial</option>
                                 </select>
                             </div>
 
                             <div class="mb-3">
                                 <label for="insurance" class="form-label"><strong>Insurance:</strong></label>
-                                <input type="number" step="0.01" min="0" name="insurance" id="insurance" value="{{ old('insurance') }}" class="form-control @error('insurance') is-invalid @enderror">
+                                <input type="number" step="0.01" min="0" name="insurance" id="insurance" class="form-control">
                             </div>
 
                             <div class="mb-3">
                                 <label for="sanitation" class="form-label"><strong>Sanitation:</strong></label>
-                                <input type="number" step="0.01" min="0" name="sanitation" id="sanitation" value="{{ old('sanitation') }}" class="form-control @error('sanitation') is-invalid @enderror">
+                                <input type="number" step="0.01" min="0" name="sanitation" id="sanitation" class="form-control">
                             </div>
 
                             <div class="mb-3">
-                                <label for="scholarship" class="form-label"><strong>Scholarship:</strong></label>
-                                <input type="number" step="0.01" min="0" name="scholarship" id="scholarship" value="{{ old('scholarship') }}" class="form-control @error('scholarship') is-invalid @enderror">
+                                <label for="scholarship_id" class="form-label"><strong>Scholarship:</strong></label>
+                                <select name="scholarship_id" id="scholarship_id" class="form-select">
+                                    <option value="">-- Select Scholarship --</option>
+                                    @foreach($scholarships as $scholarship)
+                                        <option value="{{ $scholarship->scholar_id }}">
+                                            {{ $scholarship->name }} — ₱{{ number_format($scholarship->amount, 2) }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="mb-3">
                                 <label for="balance" class="form-label"><strong>Balance:</strong></label>
-                                <input type="number" step="0.01" min="0" name="balance" id="balance" value="{{ old('balance') }}" class="form-control" readonly>
+                                <input type="number" step="0.01" min="0" name="balance" id="balance" class="form-control" readonly>
                             </div>
                         </div>
 
@@ -166,7 +172,7 @@
                             <div class="mb-3"><label>Status:</label> <input class="form-control" value="{{ ucfirst($invoice->status) }}" readonly></div>
                             <div class="mb-3"><label>Insurance:</label> <input class="form-control" value="₱{{ number_format($invoice->insurance ?? 0, 2) }}" readonly></div>
                             <div class="mb-3"><label>Sanitation:</label> <input class="form-control" value="₱{{ number_format($invoice->sanitation ?? 0, 2) }}" readonly></div>
-                            <div class="mb-3"><label>Scholarship:</label> <input class="form-control" value="₱{{ number_format($invoice->scholarship ?? 0, 2) }}" readonly></div>
+                            <div class="mb-3"><label><strong>Scholarship:</strong></label><input class="form-control" value="{{ $invoice->scholar ? $invoice->scholar->name . ' - ₱' . number_format($invoice->scholar->amount, 2) : 'Custom Scholarship / None' }}" readonly></div>
                             <div class="mb-3"><label>Balance:</label> <input class="form-control" value="₱{{ number_format($invoice->balance ?? 0, 2) }}" readonly></div>
                         </div>
                         <div class="modal-footer">
@@ -204,10 +210,20 @@
                                     <label>Sanitation:</label>
                                     <input type="number" step="0.01" min="0" name="sanitation" id="sanitation{{ $invoice->invoice_id }}" value="{{ old('sanitation', $invoice->sanitation) }}" class="form-control">
                                 </div>
+
                                 <div class="mb-3">
-                                    <label>Scholarship:</label>
-                                    <input type="number" step="0.01" min="0" name="scholarship" id="scholarship{{ $invoice->invoice_id }}" value="{{ old('scholarship', $invoice->scholarship) }}" class="form-control">
+                                    <label for="scholar_id{{ $invoice->invoice_id }}"><strong>Scholarship Name:</strong></label>
+                                    <select name="scholar_id" id="scholar_id{{ $invoice->invoice_id }}" class="form-select">
+                                        <option value="">-- Select Scholarship --</option>
+                                        @foreach($scholarships as $scholarship)
+                                            <option value="{{ $scholarship->scholar_id }}"
+                                                {{ old('scholar_id', $invoice->scholar_id) == $scholarship->scholar_id ? 'selected' : '' }}>
+                                                {{ $scholarship->name }} — ₱{{ number_format($scholarship->amount, 2) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
+
                                 <div class="mb-3">
                                     <label>Balance:</label>
                                     <input type="number" step="0.01" name="balance" id="balance{{ $invoice->invoice_id }}" value="{{ $invoice->balance }}" class="form-control" readonly>
@@ -263,36 +279,63 @@
     {{-- === BALANCE CALCULATION SCRIPT === --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Create modal balance
+            // CREATE MODAL BALANCE
             function calculateBalance() {
                 let amount = parseFloat(document.getElementById('amount').value) || 0;
                 let insurance = parseFloat(document.getElementById('insurance').value) || 0;
                 let sanitation = parseFloat(document.getElementById('sanitation').value) || 0;
-                let scholarship = parseFloat(document.getElementById('scholarship').value) || 0;
-                document.getElementById('balance').value = ((amount + insurance + sanitation) - scholarship).toFixed(2);
-            }
-            ['amount','insurance','sanitation','scholarship'].forEach(id => {
-                document.getElementById(id).addEventListener('input', calculateBalance);
-            });
+                let scholarshipSelect = document.getElementById('scholarship_id');
+                let scholarAmount = 0;
 
-            // Edit modals balance
-            @foreach($invoices as $invoice)
-                function calcBalance{{ $invoice->invoice_id }}() {
-                    let amount = parseFloat(document.getElementById('amount{{ $invoice->invoice_id }}').value) || 0;
-                    let insurance = parseFloat(document.getElementById('insurance{{ $invoice->invoice_id }}').value) || 0;
-                    let sanitation = parseFloat(document.getElementById('sanitation{{ $invoice->invoice_id }}').value) || 0;
-                    let scholarship = parseFloat(document.getElementById('scholarship{{ $invoice->invoice_id }}').value) || 0;
-                    let balance = (amount + insurance + sanitation) - scholarship;
-                    document.getElementById('balance{{ $invoice->invoice_id }}').value = balance.toFixed(2);
-
-                    let statusField = document.getElementById('status{{ $invoice->invoice_id }}');
-                    if(balance <= 0) statusField.value = 'Paid';
-                    else if(balance < amount + insurance + sanitation) statusField.value = 'Partial';
-                    else statusField.value = 'Unpaid';
+                if (scholarshipSelect && scholarshipSelect.selectedIndex > 0) {
+                    let text = scholarshipSelect.options[scholarshipSelect.selectedIndex].text;
+                    let match = text.match(/₱([\d,\.]+)/);
+                    if (match) scholarAmount = parseFloat(match[1].replace(/,/g, '')) || 0;
                 }
 
-                ['amount{{ $invoice->invoice_id }}','insurance{{ $invoice->invoice_id }}','sanitation{{ $invoice->invoice_id }}','scholarship{{ $invoice->invoice_id }}'].forEach(id => {
-                    document.getElementById(id).addEventListener('input', calcBalance{{ $invoice->invoice_id }});
+                document.getElementById('balance').value = ((amount + insurance + sanitation) - scholarAmount).toFixed(2);
+            }
+            ['amount','insurance','sanitation','scholarship_id'].forEach(id => {
+                let el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', calculateBalance);
+                    el.addEventListener('change', calculateBalance);
+                }
+            });
+
+            // EDIT MODALS BALANCE
+            @foreach($invoices as $invoice)
+            function calcBalance{{ $invoice->invoice_id }}() {
+                let amount = parseFloat(document.getElementById('amount{{ $invoice->invoice_id }}').value) || 0;
+                let insurance = parseFloat(document.getElementById('insurance{{ $invoice->invoice_id }}').value) || 0;
+                let sanitation = parseFloat(document.getElementById('sanitation{{ $invoice->invoice_id }}').value) || 0;
+                let scholarSelect = document.getElementById('scholar_id{{ $invoice->invoice_id }}');
+                let scholarAmount = 0;
+
+                if (scholarSelect && scholarSelect.selectedIndex > 0) {
+                    let text = scholarSelect.options[scholarSelect.selectedIndex].text;
+                    let match = text.match(/₱([\d,\.]+)/);
+                    if (match) scholarAmount = parseFloat(match[1].replace(/,/g, '')) || 0;
+                }
+
+                let balance = (amount + insurance + sanitation) - scholarAmount;
+                document.getElementById('balance{{ $invoice->invoice_id }}').value = balance.toFixed(2);
+
+                // Auto-update status
+                let statusField = document.getElementById('status{{ $invoice->invoice_id }}');
+                let total = amount + insurance + sanitation;
+                if (balance <= 0) statusField.value = 'Paid';
+                else if (balance < total) statusField.value = 'Partial';
+                else statusField.value = 'Unpaid';
+            }
+
+            ['amount{{ $invoice->invoice_id }}','insurance{{ $invoice->invoice_id }}','sanitation{{ $invoice->invoice_id }}','scholar_id{{ $invoice->invoice_id }}']
+                .forEach(id => {
+                    let el = document.getElementById(id);
+                    if (el) {
+                        el.addEventListener('input', calcBalance{{ $invoice->invoice_id }});
+                        el.addEventListener('change', calcBalance{{ $invoice->invoice_id }});
+                    }
                 });
             @endforeach
         });

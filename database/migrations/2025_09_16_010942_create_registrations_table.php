@@ -16,7 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
 
             // Student info
-            $table->string('student_name');
+            $table->string('student_Fname');
+            $table->string('student_Mname');
+            $table->string('student_Lname');
             $table->string('course_level');
             $table->string('student_address');
             $table->string('student_phone_num');

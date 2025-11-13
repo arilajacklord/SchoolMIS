@@ -20,7 +20,9 @@ class Registration extends Model
 
     protected $fillable = [
         'user_id',
-        'student_name',
+        'student_Fname',
+        'student_Mname',
+        'student_Lname',
         'course_level',
         'student_address',
         'student_phone_num',

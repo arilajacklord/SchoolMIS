@@ -26,7 +26,8 @@ class InvoiceStoreRequest extends FormRequest
             'invoice_id' => ['nullable', 'integer'],  
 
             // Foreign key validation  
-            'enroll_id' => ['required', 'exists:enrollments,enroll_id'],  
+            'enroll_id' => ['required', 'exists:enrollments,enroll_id'], 
+            'scholar_id' => ['required', 'exists:scholarships,scholar_id'], 
 
             // Required fields  
             'amount' => ['required', 'numeric', 'min:0'],  
@@ -36,7 +37,6 @@ class InvoiceStoreRequest extends FormRequest
             // Optional extra charges  
             'insurance' => ['nullable', 'numeric', 'min:0'],  
             'sanitation' => ['nullable', 'numeric', 'min:0'], 
-            'scholarship' => ['nullable', 'numeric', 'min:0'], 
 
             // Computed / remaining balance  
             'balance' => ['nullable', 'numeric', 'min:0'],  

@@ -134,7 +134,7 @@
                                 <a href="{{route('invoices.index')}}"> invoice  </a>
                             </li>
                             <li>
-                                <a href="#"> Sample Page </a>
+                                <a href="{{route('scholarships.index')}}">scholarship</a>
                             </li>
                         </ul>
                     </li>
@@ -279,10 +279,9 @@
             <!-- ========== section start ========== -->
             <section class="section">
                 <div class="container-fluid">
-                
+                    @yield('content')
+                    
                     {{$slot}}
-                    
-                    
 
                     <!-- ========== title-wrapper start ========== -->
                     <!-- ... dashboard content unchanged ... -->

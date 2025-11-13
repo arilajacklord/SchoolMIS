@@ -20,7 +20,7 @@ class RegistrationController extends Controller
     public function index(): View
     {
         $registrations = Registration::latest()->get();
-        return view('registration.index', compact('registrations'));
+        return view('registrations.index', compact('registrations'));
     }
 
     /**
@@ -28,7 +28,7 @@ class RegistrationController extends Controller
      */
     public function create(): View
     {
-        return view('registration.create');
+        return view('registrations.create');
     }
 
     /**
@@ -139,7 +139,7 @@ class RegistrationController extends Controller
             }
 
             return redirect()
-                ->route('registration.index')
+                ->route('registrations.index')
                 ->with('success', 'Registration updated successfully.');
 
         } catch (Exception $e) {
@@ -166,7 +166,7 @@ class RegistrationController extends Controller
             $registration->delete();
 
             return redirect()
-                ->route('registration.index')
+                ->route('registrations.index')
                 ->with('success', 'Registration deleted successfully.');
 
         } catch (Exception $e) {

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Enrollment;
+use App\Models\Scholarship;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Http\Requests\InvoiceUpdateRequest;
@@ -12,84 +14,85 @@ use Illuminate\Http\RedirectResponse;
 class InvoiceController extends Controller
 {
     /**
-     * Display a listing of the resource along with enrollments for the create modal.
+     * Display a listing of invoices with related data (enrollment, user, payments, scholarship)
      */
     public function index()
     {
-        // Eager load enrollment + user + payments for efficiency
-        $invoices = Invoice::with(['enrollment.user', 'payments'])->latest()->get();
+        // Load all invoices with relationships
+        $invoices = Invoice::with(['enrollment.user', 'payments', 'scholar'])
+            ->latest()
+            ->get();
 
-        // Ensure balance is current for all invoices
+        // Update balance for each invoice dynamically
         foreach ($invoices as $invoice) {
             $invoice->updateBalance();
         }
 
-        // Get enrollments for Create Invoice modal dropdown
+        // Data for the Create Invoice modal
         $enrollments = Enrollment::with('user')->get();
+        $scholarships = Scholarship::orderBy('name')->get();
 
-        // Pass both invoices and enrollments to the view
-        return view('invoices.index', compact('invoices', 'enrollments'));
+        return view('invoices.index', compact('invoices', 'enrollments', 'scholarships'));
     }
 
     /**
-     * Show the form for creating a new resource (optional if using modal on index).
+     * Show the form for creating a new invoice.
      */
     public function create()
     {
         $enrollments = Enrollment::with('user')->get();
-        return view('invoices.create', compact('enrollments'));
+        $scholarships = Scholarship::orderBy('name')->get();
+
+        return view('invoices.create', compact('enrollments', 'scholarships'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created invoice in storage.
      */
     public function store(InvoiceStoreRequest $request)
     {
         $validated = $request->validated();
 
-        // Create invoice
+        // Create the invoice
         $invoice = Invoice::create($validated);
 
-        // Update balance dynamically
+        // Update balance after creation
         $invoice->updateBalance();
 
         return redirect()->route('invoices.index')
-                         ->with('success', 'Invoice created successfully.');
+            ->with('success', 'Invoice created successfully.');
     }
 
     /**
-     * Display the specified resource.
+     * Display a specific invoice.
      */
     public function show(Invoice $invoice)
     {
-        $invoice->load('enrollment.user', 'payments');
-
-        // Update balance in case any payments changed
+        $invoice->load('enrollment.user', 'payments', 'scholar');
         $invoice->updateBalance();
 
         return view('invoices.show', compact('invoice'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing an existing invoice.
      */
     public function edit(Invoice $invoice)
     {
         $enrollments = Enrollment::with('user')->get();
-        return view('invoices.edit', compact('invoice', 'enrollments'));
+        $scholarships = Scholarship::orderBy('name')->get();
+
+        return view('invoices.edit', compact('invoice', 'enrollments', 'scholarships'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified invoice in storage.
      */
     public function update(InvoiceUpdateRequest $request, Invoice $invoice): RedirectResponse
     {
         $validated = $request->validated();
 
-        // Update invoice fields
         $invoice->update($validated);
-
-        // Recalculate balance based on all payments
         $invoice->updateBalance();
 
         return redirect()
@@ -98,7 +101,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified invoice from storage.
      */
     public function destroy(Invoice $invoice): RedirectResponse
     {
@@ -110,13 +113,11 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Print invoice
+     * Print a specific invoice.
      */
     public function print(Invoice $invoice)
     {
-        $invoice->load('enrollment.user', 'payments');
-
-        // Ensure balance is current
+        $invoice->load('enrollment.user', 'payments', 'scholar');
         $invoice->updateBalance();
 
         return view('invoices.print', compact('invoice'));

@@ -26,7 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'type', // 👈 Added type so it can be mass assigned
+        'type',
     ];
 
     /**
@@ -44,13 +44,8 @@ class User extends Authenticatable
     /**
      * The attributes that should be cast.
      *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+     
 
-    /**
      * The accessors to append to the model's array form.
      *
      * @var array<int, string>
@@ -59,6 +54,9 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    /**
+     * Relationships
+     */
     public function registration()
     {
         return $this->hasOne(Registration::class);
