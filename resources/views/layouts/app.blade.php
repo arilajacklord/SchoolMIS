@@ -279,10 +279,9 @@
             <!-- ========== section start ========== -->
             <section class="section">
                 <div class="container-fluid">
-                    @yield('content')
+                
                     {{$slot}}
                     
-                    {{$slot}}
                     
 
                     <!-- ========== title-wrapper start ========== -->
