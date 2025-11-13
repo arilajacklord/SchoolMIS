@@ -25,6 +25,7 @@ class InvoiceUpdateRequest extends FormRequest
         return [
             // Usually invoice_id comes from the route (so we don't validate it here)
             'enroll_id'   => ['nullable', 'exists:enrollments,enroll_id'],
+            'scholar_id'  => ['nullable', 'exists:scholarships,scholar_id'],
             'amount'      => ['required', 'numeric', 'min:0'],
             'status'      => ['nullable', 'in:paid,unpaid,overdue'],
            
@@ -32,7 +33,6 @@ class InvoiceUpdateRequest extends FormRequest
             // Optional additional fields
             'insurance'   => ['nullable', 'numeric', 'min:0'],
             'sanitation'  => ['nullable', 'numeric', 'min:0'],
-            'scholarship' => ['nullable', 'numeric', 'min:0'],
             'balance'     => ['nullable', 'numeric', 'min:0'],
         ];
     }

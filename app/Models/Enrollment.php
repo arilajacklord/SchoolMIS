@@ -41,8 +41,9 @@ public function schoolyear()
     return $this->belongsTo(Schoolyear::class); // defaults to 'schoolyear_id'
 }
 
-
-
-
+public function invoices()
+{
+    return $this->hasMany(Invoice::class, 'enroll_id', 'enroll_id');
 }
     
+}

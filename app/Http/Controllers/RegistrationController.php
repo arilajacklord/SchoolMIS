@@ -15,10 +15,16 @@ class RegistrationController extends Controller
     /**
      * Display a listing of the registrations.
      */
+    public function studentinfo_index()
+    {
+        $registrations = Registration::latest()->get();
+        return view('studentinfo.studentinfo_index', compact('registrations'));
+    }
+    
     public function index()
     {
         $registrations = Registration::latest()->get();
-        return view('registration.index', compact('registrations'));
+        return view('registrations.index', compact('registrations'));
     }
 
     /**
@@ -26,7 +32,7 @@ class RegistrationController extends Controller
      */
     public function create()
     {
-        return view('registration.create');
+        return view('registrations.create');
     }
 
     /**
@@ -34,27 +40,34 @@ class RegistrationController extends Controller
      */
     public function store(RegistrationStoreRequest $request)
     {
-       // dd($request->all());
+       
       
             // Step 1: Create User account first
-            try {
-                $user = User::create([
-                    'name'     => $request->student_name,
-                    'email'    => $request->email,
-                    'password' => Hash::make($request->password),
-                ]);
-            } catch (Exception $e) {
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->with('errors', 'Failed to create user: ' . $e->getMessage());
-            }
+    try {
+    // Combine full name (First Middle Last)
+    $fullName = trim("{$request->student_Fname} {$request->student_Mname} {$request->student_Lname}");
 
+    $user = User::create([
+        'name'     => $fullName,
+        'email'    => $request->email,
+        'password' => Hash::make($request->password),
+        'type'     => $request->type,
+    ]);
+} catch (Exception $e) {
+    return redirect()
+        ->back()
+        ->withInput()
+        ->with('errors', 'Failed to create user: ' . $e->getMessage());
+}
+
+//dd($request->all());    
             // Step 2: Create Registration record linked to the user
             try {
                 Registration::create([
                     'user_id'             => $user->id,
-                    'student_name'        => $request->student_name,
+                    'student_Fname'       => $request->student_Fname,
+                    'student_Mname'       => $request->student_Mname,
+                    'student_Lname'       => $request->student_Lname,
                     'course_level'        => $request->course_level,
                     'student_address'     => $request->student_address,
                     'student_phone_num'   => $request->student_phone_num,
@@ -108,7 +121,7 @@ class RegistrationController extends Controller
      */
     public function show(Registration $registration)
     {
-        return view('registration.show', compact('registration'));
+        return view('registrations.show', compact('registration'));
     }
 
     /**
@@ -117,7 +130,7 @@ class RegistrationController extends Controller
     public function edit($id)
 {
     $student = Registration::findOrFail($id); // fetch the student record
-    return view('registration.edit', compact('student'));
+    return view('registrations.edit', compact('student'));
 }
 
     /**
@@ -141,7 +154,7 @@ class RegistrationController extends Controller
             }
 
             return redirect()
-                ->route('registration.index')
+                ->route('registrations.index')
                 ->with('success', 'Registration updated successfully.');
         } catch (Exception $e) {
             Log::error('Registration update failed: ' . $e->getMessage());
@@ -167,7 +180,7 @@ class RegistrationController extends Controller
             $registration->delete();
 
             return redirect()
-                ->route('registration.index')
+                ->route('registrations.index')
                 ->with('success', 'Registration deleted successfully.');
         } catch (Exception $e) {
             Log::error('Registration delete failed: ' . $e->getMessage());

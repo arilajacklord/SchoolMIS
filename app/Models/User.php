@@ -9,7 +9,6 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Enrollment;
-use App\Models\Registration;
 
 class User extends Authenticatable
 {
@@ -28,7 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'type', // 👈 Added type so it can be mass assigned
+        'type',
     ];
 
     /**
@@ -46,13 +45,8 @@ class User extends Authenticatable
     /**
      * The attributes that should be cast.
      *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+     
 
-    /**
      * The accessors to append to the model's array form.
      *
      * @var array<int, string>
@@ -60,6 +54,19 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
 
     /**
      * Relationships
@@ -74,23 +81,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Enrollment::class, 'user_id', 'id');
     }
-
-    /**
-     * Role Helpers
-     */
-    public function isAdmin(): bool
-    {
-        return $this->type === 'admin';
-    }
-
-    public function isTeacher(): bool
-    {
-        return $this->type === 'teacher';
-    }
-
-    public function isStudent(): bool
-    {
-        return $this->type === 'student';
-    }
 }
-

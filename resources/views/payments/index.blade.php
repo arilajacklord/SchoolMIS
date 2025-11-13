@@ -29,7 +29,7 @@
         <div class="card-body mb-3 d-flex justify-content-between align-items-center">
             <div>
                 <h5>Student ID: {{ $invoice->enrollment->user->id ?? 'N/A' }}</h5>
-                <h5>Name: {{ $invoice->enrollment->user->fname ?? '' }} {{ $invoice->enrollment->user->minitial ?? '' }} {{ $invoice->enrollment->user->lname ?? '' }}</h5>
+                <h5>Name: {{ $invoice->enrollment->user->name ?? '' }}</h5>
             </div>
             <a href="{{ route('invoices.index') }}" class="btn btn-primary">
                 <i class="fa fa-arrow-left"></i> Back to Invoices
@@ -67,14 +67,14 @@
                                     <i class="fa fa-edit"></i> Edit
                                 </button>
 
-                                {{-- Delete --}}
+                                <!-- {{-- Delete --}}
                                 <form action="{{ route('payments.destroy', $payment->payment_id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
                                         <i class="fa fa-trash"></i> Delete
                                     </button>
-                                </form>
+                                </form> -->
                             </td>
                         </tr>
 
