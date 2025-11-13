@@ -9,6 +9,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Enrollment;
+use App\Models\Registration;
 
 class User extends Authenticatable
 {
@@ -68,17 +69,34 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Relationships
-     */
     public function registration()
     {
         return $this->hasOne(Registration::class);
 
     }
-    
+
     public function enrollments()
+
     {
-        return $this->hasMany(Enrollment::class, 'user_id', 'id');
+        return $this->hasMany(Enrollment::class, 'user_id');
+    }
+
+    /**
+     * Role Helpers
+     */
+    public function isAdmin(): bool
+    {
+        return $this->type === 'admin';
+    }
+
+    public function isTeacher(): bool
+    {
+        return $this->type === 'teacher';
+    }
+
+    public function isStudent(): bool
+    {
+        return $this->type === 'student';
     }
 }
+

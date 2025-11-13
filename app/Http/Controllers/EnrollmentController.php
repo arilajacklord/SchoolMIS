@@ -2,103 +2,85 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Enrollment;
+use Illuminate\Http\Request;
+use App\Models\User;
+ use App\Models\Enrollment;
 use App\Models\Subject;
 use App\Models\Schoolyear;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
-use App\Http\Requests\EnrollmentStoreRequest;
-use App\Http\Requests\EnrollmentUpdateRequest;
-use Illuminate\Support\Facades\DB;
+
 
 class EnrollmentController extends Controller
 {
-    /**
-     * Display a listing of the enrollments.
-     */
-    public function index(): View
+    public function index()
     {
-        $enrollments = "Select * from enrollments e INNER JOIN subjects s on e.subject_id = s.subject_id 
-            INNER JOIN schoolyears sy on e.schoolyear_id = sy.schoolyear_id INNER JOIN users u on e.user_id = u.id";
-        //
-        // $enrollments = Enrollment::with(['subject', 'schoolyear', 'user'])->get();
-        //
-        $result = DB::select($enrollments);
-        $enroll_list = collect($result);
-    //dd($enrollments);
-        return view('enrollments.index', compact('enroll_list'))
-            ->with('i', (request()->input('page', 1) - 1) * 10);
-    }
-
-    /**
-     * Show the form for creating a new enrollment.
-     */
-    public function create(): View
-    {
+        $enrollments = Enrollment::with(['user', 'subject', 'schoolyear'])->get();
+        $users = User::all();
         $subjects = Subject::all();
         $schoolyears = Schoolyear::all();
+
+        return view('enrollments.index', compact('enrollments', 'users', 'subjects', 'schoolyears'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'subject_id' => 'required|exists:subjects,subject_id',
+            'schoolyear_id' => 'required|exists:schoolyears,schoolyear_id',
+        ]);
+
+        Enrollment::create($request->only(['user_id', 'subject_id', 'schoolyear_id']));
+
+        return redirect()->route('enrollments.index')->with('success', 'Enrollment added successfully.');
+    }
+
+    public function edit($id)
+    {
+        $enrollment = Enrollment::findOrFail($id);
         $users = User::all();
+        $subjects = Subject::all();
+        $schoolyears = Schoolyear::all();
 
-        return view('enrollments.create', compact('subjects', 'schoolyears', 'users'));
+        return response()->json([
+            'enroll_id' => $enrollment->enroll_id,
+            'user_id' => $enrollment->user_id,
+            'subject_id' => $enrollment->subject_id,
+            'schoolyear_id' => $enrollment->schoolyear_id,
+        ]);
     }
 
-    /**
-     * Store a newly created enrollment in storage.
-     */
-    public function store(EnrollmentStoreRequest $request): RedirectResponse
+    public function update(Request $request, $id)
     {
-        Enrollment::create($request->validated());
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'subject_id' => 'required|exists:subjects,subject_id',
+            'schoolyear_id' => 'required|exists:schoolyears,schoolyear_id',
+        ]);
 
-        return redirect()->route('enrollments.index')
-                         ->with('success', 'Enrollment created successfully.');
+        $enrollment = Enrollment::findOrFail($id);
+        $enrollment->update($request->only(['user_id', 'subject_id', 'schoolyear_id']));
+
+        return redirect()->route('enrollments.index')->with('success', 'Enrollment updated successfully.');
     }
 
-    /**
-     * Display the specified enrollment.
-     */
-    public function show(Enrollment $enrollment): View
-{
-    $enrollment->load(['subject', 'schoolyear', 'user']); // eager load relations
-    return view('enrollments.show', compact('enrollment'));
-}
-
-
-    /**
-     * Show the form for editing the specified enrollment.
-     */
-   public function edit(Enrollment $enrollment): View
-{
-    $enrollment->load(['subject', 'schoolyear', 'user']); // eager load relations
-
-    $subjects = Subject::all();
-    $schoolyears = Schoolyear::all();
-    $users = User::all();
-
-    return view('enrollments.edit', compact('enrollment', 'subjects', 'schoolyears', 'users'));
-}
-
-
-    /**
-     * Update the specified enrollment in storage.
-     */
-    public function update(EnrollmentUpdateRequest $request, Enrollment $enrollment): RedirectResponse
+    public function show($id)
     {
-        $enrollment->update($request->validated());
+        $enrollment = Enrollment::with(['user', 'subject', 'schoolyear'])->findOrFail($id);
 
-        return redirect()->route('enrollments.index')
-                        ->with('success', 'Enrollment updated successfully');
+        return response()->json([
+            'user' => $enrollment->user->name ?? 'N/A',
+            'subject' => $enrollment->subject->descriptive_title ?? 'N/A',
+            'schoolyear' => $enrollment->schoolyear->schoolyear ?? 'N/A',
+            'semester' => $enrollment->schoolyear->semester ?? '',
+        ]);
     }
 
-    /**
-     * Remove the specified enrollment from storage.
-     */
-    public function destroy(Enrollment $enrollment): RedirectResponse
+    public function destroy($id)
     {
+        $enrollment = Enrollment::findOrFail($id);
         $enrollment->delete();
 
-        return redirect()->route('enrollments.index')
-                        ->with('success', 'Enrollment deleted successfully');
+        return redirect()->route('enrollments.index')->with('success', 'Enrollment deleted successfully.');
     }
 }

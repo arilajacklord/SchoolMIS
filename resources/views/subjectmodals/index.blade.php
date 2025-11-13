@@ -1,12 +1,9 @@
-<!-- jQuery CDN -->
-<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css"> -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <!-- <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script> -->
 
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css" />
-  
-<script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
-
+ <link rel="stylesheet" href="{{ asset('assets/DataTables/datatables.css') }}" />
+ <link rel="stylesheet" href="{{ asset('assets/DataTables/datatables.min.css') }}" />
+  <script src="{{ asset('assets/jquery/dist/jquery.js') }}"></script>
+  <script src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+  <script src="{{ asset('assets/DataTables/datatables.js') }}"></script>
 <x-app-layout>
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
@@ -40,7 +37,7 @@
                     <div class="card-body">
                       <div class="row gy-3">
                          <div class="col-lg-12 mb-4 order-0">
-                            <table id="myTable" class="table table-striped display " style="width:100%">
+                            <table id="myTable" class="table stripe compact hover row-border" style="width:100%">
                                 <thead>
                                     <tr>
                                     <th>Subject Code</th>

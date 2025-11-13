@@ -9,12 +9,12 @@ use App\Http\Controllers\GradeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\ScholarshipController;
+use App\Http\Controllers\SubjectModalController;
 
 
 
-/*
-|--------------------------------------------------------------------------
+
+/*|--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
@@ -29,6 +29,7 @@ use App\Http\Controllers\ScholarshipController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/books', [App\Http\Controllers\BookController::class, 'index'])->name('books.index');
 Route::get('/books/create', [App\Http\Controllers\BookController::class, 'create'])->name('books.create');
 Route::post('/books', [App\Http\Controllers\BookController::class, 'store'])->name('books.store');
@@ -47,42 +48,50 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-Route::resource('grades', GradeController::class);
-Route::get('/grades/{subject_id}/getStudent', [GradeController::class,'getStudent']);
     
 Route::resource('enrollments', EnrollmentController::class);
-Route::resource('schoolyears', SchoolyearController::class);
+Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
+Route::resource('schoolyear', SchoolyearController::class);
+Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects.index');
 Route::resource('subjects', SubjectController::class);
+Route::get('/schoolyears', [SchoolYearController::class, 'index'])->name('schoolyears.index');
 
 
-// Registration Routes
+
+
+
 Route::resource('registration', RegistrationController::class);
-Route::get('/registrations/studentinfo/{id?}', [RegistrationController::class, 'studentinfo_index'])
-    ->name('registrations.studentinfo_index');
 Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
+Route::get('/register', function (\Illuminate\Http\Request $request) {
+    // Pass selected type to the view
+    $type = $request->query('type');
+    return view('auth.register', compact('type'));
+})->name('register');
 
-// Invoice and Payment Routes
+
 Route::resource('invoices', InvoiceController::class);
-Route::resource('payments', PaymentController::class);
 
-// Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
 Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
+
+
+
 // Print Invoice
 Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])
         ->name('invoices.print');
 // Print Payment
 Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
-    ->name('payments.print');    
+    ->name('payments.print');  
 
 
-// SCHOLARSHIP ROUTES
-Route::middleware(['auth'])->group(function () {
-    Route::get('/scholarships', [ScholarshipController::class, 'index'])->name('scholarships.index');
-    Route::post('/scholarships', [ScholarshipController::class, 'store'])->name('scholarships.store');
-    Route::put('/scholarships/{scholar_id}', [ScholarshipController::class, 'update'])->name('scholarships.update');
-    Route::delete('/scholarships/{scholar_id}', [ScholarshipController::class, 'destroy'])->name('scholarships.destroy');
-});
+Route::resource('grades', GradeController::class);
+Route::get('/grades/{subject_id}/getStudent', [GradeController::class,'getStudent']);
 
 // SUBJECT MODAL ROUTE
 Route::resource('/subjectmodals', SubjectModalController::class);
+
 });
+  
+
+
+    

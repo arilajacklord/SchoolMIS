@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Books;
+use App\Models\Book;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -15,12 +16,13 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+     public function index()
     {
-       $books = Books::paginate(10);
-       return view('books.index', compact('books'));
-    }
+        $books = Book::all();
+        $users  = User::select('id','name')->orderBy('name')->get(); // only id + name
 
+        return view('books.index', compact('books', 'users'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -48,7 +50,7 @@ class BookController extends Controller
         'date_purchased' => 'required|date',
     ]);
 
-    Books::create($validated);
+    Book::create($validated);
 
     return redirect()->route('books.index')->with('success', 'Book added successfully.');
 }
@@ -57,7 +59,7 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Books $books)
+    public function show(Book $books)
     {
         return view('books.show', compact('books'));
     }
@@ -67,36 +69,39 @@ class BookController extends Controller
      */
 public function edit($book_id)
 {
-    $book = Books::findOrFail($book_id);
+    $book = Book::findOrFail($book_id);
     return view('books.edit', compact('book'));
 }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-{
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'author' => 'required|string|max:255',
-        'date_pub' => 'required|date',
-        'status' => 'required|string',
-        'date_purchased' => 'required|date',
-    ]);
+   public function update(Request $request, $book_id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'date_pub' => 'required|date',
+            'status' => 'required|string',
+            'date_purchased' => 'required|date',
+        ]);
 
-    $book = Books::findOrFail($id);
-    $book->update($validated);
+        $books = Book::where('book_id', $book_id)->firstOrFail();
 
-    return redirect()->route('books.index')->with('success', 'Book updated successfully.');
-}
+        $books->update($request->all());
+
+        return redirect()->route('books.index')->with('success', 'Book updated successfully.');
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-   public function destroy(Books $books)
+  public function destroy($book_id)
 {
+    $books = Books::where('book_id', $book_id)->firstOrFail();
     $books->delete();
 
-    return redirect()->route('books.index')->with('success', 'Book deleted successfully!');
+    return redirect()->route('books.index')->with('success', 'Book deleted successfully.');
 }
+
 }

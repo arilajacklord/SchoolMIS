@@ -31,15 +31,13 @@
                             <td>{{ ucfirst($reg->user->type ?? 'N/A') }}</td>
                             <td>{{ $reg->user->email ?? 'N/A' }}</td>       
                             <td>
-                                <a href="{{ route('registration.show', $reg) }}" class="btn btn-info btn-sm me-1">
+                                <a href="{{ route('registration.show', $reg) }}" class="btn btn-info btn-sm">
                                     <i class="fa fa-eye"></i> View
                                 </a>
-                                <a href="{{ route('registration.edit', $reg) }}" class="btn btn-warning btn-sm me-1">
+                                <a href="{{ route('registration.edit', $reg) }}" class="btn btn-warning btn-sm">
                                     <i class="fa fa-edit"></i> Edit
                                 </a>
-                                <a href="{{ route('registrations.studentinfo_index', ['id' => $reg->id]) }}" class="btn btn-primary btn-sm"> <i class="fa fa-user"></i> Student Info
-                                </a>
-                                <form action="{{ route('registration.destroy', $reg) }}" method="POST" class="d-inline me-1" onsubmit="return confirm('Delete this registration?');">
+                                <form action="{{ route('registration.destroy', $reg) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this registration?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">

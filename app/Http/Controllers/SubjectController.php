@@ -2,98 +2,88 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Subject;
-use App\Models\Course;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use App\Http\Requests\SubjectStoreRequest;
-use App\Http\Requests\SubjectUpdateRequest;
 
 class SubjectController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of subjects.
      */
-  public function index()
-{
-    $subjects = Subject::all();
-    return view('subjects.index', compact('subjects'));
-}
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-{
-    $subjects = Subject::all(); 
-    $courses = Course::all();
-
-
-    return view('subjects.create', compact('courses'));
-   
-}
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(SubjectStoreRequest $request): RedirectResponse
+    public function index(): View
     {
-        Subject::create($request->validated());
-
-        return redirect()->route('subjects.index')
-                         ->with('success', 'Subject created successfully.');
+        $subjects = Subject::paginate(10);
+        return view('subjects.index', compact('subjects'));
     }
 
     /**
-     * Display the specified resource.
+     * Store a newly created subject.
      */
-    public function show(Subject $subject): View
+    public function store(Request $request): RedirectResponse
     {
-        return view('subjects.show',compact('subject'));
+        $validated = $request->validate([
+            'course_code' => 'required|string|max:255',
+            'descriptive_title' => 'required|string|max:255',
+            'lec_units' => 'required|integer|min:0',
+            'lab_units' => 'required|integer|min:0',
+            'co_requisite' => 'nullable|string|max:255',
+            'pre_requisite' => 'nullable|string|max:255',
+        ]);
+
+        $validated['total_units'] = ($validated['lec_units'] ?? 0) + ($validated['lab_units'] ?? 0);
+
+        Subject::create($validated);
+
+        return redirect()
+            ->route('subjects.index')
+            ->with('success', 'Subject created successfully.');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display a specific subject (for AJAX).
      */
-    public function edit(Subject $subject): View
-{
-    $courses = Course::all();
-    $subjects = Subject::all(); 
-
-    return view('subjects.edit', compact('subject', 'courses', 'subjects'));
-}
-
-
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(SubjectUpdateRequest $request, Subject $subject): RedirectResponse
+    public function show($id)
     {
-       // var_dump("dfghjkl.;");
-        $subject->update($request->validated());
-
-        return redirect()->route('subjects.index')
-                         ->with('success', 'Subject updated successfully');
+        $subject = Subject::findOrFail($id);
+        return response()->json($subject);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Update an existing subject.
+     */
+    public function update(Request $request, $id): RedirectResponse
+    {
+        $subject = Subject::findOrFail($id);
+
+        $validated = $request->validate([
+            'course_code' => 'required|string|max:255',
+            'descriptive_title' => 'required|string|max:255',
+            'lec_units' => 'required|integer|min:0',
+            'lab_units' => 'required|integer|min:0',
+            'total_units' => 'nullable|integer|min:0',
+            'co_requisite' => 'nullable|string|max:255',
+            'pre_requisite' => 'nullable|string|max:255',
+        ]);
+
+        $validated['total_units'] = ($validated['lec_units'] ?? 0) + ($validated['lab_units'] ?? 0);
+
+        $subject->update($validated);
+
+        return redirect()
+            ->route('subjects.index')
+            ->with('success', 'Subject updated successfully.');
+    }
+
+    /**
+     * Remove a subject.
      */
     public function destroy(Subject $subject): RedirectResponse
     {
         $subject->delete();
-
-        return redirect()->route('subjects.index')
-                        ->with('success','Subject deleted successfully');
-    }
-
-    
+        return redirect()
+            ->route('subjects.index')
+            ->with('success', 'Subject deleted successfully.');
+     }
 }
