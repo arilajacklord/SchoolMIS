@@ -23,13 +23,8 @@ class Enrollment extends Model
         return $this->belongsTo(Subject::class, 'subject_id', 'subject_id');
     }
 
-public function schoolyear()
-{
-    return $this->belongsTo(Schoolyear::class); // defaults to 'schoolyear_id'
+    public function schoolyear()
+    {
+        return $this->belongsTo(Schoolyear::class, 'schoolyear_id', 'schoolyear_id');
+     }
 }
-
-
-
-
-}
-    

@@ -8,8 +8,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Enrollment;
-use App\Models\Registration;
 
 class User extends Authenticatable
 {
@@ -57,18 +55,8 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Relationships
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
     public function registration()
     {
         return $this->hasOne(Registration::class);
@@ -80,23 +68,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Enrollment::class, 'user_id');
     }
-
-    /**
-     * Role Helpers
-     */
-    public function isAdmin(): bool
-    {
-        return $this->type === 'admin';
-    }
-
-    public function isTeacher(): bool
-    {
-        return $this->type === 'teacher';
-    }
-
-    public function isStudent(): bool
-    {
-        return $this->type === 'student';
-    }
 }
+
 

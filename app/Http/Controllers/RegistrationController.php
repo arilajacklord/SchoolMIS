@@ -17,7 +17,7 @@ class RegistrationController extends Controller
     /**
      * Display a listing of registrations.
      */
-    public function index()
+    public function index(): View
     {
         $registrations = Registration::latest()->get();
         return view('registrations.index', compact('registrations'));
@@ -36,35 +36,26 @@ class RegistrationController extends Controller
      */
     public function store(RegistrationStoreRequest $request): RedirectResponse
     {
-       // dd($request->all());
-      
-            // Step 1: Create User account first
-            try {
-                $user = User::create([
-                    'name'     => $request->student_name,
-                    'email'    => $request->email,
-                    'password' => Hash::make($request->password),
-                ]);
-            } catch (Exception $e) {
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->with('errors', 'Failed to create user: ' . $e->getMessage());
-            }
+        try {
+            // ✅ Step 1: Create User account first
+            $user = User::create([
+                'name'     => $request->student_name,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-            // Step 2: Create Registration record linked to the user
-            try {
-                Registration::create([
-                    'user_id'             => $user->id,
-                    'student_name'        => $request->student_name,
-                    'course_level'        => $request->course_level,
-                    'student_address'     => $request->student_address,
-                    'student_phone_num'   => $request->student_phone_num,
-                    'student_status'      => $request->student_status,
-                    'student_citizenship' => $request->student_citizenship,
-                    'student_birthdate'   => $request->student_birthdate,
-                    'student_religion'    => $request->student_religion,
-                    'student_age'         => $request->student_age,
+            // ✅ Step 2: Create Registration record linked to the user
+            Registration::create([
+                'user_id'             => $user->id,
+                'student_name'        => $request->student_name,
+                'course_level'        => $request->course_level,
+                'student_address'     => $request->student_address,
+                'student_phone_num'   => $request->student_phone_num,
+                'student_status'      => $request->student_status,
+                'student_citizenship' => $request->student_citizenship,
+                'student_birthdate'   => $request->student_birthdate,
+                'student_religion'    => $request->student_religion,
+                'student_age'         => $request->student_age,
 
                 // Father info
                 'father_Fname'        => $request->father_Fname,
@@ -115,17 +106,17 @@ class RegistrationController extends Controller
      */
     public function show(Registration $registration): View
     {
-        return view('registration.show', compact('registration'));
+        return view('/registration.show', compact('registration'));
     }
 
     /**
      * Show the form for editing the specified registration.
      */
-    public function edit($id)
-{
-    $student = Registration::findOrFail($id); // fetch the student record
-    return view('registration.edit', compact('student'));
-}
+    public function edit($id): View
+    {
+        $student = Registration::findOrFail($id);
+        return view('registration.edit', compact('student'));
+    }
 
     /**
      * Update the specified registration in storage.
