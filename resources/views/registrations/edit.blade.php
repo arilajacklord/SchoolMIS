@@ -15,10 +15,20 @@
                 <div class="form-step" id="step-1">
                     <h5 class="mb-3"><i class="fa fa-user-graduate text-primary"></i> Student Information</h5>
                     <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label><strong>Full Name</strong></label>
+                        <div class="col-md-2">
+                            <label><strong>First Name</strong></label>
                             <input type="text" name="student_name" class="form-control" 
-                                value="{{ old('student_name', $student->student_name) }}" required>
+                                value="{{ old('student_Fname', $student->student_Fname) }}" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label><strong>Middle Name</strong></label>
+                            <input type="text" name="student_name" class="form-control" 
+                                value="{{ old('student_Mname', $student->student_Mname) }}" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label><strong>Last Name</strong></label>
+                            <input type="text" name="student_name" class="form-control" 
+                                value="{{ old('student_Lname', $student->student_Lname) }}" required>
                         </div>
                         <div class="col-md-6">
                             <label><strong>Email</strong></label>

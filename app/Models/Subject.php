@@ -11,21 +11,27 @@ class Subject extends Model
 
     protected $table = 'subjects';
     protected $primaryKey = 'subject_id';
-    public $timestamps = false; // Optional, if your table doesn't have created_at/updated_at
+    public $timestamps = false;
 
     protected $fillable = [
         'course_code',
         'descriptive_title',
-        'led_units',
+        'lec_units',
         'lab_units',
         'total_units',
         'co_requisite',
         'pre_requisite',
     ];
-    
 
+    // Optional helper to get total units dynamically
+    public function getTotalUnitsAttribute()
+    {
+        return $this->lec_units + $this->lab_units;
+    }
+
+    // Relationships
     public function enrollments()
     {
-        return $this->hasMany(Enrollment::class, 'subject_id');
+        return $this->hasMany(Enrollment::class, 'subject_id', 'subject_id');
     }
 }

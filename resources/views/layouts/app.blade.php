@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/materialdesignicons.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/fullcalendar.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
+
         
     </head>
     <body>
@@ -159,7 +160,7 @@
                                 <a href="{{route('invoices.index')}}"> invoice  </a>
                             </li>
                             <li>
-                                <a href="#"> Sample Page </a>
+                                <a href="{{route('scholarships.index')}}">scholarship</a>
                             </li>
                         </ul>
                     </li>
@@ -186,10 +187,10 @@
                                 <a href="{{route('books.index')}}"> Book</a>
                             </li>
                             <li>
-                                <a href="{{route('borrow.index')}}"> Borrow</a>
+                                <a href="{{route('borrow.index')}}"> Borrow Book</a>
                             </li>
                             <li>
-                                <a href="{{route('return.index')}}"> Return</a>
+                                <a href="{{route('returns.index')}}"> Return Book</a>
                             </li>
                                                         <li>
                                 <a href="{{route('history.index')}}"> History</a>
@@ -308,6 +309,7 @@
                     
                     {{$slot}}
                     
+               
 
                     <!-- ========== title-wrapper start ========== -->
                     <!-- ... dashboard content unchanged ... -->

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Schoolyear;
-use Illuminate\Http\RedirectResponse;
+ use App\Models\Schoolyear;
 use Illuminate\Http\Request;
+ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Http\Requests\SchoolyearStoreRequest;
+use App\Http\Requests\SchoolyearUpdateRequest;
 
 class SchoolyearController extends Controller
 {
@@ -19,65 +21,70 @@ class SchoolyearController extends Controller
         return view('schoolyears.index', compact('schoolyears'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): View
-    {
-        $validated = $request->validate([
-            'schoolyear' => 'required|string|max:20',
-            'semester' => 'required|string|in:1st Semester,2nd Semester,Summer',
-        ]);
-
+ 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(SchoolyearStoreRequest $request): RedirectResponse
-    {
-        Schoolyear::create($request->validated());
+   public function store(Request $request): RedirectResponse
+{
+    $validated = $request->validate([
+        'schoolyear' => 'required|string|max:255',
+        'semester' => 'required|string|max:255',
+    ]);
 
-        return redirect()->route('schoolyears.index')
-            ->with('success', 'School Year created successfully.');
+    Schoolyear::create($validated);
+
+    return redirect()->route('schoolyears.index')
+        ->with('success', 'School Year created successfully.');
+}
+    /**
+     * Display the specified resource (for view modal).
+     */
+    public function show($id)
+    {
+        $schoolyear = Schoolyear::findOrFail($id);
+
+        // Handle AJAX requests
+        if (request()->ajax()) {
+            return response()->json($schoolyear);
+        }
+
+        return view('schoolyears.show', compact('schoolyear'));
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified resource (AJAX modal).
      */
-    public function show(Schoolyear $schoolyear): View
-    {
-        $validated = $request->validate([
-            'schoolyear' => 'required|string|max:20',
-            'semester' => 'required|string|in:1st Semester,2nd Semester,Summer',
-        ]);
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Schoolyear $schoolyear): View
-    {
-        return view('schoolyears.edit', compact('schoolyear'));
+    public function edit(Schoolyear $schoolyear)
+{
+    if (request()->ajax()) {
+        return response()->json($schoolyear);
     }
-
+    return view('schoolyears.edit', compact('schoolyear'));
+}
     /**
      * Update the specified resource in storage.
      */
-    public function update(SchoolyearUpdateRequest $request, Schoolyear $schoolyear): RedirectResponse
-    {
-        $schoolyear->update($request->validated());
+   public function update(Request $request, Schoolyear $schoolyear)
+{
+    $validated = $request->validate([
+        'schoolyear' => 'required|string|max:255',
+        'semester' => 'required|string|max:255',
+    ]);
 
-        return redirect()->route('schoolyears.index')
-                         ->with('success', 'Schoolyear updated successfully.');
-    }
+    $schoolyear->update($validated);
 
+    return redirect()->route('schoolyears.index')->with('success', 'School year updated successfully.');
+}
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Schoolyear $schoolyear): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
+        $schoolyear = Schoolyear::findOrFail($id);
         $schoolyear->delete();
 
         return redirect()->route('schoolyears.index')
-                         ->with('success', 'Schoolyear deleted successfully.');
+            ->with('success', 'School Year deleted successfully.');
     }
 }

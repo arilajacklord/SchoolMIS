@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
-            <h4 class="card-title">Returned Books</h4>
+            <h4 class="card-title">Borrowed Books</h4>
           </div>
 
           <div class="card-body">
@@ -20,23 +20,21 @@
                     <th>User</th>
                     <th>Book</th>
                     <th>Date Borrowed</th>
-                    <th>Date Returned</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @forelse ($returns as $index => $return)
+                  @forelse ($borrowedbooks as $index => $borrowedbook)
                     <tr>
                       <td>{{ $index + 1 }}</td>
-                      <td>{{ $return->user->name ?? 'Unknown' }}</td>
-                      <td>{{ $return->book->title ?? 'Unknown' }}</td>
-                      <td>{{ \Carbon\Carbon::parse($return->date_borrowed)->format('M d, Y') }}</td>
-                      <td>{{ \Carbon\Carbon::parse($return->date_returned)->format('M d, Y') }}</td>
-                      <td><span class="badge bg-primary">Returned</span></td>
+                      <td>{{ $borrowedbook->user->name ?? 'Unknown' }}</td>
+                      <td>{{ $borrowedbook->book->title ?? 'Unknown' }}</td>
+                      <td>{{ \Carbon\Carbon::parse($borrowedbook->date_borrowed)->format('M d, Y') }}</td>
+                      <td><span class="badge bg-warning text-dark">Borrowed</span></td>
                     </tr>
                   @empty
                     <tr>
-                      <td colspan="6" class="text-center text-muted">No returned books yet.</td>
+                      <td colspan="5" class="text-center text-muted">No borrowed books yet.</td>
                     </tr>
                   @endforelse
                 </tbody>

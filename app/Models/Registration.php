@@ -3,11 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Sanctum\HasApiTokens;
+use App\Models\Enrollment;
 
-class Registration extends Model
+class User extends Authenticatable
 {
+    use HasApiTokens;
     use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
     // Table name
     protected $table = 'registration';
@@ -19,36 +28,10 @@ class Registration extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'user_id',
-        'student_name',
-        'course_level',
-        'student_address',
-        'student_phone_num',
-        'student_status',
-        'student_citizenship',
-        'student_birthdate',
-        'student_religion',
-        'student_age',
-        'father_Fname',
-        'father_Mname',
-        'father_Lname',
-        'father_address',
-        'father_cell_no',
-        'father_age',
-        'father_religion',
-        'father_birthdate',
-        'father_profession',
-        'father_occupation',
-        'mother_Fname',
-        'mother_Mname',
-        'mother_Lname',
-        'mother_address',
-        'mother_cell_no',
-        'mother_age',
-        'mother_religion',
-        'mother_birthdate',
-        'mother_profession',
-        'mother_occupation',
+        'name',
+        'email',
+        'password',
+        'type',
     ];
 
     /**

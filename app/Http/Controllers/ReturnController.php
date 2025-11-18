@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Borrow;
+use App\Models\Return;
 use Illuminate\Http\Request;
 
 class ReturnController extends Controller
@@ -14,6 +15,6 @@ class ReturnController extends Controller
             ->orderByDesc('date_returned')
             ->get();
 
-        return view('return.index', compact('returns'));
+        return view('returns.index', compact('returns'));
     }
 }

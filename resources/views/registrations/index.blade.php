@@ -6,22 +6,20 @@
                 <i class="fa fa-plus"></i> New Registration
             </a>
         </div>
-
+        
         <div class="card-body">
             {{-- Flash success message --}}
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <table class="table table-bordered table-hover text-center">
+            <table class="table table-bordered table-hover text-center align-middle">
                 <thead class="table-white">
                     <tr>
                         <th>#</th>
                         <th>Name</th>
                         <th>Type</th>
-                        <th>Status</th>
-                        <th>Address</th>
-                        <th>Citizenship</th>
+                        <th>Email</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -29,26 +27,17 @@
                     @forelse($registrations as $reg)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $reg->student_name }}</td>
-                            <td>{{ ucfirst($reg->type ?? 'student') }}</td>
+                            <td>{{ $reg->student_Fname }} {{ $reg->student_Mname }} {{ $reg->student_Lname }}</td>
+                            <td>{{ ucfirst($reg->user->type ?? 'N/A') }}</td>
+                            <td>{{ $reg->user->email ?? 'N/A' }}</td>       
                             <td>
-                                <span class="badge 
-                                    @if($reg->student_status === 'active') bg-success 
-                                    @elseif($reg->student_status === 'inactive') bg-danger 
-                                    @else bg-warning @endif">
-                                    {{ ucfirst($reg->student_status) }}
-                                </span>
-                            </td>
-                            <td>{{ $reg->student_address }}</td>
-                            <td>{{ $reg->student_citizenship }}</td>
-                            <td>
-                                <a href="{{ route('registration.show', $reg) }}" class="btn btn-info btn-sm">
+                                <a href="{{ route('registration.show', $reg->id) }}" class="btn btn-info btn-sm">
                                     <i class="fa fa-eye"></i> View
                                 </a>
-                                <a href="{{ route('registration.edit', $reg) }}" class="btn btn-warning btn-sm">
+                                <a href="{{ route('registration.edit', $reg->id) }}" class="btn btn-warning btn-sm">
                                     <i class="fa fa-edit"></i> Edit
                                 </a>
-                                <form action="{{ route('registration.destroy', $reg) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this registration?');">
+                                <form action="{{ route('registration.destroy', $reg->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this registration?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">
@@ -59,7 +48,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">No registrations found.</td>
+                            <td colspan="5" class="text-center">No registrations found.</td>
                         </tr>
                     @endforelse
                 </tbody>

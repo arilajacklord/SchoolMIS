@@ -119,8 +119,23 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+        /* card */
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+            backdrop-filter: blur(8px);
+            transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+            transform: translateY(0);
+        }
+        .auth-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(2,6,23,0.7);
+        }
 
             <div>
                 <x-label for="email" value="{{ __('Email') }}" />
@@ -141,12 +156,11 @@
                          required autocomplete="current-password" />
             </div>
 
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
+            @if (session('status'))
+                <div class="status">
+                    {{ session('status') }}
+                </div>
+            @endif
 
             <div class="flex items-center justify-between mt-4">
                 @if (Route::has('password.request'))

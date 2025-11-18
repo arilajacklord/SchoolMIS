@@ -14,9 +14,17 @@
                 <h5 class="mb-3"><i class="fa fa-user-graduate text-primary"></i> Student Information</h5>
 
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label><strong>Full Name</strong></label>
-                        <input type="text" class="form-control" value="{{ $registration->student_name }}" disabled>
+                    <div class="col-md-2">
+                        <label><strong>First Name</strong></label>
+                        <input type="text" class="form-control" value="{{ $registration->student_Fname }}" disabled>
+                    </div>
+                    <div class="col-md-2">
+                        <label><strong>Middle Name</strong></label>
+                        <input type="text" class="form-control" value="{{ $registration->student_Mname }}" disabled>
+                    </div>
+                    <div class="col-md-2">
+                        <label><strong>Last Name</strong></label>
+                        <input type="text" class="form-control" value="{{ $registration->student_Lname }}" disabled>
                     </div>
                     <div class="col-md-6">
                         <label><strong>Email</strong></label>
