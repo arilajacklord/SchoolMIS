@@ -23,28 +23,28 @@ class BorrowController extends Controller
     }
 
     // ✅ Store New Borrow Record
-    public function store(Request $request)
-    {
-        $request->validate([
-            'book_id' => 'required|exists:books,book_id',
-            'user_id' => 'required|exists:users,id',
-            'date_borrowed' => 'required|date',
-        ]);
+   public function store(Request $request)
+{
+    // Validate incoming request
+    $request->validate([
+        'book_id' => 'required|exists:books,book_id',
+    ]);
 
-        // Create borrow record
-        Borrow::create([
-            'book_id' => $request->book_id,
-            'user_id' => $request->user_id,
-            'date_borrowed' => $request->date_borrowed,
-        ]);
+    // Create a borrow record
+    $borrow = new Borrow();
+    $borrow->book_id = $request->book_id;
+    $borrow->user_id = auth()->id(); // ✅ Logged-in user
+    $borrow->borrow_date = now();    // ✅ Current date
+    $borrow->status = 'Borrowed';
+    $borrow->save();
 
-        // Update book status to Checked Out
-        Book::where('book_id', $request->book_id)
-            ->update(['status' => 'Checked Out']);
+    // Update the book status
+    $book = Book::findOrFail($request->book_id);
+    $book->status = 'Borrowed';
+    $book->save();
 
-        // Redirect to Borrow List
-        return redirect()->route('borrow.index')->with('success', 'Book borrowed successfully!');
-    }
+    return redirect()->back()->with('success', 'Book borrowed successfully!');
+}
 
     // ✅ Update Borrow Record
     public function update(Request $request, $id)
