@@ -10,38 +10,39 @@ use App\Models\Schoolyear;
 
 class GradeController extends Controller
 {
-    // Page 1: List subjects by selected school year
+    // Show subjects by selected school year
     public function index(Request $request)
     {
         $schoolyears = Schoolyear::all();
+        $selectedId = $request->schoolyear_id;
         $selectedSchoolyear = null;
         $subjects = [];
 
-        if ($request->has('schoolyear_id')) {
-            $selectedSchoolyear = Schoolyear::find($request->schoolyear_id);
-            if ($selectedSchoolyear) {
-                $subjects = Subject::orderBy('course_code', 'asc')->get();
-            }
+        if ($selectedId) {
+            $selectedSchoolyear = Schoolyear::find($selectedId);
+            $subjects = Subject::whereIn('subject_id', function ($q) use ($selectedId) {
+                $q->select('subject_id')->from('enrollments')->where('schoolyear_id', $selectedId);
+            })->get();
         }
 
         return view('grades.index', compact('schoolyears', 'selectedSchoolyear', 'subjects'));
     }
 
-    // Page 2: Show students in a subject
+    // Show students under a subject
     public function showSubject($schoolyear_id, $subject_id)
     {
-        $schoolyear = Schoolyear::findOrFail($schoolyear_id);
         $subject = Subject::findOrFail($subject_id);
+        $schoolyear = Schoolyear::findOrFail($schoolyear_id);
 
-        $enrollments = Enrollment::where('schoolyear_id', $schoolyear_id)
+        $enrollments = Enrollment::with(['registration', 'grade'])
             ->where('subject_id', $subject_id)
-            ->with(['registration', 'grade'])
+            ->where('schoolyear_id', $schoolyear_id)
             ->get();
 
-        return view('grades.students', compact('schoolyear', 'subject', 'enrollments'));
+        return view('grades.students', compact('enrollments', 'subject', 'schoolyear'));
     }
 
-    // Store or update grades
+    // Store or update grade
     public function store(Request $request)
     {
         $request->validate([
@@ -52,26 +53,30 @@ class GradeController extends Controller
             'final' => 'nullable|numeric|min:0|max:100',
         ]);
 
-        $grade = Grade::firstOrNew(['enroll_id' => $request->enroll_id]);
-        $grade->fill($request->only(['prelim','midterm','semifinal','final']));
+        $enroll_id = $request->enroll_id;
+
+        // Get existing grade or create new
+        $grade = Grade::firstOrNew(['enroll_id' => $enroll_id]);
+        $grade->prelim = $request->prelim;
+        $grade->midterm = $request->midterm;
+        $grade->semifinal = $request->semifinal;
+        $grade->final = $request->final;
         $grade->save();
 
         return redirect()->back()->with('success', 'Grade saved successfully!');
     }
 
-    // Fetch grade for modal via AJAX
-    public function getGrade($enroll_id)
+    // Fetch grade for AJAX
+    public function get($enroll_id)
     {
         $grade = Grade::where('enroll_id', $enroll_id)->first();
         return response()->json($grade);
     }
 
-    // Print single student's grade
+    // Print grade slip
     public function print($enroll_id)
     {
-        $enrollment = Enrollment::with(['registration','subject','schoolyear','grade'])
-            ->findOrFail($enroll_id);
-
+        $enrollment = Enrollment::with(['registration', 'subject', 'grade'])->findOrFail($enroll_id);
         return view('grades.print', compact('enrollment'));
     }
 }

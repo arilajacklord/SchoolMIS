@@ -113,6 +113,32 @@
 
                     <span class="divider"><hr /></span>
 
+                    <!-- Repeat for other menu items, but use unique data-bs-target and id for each dropdown -->
+                    <li class="nav-item nav-item-has-children">
+                        <a
+                            href="#0"
+                            class="collapsed"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#ddmenu_3"
+                            aria-controls="ddmenu_3"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation"
+                        >
+                            <span class="icon">
+                                <!-- SVG omitted for brevity -->
+                            </span>
+                            <span class="text">ProspectusManagement</span>
+                        </a>
+                        <ul id="ddmenu_3" class="collapse dropdown-nav">
+                            <li>
+                               <a href="{{ route('prospectus.index') }}"> Prospectus  </a>
+                         </li>
+                            
+                        </ul>
+                    </li>
+
+                    <span class="divider"><hr /></span>
+
                     <li class="nav-item nav-item-has-children">
                         <a
                             href="#0"

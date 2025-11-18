@@ -9,14 +9,14 @@ class Registration extends Model
 {
     use HasFactory;
 
-    // Table name (optional if your table is plural: "registrations")
+    // Table name
     protected $table = 'registration';
 
-    // Primary key (if not 'id')
-    protected $primaryKey = 'id'; // adjust if your table uses this column
+    // Primary key
+    protected $primaryKey = 'id';
 
-    // Disable timestamps if your table doesn’t have created_at / updated_at
-    public $timestamps = false;
+    // Enable timestamps since your migration uses them
+    public $timestamps = true;
 
     protected $fillable = [
         'user_id',
@@ -51,17 +51,36 @@ class Registration extends Model
         'mother_occupation',
     ];
 
-    // /**
-    //  * Optional relationship to the User model.
-    //  * If `user_id` references the `users` table.
-    //  */
+    /**
+     * Relationship to the User model.
+     * `user_id` references `users.id`
+     */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    /**
+     * Relationship to enrollments.
+     * A registration can have multiple enrollments.
+     */
     public function enrollments()
     {
-        return $this->hasMany(Enrollment::class, 'user_id', 'id');
+        return $this->hasMany(Enrollment::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Optional: Relationship to grades through enrollments
+     */
+    public function grades()
+    {
+        return $this->hasManyThrough(
+            Grade::class,
+            Enrollment::class,
+            'user_id',      // Foreign key on enrollments table
+            'enroll_id',    // Foreign key on grades table
+            'user_id',      // Local key on registration table
+            'enroll_id'     // Local key on enrollment table
+        );
     }
 }

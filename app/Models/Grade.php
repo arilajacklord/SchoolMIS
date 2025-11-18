@@ -11,19 +11,11 @@ class Grade extends Model
 
     protected $table = 'grades';
     protected $primaryKey = 'grade_id';
-    public $incrementing = true;
-    protected $keyType = 'int';
-
-    protected $fillable = [
-        'enroll_id',
-        'prelim',
-        'midterm',
-        'semifinal',
-        'final',
-    ];
+    protected $fillable = ['enroll_id', 'prelim', 'midterm', 'semifinal', 'final'];
 
     public function enrollment()
     {
         return $this->belongsTo(Enrollment::class, 'enroll_id', 'enroll_id');
     }
 }
+

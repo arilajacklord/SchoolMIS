@@ -17,6 +17,9 @@ class Enrollment extends Model
         'subject_id', 'schoolyear_id', 'user_id'
     ];
 
+    /**
+     * ✅ Link to Registration instead of User
+     */
     public function registration()
     {
         return $this->belongsTo(Registration::class, 'user_id', 'user_id');
