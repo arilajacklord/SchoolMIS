@@ -19,7 +19,7 @@ class RegistrationUpdateRequest extends FormRequest
 
         return [
             // User fields
-            'email' => [
+                'email' => [
                 'required',
                 'email',
                 'max:255',
@@ -28,15 +28,17 @@ class RegistrationUpdateRequest extends FormRequest
             'password' => ['nullable', 'string', 'min:6', 'confirmed'], // optional, keep existing if empty
 
             // Student fields (same as store)
-            'student_name'        => ['required', 'string', 'max:255'],
-            'course_level'        => ['required', 'string', 'max:100'],
-            'student_address'     => ['required', 'string', 'max:255'],
-            'student_phone_num'      => ['required', 'string', 'max:20'],
-            'student_status'      => ['required', 'string', 'max:50'],
-            'student_citizenship' => ['required', 'string', 'max:100'],
-            'student_birthdate'   => ['required', 'date'],
-            'student_religion'    => ['required', 'string', 'max:50'],
-            'student_age'         => ['required', 'integer', 'min:0'],
+            'student_Fname'       => ['nullable', 'string', 'max:255'],
+            'student_Mname'       => ['nullable', 'string', 'max:255'],
+            'student_Lname'       => ['nullable', 'string', 'max:255'],
+            'course_level'        => ['nullable', 'string', 'max:100'],
+            'student_address'     => ['nullable', 'string', 'max:255'],
+            'student_phone_num'   => ['nullable', 'string', 'max:20'],
+            'student_status'      => ['nullable', 'string', 'max:50'],
+            'student_citizenship' => ['nullable', 'string', 'max:100'],
+            'student_birthdate'   => ['nullable', 'date'],
+            'student_religion'    => ['nullable', 'string', 'max:50'],
+            'student_age'         => ['nullable', 'integer', 'min:0'],
 
             // Father info
             'father_Fname'      => ['nullable', 'string', 'max:255'],

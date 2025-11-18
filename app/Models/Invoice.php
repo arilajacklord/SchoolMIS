@@ -9,17 +9,17 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'invoice_id';   // important!
+    protected $primaryKey = 'invoice_id';
     public $incrementing = true;
     protected $keyType = 'int';
 
     protected $fillable = [
         'enroll_id',
+        'scholar_id',      // selected scholarship from dropdown
         'amount',
         'status',
         'insurance',
         'sanitation',
-        'scholarship',
         'balance',
         'due_date',
     ];
@@ -41,63 +41,82 @@ class Invoice extends Model
     }
 
     /**
-     * Booted method to automatically update status
+     * Relationship: Invoice belongs to Scholarship
      */
-    protected static function booted()
-{
-    static::saving(function ($invoice) {
-        // Ensure balance is never negative
-        if ($invoice->balance < 0) {
-            $invoice->balance = 0;
-        }
-
-        // Total extra charges
-        $extraCharges = ($invoice->insurance ?? 0) + ($invoice->sanitation ?? 0);
-
-        // Total amount including extra charges
-        $totalAmountWithExtras = $invoice->amount + $extraCharges;
-
-        // Total deductions: scholarship + payments
-        $totalDeductions = ($invoice->scholarship ?? 0) + ($invoice->payments->sum('total_amount') ?? 0);
-
-        // Calculate current balance
-        $invoice->balance = $totalAmountWithExtras - $totalDeductions;
-
-        // Determine status
-        if ($totalDeductions == 0) {
-            $invoice->status = 'Unpaid';
-        } elseif ($invoice->balance > 0) {
-            $invoice->status = 'Partial';
-        } else {
-            $invoice->status = 'Paid';
-        }
-    });
-}
-
-
-    /**
-     * Calculate total invoice amount including optional fields
-     */
-    public function totalAmount()
+    public function scholar()
     {
-        return ($this->amount ?? 0)
-            + ($this->insurance ?? 0)
-            + ($this->sanitation ?? 0)
-            - ($this->scholarship ?? 0);
+        return $this->belongsTo(Scholarship::class, 'scholar_id', 'scholar_id');
     }
 
     /**
-     * Recalculate the balance based on all payments
+     * Automatically calculate balance and status before saving
+     */
+    protected static function booted()
+    {
+        static::saving(function ($invoice) {
+            // Prevent negative balances
+            if ($invoice->balance < 0) {
+                $invoice->balance = 0;
+            }
+
+            // Add optional fees
+            $extraCharges = ($invoice->insurance ?? 0) + ($invoice->sanitation ?? 0);
+
+            // Scholarship amount (from relationship)
+            $scholarshipAmount = $invoice->scholar ? ($invoice->scholar->amount ?? 0) : 0;
+
+            // Total invoice amount including fees
+            $totalAmountWithExtras = ($invoice->amount ?? 0) + $extraCharges;
+
+            // Total paid by the student
+            $totalPayments = $invoice->payments->sum('total_amount') ?? 0;
+
+            // Compute new balance
+            $invoice->balance = max($totalAmountWithExtras - ($scholarshipAmount + $totalPayments), 0);
+
+            // Update status automatically
+            if ($totalPayments == 0 && $invoice->balance == $totalAmountWithExtras) {
+                $invoice->status = 'Unpaid';
+            } elseif ($invoice->balance > 0) {
+                $invoice->status = 'Partial';
+            } else {
+                $invoice->status = 'Paid';
+            }
+        });
+    }
+
+    /**
+     * Get total payable amount considering scholarship
+     */
+    public function totalAmount()
+    {
+        $scholarshipAmount = $this->scholar ? ($this->scholar->amount ?? 0) : 0;
+
+        return ($this->amount ?? 0)
+            + ($this->insurance ?? 0)
+            + ($this->sanitation ?? 0)
+            - $scholarshipAmount;
+    }
+
+    /**
+     * Recalculate balance after payment or scholarship update
      */
     public function updateBalance()
     {
         $totalPaid = $this->payments()->sum('total_amount');
+        $scholarshipAmount = $this->scholar ? ($this->scholar->amount ?? 0) : 0;
+        $totalAmountWithExtras = ($this->amount ?? 0) + ($this->insurance ?? 0) + ($this->sanitation ?? 0);
 
-        // Calculate full invoice total
-        $fullAmount = $this->totalAmount();
+        $this->balance = max($totalAmountWithExtras - ($scholarshipAmount + $totalPaid), 0);
 
-        // Update balance and save
-        $this->balance = max($fullAmount - $totalPaid, 0);
+        if ($totalPaid == 0 && $this->balance == $totalAmountWithExtras) {
+            $this->status = 'Unpaid';
+        } elseif ($this->balance > 0) {
+            $this->status = 'Partial';
+        } else {
+            $this->status = 'Paid';
+        }
+
         $this->save();
     }
 }

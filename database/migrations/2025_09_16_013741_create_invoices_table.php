@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id('invoice_id');
             $table->unsignedBigInteger('enroll_id');
+            $table->unsignedBigInteger('scholar_id');
             $table->decimal('amount', 10, 2);
             $table->string('status')->default('unpaid');
             $table->decimal('insurance', 10, 2)->default(0);
