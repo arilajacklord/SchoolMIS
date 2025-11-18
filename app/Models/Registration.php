@@ -3,65 +3,80 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Sanctum\HasApiTokens;
+use App\Models\Enrollment;
 
-class Registration extends Model
+class User extends Authenticatable
 {
+    use HasApiTokens;
     use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
-    // Table name (optional if your table is plural: "registrations")
-    protected $table = 'registration';
-
-    // Primary key (if not 'id')
-    protected $primaryKey = 'registration_id'; // adjust if your table uses this column
-
-    // Disable timestamps if your table doesn’t have created_at / updated_at
-    public $timestamps = false;
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
-        'user_id',
-        'student_Fname',
-        'student_Mname',
-        'student_Lname',
-        'course_level',
-        'student_address',
-        'student_phone_num',
-        'student_status',
-        'student_citizenship',
-        'student_birthdate',
-        'student_religion',
-        'student_age',
-        'father_Fname',
-        'father_Mname',
-        'father_Lname',
-        'father_address',
-        'father_cell_no',
-        'father_age',
-        'father_religion',
-        'father_birthdate',
-        'father_profession',
-        'father_occupation',
-        'mother_Fname',
-        'mother_Mname',
-        'mother_Lname',
-        'mother_address',
-        'mother_cell_no',
-        'mother_age',
-        'mother_religion',
-        'mother_birthdate',
-        'mother_profession',
-        'mother_occupation',
+        'name',
+        'email',
+        'password',
+        'type',
     ];
 
-    // /**
-    //  * Optional relationship to the User model.
-    //  * If `user_id` references the `users` table.
-    //  */
-    public function user()
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     
+
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'profile_photo_url',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 
+    /**
+     * Relationships
+     */
+    public function registration()
+    {
+        return $this->hasOne(Registration::class);
+
+    }
+    
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class, 'user_id', 'id');
