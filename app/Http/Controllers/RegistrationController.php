@@ -17,6 +17,13 @@ class RegistrationController extends Controller
     /**
      * Display a listing of registrations.
      */
+    public function studentinfo_index(): View
+
+    {
+        $registrations = Registration::latest()->get();
+        return view('studentinfo.index', compact('registrations'));
+    }
+
     public function index(): View
     {
         $registrations = Registration::latest()->get();
@@ -38,16 +45,20 @@ class RegistrationController extends Controller
     {
         try {
             // ✅ Step 1: Create User account first
+            $fullname = $request->student_Fname . ' ' . $request->student_Mname . ' ' . $request->student_Lname;
             $user = User::create([
-                'name'     => $request->student_name,
+                'name'     => $fullname,
                 'email'    => $request->email,
                 'password' => Hash::make($request->password),
+                'type'     => $request->type,
             ]);
 
             // ✅ Step 2: Create Registration record linked to the user
             Registration::create([
                 'user_id'             => $user->id,
-                'student_name'        => $request->student_name,
+                'student_Fname'        => $request->student_Fname,
+                'student_Mname'        => $request->student_Mname,
+                'student_Lname'        => $request->student_Lname,
                 'course_level'        => $request->course_level,
                 'student_address'     => $request->student_address,
                 'student_phone_num'   => $request->student_phone_num,
@@ -58,28 +69,28 @@ class RegistrationController extends Controller
                 'student_age'         => $request->student_age,
 
                 // Father info
-                'father_Fname'        => $request->father_Fname,
-                'father_Mname'        => $request->father_Mname,
-                'father_Lname'        => $request->father_Lname,
-                'father_address'      => $request->father_address,
-                'father_cell_no'      => $request->father_cell_no,
-                'father_age'          => $request->father_age,
-                'father_religion'     => $request->father_religion,
-                'father_birthdate'    => $request->father_birthdate,
-                'father_profession'   => $request->father_profession,
-                'father_occupation'   => $request->father_occupation,
+                // 'father_Fname'        => $request->father_Fname,
+                // 'father_Mname'        => $request->father_Mname,
+                // 'father_Lname'        => $request->father_Lname,
+                // 'father_address'      => $request->father_address,
+                // 'father_cell_no'      => $request->father_cell_no,
+                // 'father_age'          => $request->father_age,
+                // 'father_religion'     => $request->father_religion,
+                // 'father_birthdate'    => $request->father_birthdate,
+                // 'father_profession'   => $request->father_profession,
+                // 'father_occupation'   => $request->father_occupation,
 
-                // Mother info
-                'mother_Fname'        => $request->mother_Fname,
-                'mother_Mname'        => $request->mother_Mname,
-                'mother_Lname'        => $request->mother_Lname,
-                'mother_address'      => $request->mother_address,
-                'mother_cell_no'      => $request->mother_cell_no,
-                'mother_age'          => $request->mother_age,
-                'mother_religion'     => $request->mother_religion,
-                'mother_birthdate'    => $request->mother_birthdate,
-                'mother_profession'   => $request->mother_profession,
-                'mother_occupation'   => $request->mother_occupation,
+                // // Mother info
+                // 'mother_Fname'        => $request->mother_Fname,
+                // 'mother_Mname'        => $request->mother_Mname,
+                // 'mother_Lname'        => $request->mother_Lname,
+                // 'mother_address'      => $request->mother_address,
+                // 'mother_cell_no'      => $request->mother_cell_no,
+                // 'mother_age'          => $request->mother_age,
+                // 'mother_religion'     => $request->mother_religion,
+                // 'mother_birthdate'    => $request->mother_birthdate,
+                // 'mother_profession'   => $request->mother_profession,
+                // 'mother_occupation'   => $request->mother_occupation,
             ]);
 
             return redirect()
