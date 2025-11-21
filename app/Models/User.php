@@ -68,6 +68,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Enrollment::class, 'user_id');
     }
+
+    // In User.php
+public function getStudentNameAttribute()
+{
+    return $this->lname . ', ' . $this->fname . ' ' . $this->mname;
+}
+
 }
 
 

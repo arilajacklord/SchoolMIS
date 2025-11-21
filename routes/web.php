@@ -11,10 +11,6 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\SubjectModalController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ReturnController;
-use App\Http\Controllers\ScholarshipController;
-
 
 
 
@@ -109,9 +105,19 @@ Route::get('/studentinfo', [RegistrationController::class, 'studentinfo_index'])
     ->name('studentinfo.index');
 
 // Grades
-Route::resource('grades', GradeController::class);
-   
+// web.php
+Route::prefix('grades')->group(function(){
+    Route::get('/', [GradeController::class, 'index'])->name('grades.index');
+    Route::get('/subject/{schoolyear_id}/{subject_id}', [GradeController::class, 'showSubject'])->name('grades.showSubject');
+    Route::post('/store', [GradeController::class, 'store'])->name('grades.store');
+    Route::get('/get/{enroll_id}', [GradeController::class, 'get']);
+    Route::get('/print/{enroll_id}', [GradeController::class, 'print'])->name('grades.print');
+});
 
+Route::get('prospectus', [ProspectusController::class, 'index'])->name('prospectus.index');
+Route::get('prospectus/print/{schoolyear?}', [ProspectusController::class, 'print'])->name('prospectus.print');
+
+          
 });
   
 

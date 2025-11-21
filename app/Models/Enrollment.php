@@ -3,19 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
- use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 
 class Enrollment extends Model
- {
+{
     use HasFactory;
 
     protected $table = 'enrollments';
     protected $primaryKey = 'enroll_id';
-    protected $fillable = ['user_id', 'subject_id', 'schoolyear_id'];
+    public $timestamps = true;
 
-    public function user()
+    protected $fillable = [
+        'subject_id', 'schoolyear_id', 'user_id'
+    ];
+
+    /**
+     * ✅ Link to Registration instead of User
+     */
+    public function registration()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(Registration::class, 'user_id', 'user_id');
     }
 
     public function subject()
