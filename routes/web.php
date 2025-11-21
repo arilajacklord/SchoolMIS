@@ -11,6 +11,10 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\SubjectModalController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReturnController;
+use App\Http\Controllers\ScholarshipController;
+
 
 
 
@@ -71,17 +75,13 @@ Route::resource('enrollments', EnrollmentController::class);
  Route::resource('schoolyears', SchoolyearController::class);
 Route::resource('subjects', SubjectController::class);
  
-
-
-
-
-
 Route::resource('/subjectmodals', SubjectModalController::class);
 
 // Invoices
 Route::resource('invoices', InvoiceController::class);
 Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 
+Route::resource('scholarships', ScholarshipController::class);
 // Payments
 Route::resource('payments', PaymentController::class);
 // Print Payment
@@ -104,7 +104,9 @@ Route::delete('/return/{return}', [App\Http\Controllers\ReturnController::class,
 Route::resource('history', App\Http\Controllers\HistoryController::class);Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');         
 // Registration
 Route::resource('/registration', RegistrationController::class);
-Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
+//Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
+Route::get('/studentinfo', [RegistrationController::class, 'studentinfo_index'])
+    ->name('studentinfo.index');
 
 // Grades
 Route::resource('grades', GradeController::class);
