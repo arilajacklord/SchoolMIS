@@ -20,9 +20,12 @@ class Enrollment extends Model
     /**
      * ✅ Link to Registration instead of User
      */
-    public function registration()
+    public function Registration()
     {
         return $this->belongsTo(Registration::class, 'user_id', 'user_id');
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     public function subject()
@@ -34,4 +37,10 @@ class Enrollment extends Model
     {
         return $this->belongsTo(Schoolyear::class, 'schoolyear_id', 'schoolyear_id');
      }
+       public function grade()
+    {
+        return $this->belongsTo(Grade::class);
+     }
+   
+   
 }

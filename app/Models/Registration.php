@@ -10,7 +10,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Enrollment;
 
-class User extends Authenticatable
+class Registration extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;

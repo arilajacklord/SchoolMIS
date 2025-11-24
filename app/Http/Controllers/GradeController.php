@@ -24,6 +24,7 @@ class GradeController extends Controller
                 $q->select('subject_id')->from('enrollments')->where('schoolyear_id', $selectedId);
             })->get();
         }
+   
 
         return view('grades.index', compact('schoolyears', 'selectedSchoolyear', 'subjects'));
     }
@@ -34,11 +35,11 @@ class GradeController extends Controller
         $subject = Subject::findOrFail($subject_id);
         $schoolyear = Schoolyear::findOrFail($schoolyear_id);
 
-        $enrollments = Enrollment::with(['registration', 'grade'])
+        $enrollments = Enrollment::with(['registration', 'grade','user'])
             ->where('subject_id', $subject_id)
             ->where('schoolyear_id', $schoolyear_id)
             ->get();
-
+    
         return view('grades.students', compact('enrollments', 'subject', 'schoolyear'));
     }
 
