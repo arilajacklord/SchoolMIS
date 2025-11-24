@@ -1,69 +1,56 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Models;
 
-return new class extends Migration
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Registration extends Model
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    use HasFactory;
+
+    protected $table = 'registration';
+
+    protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'user_id',
+        'student_Fname',
+        'student_Mname',
+        'student_Lname',
+        'course_level',
+        'student_address',
+        'student_phone_num',
+        'student_status',
+        'student_citizenship',
+        'student_birthdate',
+        'student_religion',
+        'student_age',
+        'father_Fname',
+        'father_Mname',
+        'father_Lname',
+        'father_address',
+        'father_cell_no',
+        'father_age',
+        'father_religion',
+        'father_birthdate',
+        'father_profession',
+        'father_occupation',
+        'mother_Fname',
+        'mother_Mname',
+        'mother_Lname',
+        'mother_address',
+        'mother_cell_no',
+        'mother_age',
+        'mother_religion',
+        'mother_birthdate',
+        'mother_profession',
+        'mother_occupation',
+    ];
+
+    public function user()
     {
-        Schema::create('registration', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-
-            // Student info
-            $table->string('student_Fname');
-            $table->string('student_Mname');
-            $table->string('student_Lname');
-            $table->string('course_level');
-            $table->string('student_address');
-            $table->string('student_phone_num');
-            $table->string('student_status');
-            $table->string('student_citizenship');
-            $table->date('student_birthdate');
-            $table->string('student_religion');
-            $table->integer('student_age');
-
-            // Father info
-            $table->string('father_Fname');
-            $table->string('father_Mname');
-            $table->string('father_Lname');
-            $table->string('father_address');
-            $table->string('father_cell_no');
-            $table->integer('father_age');
-            $table->string('father_religion');
-            $table->date('father_birthdate');
-            $table->string('father_profession');
-            $table->string('father_occupation');
-
-            // Mother info
-            $table->string('mother_Fname');
-            $table->string('mother_Mname');
-            $table->string('mother_Lname');
-            $table->string('mother_address');
-            $table->string('mother_cell_no');
-            $table->integer('mother_age');
-            $table->string('mother_religion');
-            $table->date('mother_birthdate');
-            $table->string('mother_profession');
-            $table->string('mother_occupation');
-
-            $table->timestamps();
-
-            // Optional foreign key to users table
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
+}
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('registration');
-    }
-};

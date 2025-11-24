@@ -10,21 +10,12 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Enrollment;
 
-class User extends Authenticatable
+class RegistrationUser extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable;
 
-    // Table name
     protected $table = 'registration';
-
-    // Primary key
     protected $primaryKey = 'id';
-
-    // Enable timestamps since your migration uses them
     public $timestamps = true;
 
     protected $fillable = [

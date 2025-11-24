@@ -12,7 +12,8 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\SubjectModalController;
 use App\Http\Controllers\ProspectusController;
-
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ScholarshipController;
 
 
 
@@ -82,6 +83,8 @@ Route::resource('/subjectmodals', SubjectModalController::class);
 // Invoices
 Route::resource('invoices', InvoiceController::class);
 Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
+Route::post('invoices/{invoice}/send', [InvoiceController::class, 'send'])->name('invoices.send');
+
 
 // Payments
 Route::resource('payments', PaymentController::class);
@@ -90,6 +93,7 @@ Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
     ->name('payments.print');  
 
 // Borrow Routes
+
 
 // Return Routes
 Route::resource('return', App\Http\Controllers\ReturnController::class);
@@ -119,6 +123,8 @@ Route::prefix('grades')->group(function(){
 
 Route::get('prospectus', [ProspectusController::class, 'index'])->name('prospectus.index');
 Route::get('prospectus/print/{schoolyear?}', [ProspectusController::class, 'print'])->name('prospectus.print');
+
+
 
           
 });

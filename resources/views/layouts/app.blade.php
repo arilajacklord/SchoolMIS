@@ -78,9 +78,7 @@
                             <li>
                                  <a href="{{ route('subjects.index') }}"> Subject </a>
                             </li>
-                            <li>
-                               <a href="{{ route('schoolyears.index') }}"> Schoolyear </a>
-                            </li>
+                            
                         </ul>
                     </li>
 
@@ -159,9 +157,7 @@
                             <li>
                                 <a href="{{route('invoices.index')}}"> invoice  </a>
                             </li>
-                            <li>
-                                <a href="{{route('scholarships.index')}}">scholarship</a>
-                            </li>
+                            
                         </ul>
                     </li>
 
