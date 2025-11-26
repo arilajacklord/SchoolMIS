@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\SubjectModalController;
+use App\Http\Controllers\ScholarshipController;
 
 
 
