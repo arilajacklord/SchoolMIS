@@ -1,9 +1,9 @@
 <x-app-layout>
     <div class="card mt-5">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h2>Registration List</h2>
+            <h2>studentinfo List</h2>
             <a href="{{ route('registration.create') }}" class="btn btn-success btn-sm">
-                <i class="fa fa-plus"></i> New Registration
+                <i class="fa fa-plus"></i> New studentinfo
             </a>
         </div>
         
@@ -36,9 +36,6 @@
                                 </a>
                                 <a href="{{ route('registration.edit', $reg->id) }}" class="btn btn-warning btn-sm">
                                     <i class="fa fa-edit"></i> Edit
-                                </a>
-                                <a href="{{ route('studentinfo.index') }}" class="btn btn-success btn-sm">
-                                    <i class="fa fa-info-circle"></i> Student Info
                                 </a>
                                 <form action="{{ route('registration.destroy', $reg->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this registration?');">
                                     @csrf

@@ -186,7 +186,11 @@
                                 <a href="{{route('borrow.index')}}"> Borrow Book</a>
                             </li>
                             <li>
-                                <a href="{{route('returns.index')}}"> Return Book</a>
+                                @if (Route::has('returns.index'))
+                                    <a href="{{ route('returns.index') }}"> Return Book</a>
+                                @else
+                                    <a href="#"> Return Book</a>
+                                @endif
                             </li>
                                                         <li>
                                 <a href="{{route('history.index')}}"> History</a>

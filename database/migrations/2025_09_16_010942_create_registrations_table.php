@@ -1,56 +1,60 @@
 <?php
 
-namespace App\Models;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Registration extends Model
+return new class extends Migration
 {
-    use HasFactory;
-
-    protected $table = 'registration';
-
-    protected $primaryKey = 'id';
-
-    protected $fillable = [
-        'user_id',
-        'student_Fname',
-        'student_Mname',
-        'student_Lname',
-        'course_level',
-        'student_address',
-        'student_phone_num',
-        'student_status',
-        'student_citizenship',
-        'student_birthdate',
-        'student_religion',
-        'student_age',
-        'father_Fname',
-        'father_Mname',
-        'father_Lname',
-        'father_address',
-        'father_cell_no',
-        'father_age',
-        'father_religion',
-        'father_birthdate',
-        'father_profession',
-        'father_occupation',
-        'mother_Fname',
-        'mother_Mname',
-        'mother_Lname',
-        'mother_address',
-        'mother_cell_no',
-        'mother_age',
-        'mother_religion',
-        'mother_birthdate',
-        'mother_profession',
-        'mother_occupation',
-    ];
-
-    public function user()
+    public function up(): void
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
-    }
-}
+        Schema::create('registration', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
 
+            $table->string('student_Fname');
+            $table->string('student_Mname')->nullable();
+            $table->string('student_Lname');
+
+            $table->string('course_level')->nullable();
+            $table->string('student_address')->nullable();
+            $table->string('student_phone_num')->nullable();
+            $table->string('student_status')->nullable();
+            $table->string('student_citizenship')->nullable();
+            $table->date('student_birthdate')->nullable();
+            $table->string('student_religion')->nullable();
+            $table->integer('student_age')->nullable();
+
+            // Father info
+            $table->string('father_Fname')->nullable();
+            $table->string('father_Mname')->nullable();
+            $table->string('father_Lname')->nullable();
+            $table->string('father_address')->nullable();
+            $table->string('father_cell_no')->nullable();
+            $table->integer('father_age')->nullable();
+            $table->string('father_religion')->nullable();
+            $table->date('father_birthdate')->nullable();
+            $table->string('father_profession')->nullable();
+            $table->string('father_occupation')->nullable();
+
+            // Mother info
+            $table->string('mother_Fname')->nullable();
+            $table->string('mother_Mname')->nullable();
+            $table->string('mother_Lname')->nullable();
+            $table->string('mother_address')->nullable();
+            $table->string('mother_cell_no')->nullable();
+            $table->integer('mother_age')->nullable();
+            $table->string('mother_religion')->nullable();
+            $table->date('mother_birthdate')->nullable();
+            $table->string('mother_profession')->nullable();
+            $table->string('mother_occupation')->nullable();
+
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('registration');
+    }
+};

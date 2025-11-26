@@ -12,8 +12,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\SubjectModalController;
 use App\Http\Controllers\ProspectusController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ScholarshipController;
+
 
 
 
@@ -48,10 +47,10 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::resource('/users', UserController::class);
+    Route::get('/dashboard', function () {
 
-    Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
-
+        return view('dashboard');
+    })->name('dashboard');
 
 Route::resource('borrows', App\Http\Controllers\BorrowController::class);
 Route::get('/borrows', [BorrowController::class, 'index'])->name('borrow.index');
@@ -65,14 +64,14 @@ Route::get('return', [ReturnController::class, 'index'])->name('return.index');
 Route::get('/return', [BorrowController::class, 'returned'])->name('borrow.return');
 Route::get('history', [HistoryController::class, 'index'])->name('history.index');
 
-Route::resource('borrowedbooks', App\Http\Controllers\BorrowedbookController::class);
-Route::get('/borrowedbooks', [App\Http\Controllers\BorrowedbookController::class, 'index'])->name('borrowedbook.index');
-    
 
+    
 Route::resource('enrollments', EnrollmentController::class);
- Route::resource('schoolyears', SchoolyearController::class);
+Route::resource('schoolyears', SchoolyearController::class);
+
 Route::resource('subjects', SubjectController::class);
- 
+
+    Route::get('/schoolyears', [SchoolYearController::class, 'index'])->name('schoolyears.index');
 
 
 
@@ -86,6 +85,7 @@ Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->nam
 Route::post('invoices/{invoice}/send', [InvoiceController::class, 'send'])->name('invoices.send');
 
 
+Route::resource('scholarships', ScholarshipController::class);
 // Payments
 Route::resource('payments', PaymentController::class);
 // Print Payment
@@ -97,7 +97,7 @@ Route::get('payments/{payment}/print', [PaymentController::class, 'print'])
 
 // Return Routes
 Route::resource('return', App\Http\Controllers\ReturnController::class);
-Route::get('/return', [App\Http\Controllers\ReturnController::class, 'index'])->name('returns.index');
+Route::get('/return', [App\Http\Controllers\ReturnController::class, 'index'])->name('return.index');
 Route::get('/return/create', [App\Http\Controllers\ReturnController::class, 'create'])->name('return.create');
 Route::post('/return', [App\Http\Controllers\ReturnController::class, 'store'])->name('return.store');
 Route::get('/return/{return}', [App\Http\Controllers\ReturnController::class, 'show'])->name('return.show');
@@ -106,9 +106,9 @@ Route::put('/return/{return}', [App\Http\Controllers\ReturnController::class, 'u
 Route::delete('/return/{return}', [App\Http\Controllers\ReturnController::class, 'destroy'])->name('return.destroy');
 
 // History Routes
-Route::resource('history', App\Http\Controllers\HistoryController::class);Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');         
-// Registration
-Route::resource('/registration', RegistrationController::class);
+Route::resource('history', App\Http\Controllers\HistoryController::class);
+Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');
+  Route::resource('registration', RegistrationController::class);
 Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
 
 // Grades
@@ -124,11 +124,12 @@ Route::prefix('grades')->group(function(){
 Route::get('prospectus', [ProspectusController::class, 'index'])->name('prospectus.index');
 Route::get('prospectus/print/{schoolyear?}', [ProspectusController::class, 'print'])->name('prospectus.print');
 
-
-
           
 });
   
+
+
+// Registration
 
 
     
