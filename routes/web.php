@@ -11,6 +11,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\SubjectModalController;
+use App\Http\Controllers\ScholarshipController;
 
 
 
@@ -81,7 +82,7 @@ Route::resource('/subjectmodals', SubjectModalController::class);
 // Invoices
 Route::resource('invoices', InvoiceController::class);
 Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
-
+Route::resource('scholarships', ScholarshipController::class);
 // Payments
 Route::resource('payments', PaymentController::class);
 // Print Payment
