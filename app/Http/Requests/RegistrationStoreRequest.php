@@ -18,7 +18,7 @@ class RegistrationStoreRequest extends FormRequest
             // User fields
             'email'    => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6', 'confirmed'], // expects password_confirmation field
-            'type'    => ['nullable', 'string','max:255'],
+            'type'    => ['required', 'string','max:255'],
 
             // Student fields
             'student_Fname'       => ['required', 'string', 'max:255'],

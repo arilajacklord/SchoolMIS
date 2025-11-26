@@ -20,7 +20,7 @@
 
     <div class="card mt-5">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h2>Payments for {{ $invoice->enrollment->user->fname ?? '' }} {{ $invoice->enrollment->user->lname ?? '' }}</h2>
+            <h2>Payments for {{ $invoice->enrollment->user->name ?? '' }} </h2>
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPaymentModal">
                 <i class="fa fa-plus"></i> Add Payment
             </button>

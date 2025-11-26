@@ -14,11 +14,22 @@ class Enrollment extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'subject_id', 'schoolyear_id', 'user_id'
+        'subject_id', 
+        'schoolyear_id', 
+        'user_id'
     ];
 
     /**
-     * ✅ Link to Registration instead of User
+     * User relationship
+     * Needed because InvoiceController calls: enrollment.user
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * Registration = optional mapping via user_id
      */
     public function Registration()
     {
@@ -37,10 +48,4 @@ class Enrollment extends Model
     {
         return $this->belongsTo(Schoolyear::class, 'schoolyear_id', 'schoolyear_id');
      }
-       public function grade()
-    {
-        return $this->belongsTo(Grade::class);
-     }
-   
-   
 }

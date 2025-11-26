@@ -125,26 +125,7 @@
             transform: translateY(-6px);
             box-shadow: 0 18px 40px rgba(2,6,23,0.7);
         }
-    </style>
 
-    <div class="auth-card">
-        <div class="logo text-center">
-            {{-- Optional logo image --}}
-            {{-- <img src="{{ asset('images/school-logo.png') }}" alt="School Logo"> --}}
-        </div>
-
-        <div class="system-title">School Management System</div>
-       
-
-        <x-validation-errors class="mb-4 text-danger" />
-
-        @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-400 text-center">
-                {{ session('status') }}
-            </div>
-        @endif
-          <form method="POST" action="{{ route('login') }}">
-        @csrf
             <div>
                 <x-label for="email" value="{{ __('Email') }}" />
                 <x-input id="email"
@@ -184,6 +165,3 @@
         </form>
     </div>
 </x-guest-layout>
-    
-</body>
-</html>
