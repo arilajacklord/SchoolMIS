@@ -3,82 +3,130 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\Enrollment;
+use App\Models\User;
+use App\Models\Grade;
 
-class User extends Authenticatable
+class Registration extends Model
 {
-    use HasApiTokens;
     use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Table name
+    protected $table = 'registration';
+
+    // Primary key
+    protected $primaryKey = 'id';
+
+    public $timestamps = true;
+
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'type',
+        'user_id',
+        'student_Fname',
+        'student_Mname',
+        'student_Lname',
+        'course_level',
+        'student_address',
+        'student_phone_num',
+        'student_status',
+        'student_citizenship',
+        'student_birthdate',
+        'student_religion',
+        'student_age',
+
+        // Father info
+        'father_Fname',
+        'father_Mname',
+        'father_Lname',
+        'father_address',
+        'father_cell_no',
+        'father_age',
+        'father_religion',
+        'father_birthdate',
+        'father_profession',
+        'father_occupation',
+
+        // Mother info
+        'mother_Fname',
+        'mother_Mname',
+        'mother_Lname',
+        'mother_address',
+        'mother_cell_no',
+        'mother_age',
+        'mother_religion',
+        'mother_birthdate',
+        'mother_profession',
+        'mother_occupation',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
+     * A registration belongs to a user
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     
-
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function user()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     /**
-     * Relationships
+     * A registration can have many enrollments
      */
-    public function registration()
-    {
-        return $this->hasOne(Registration::class);
-
-    }
-    
     public function enrollments()
     {
-        return $this->hasMany(Enrollment::class, 'user_id', 'id');
+        return $this->hasMany(Enrollment::class, 'user_id', 'user_id');
     }
+
+    /**
+     * A registration can access grades through enrollments
+     */
+    public function grades()
+    {
+        return $this->hasManyThrough(
+            Grade::class,
+            Enrollment::class,
+            'user_id',
+            'enroll_id',
+            'user_id',
+            'id'
+        );
+    }
+
+    public function isInfoIncomplete(): bool
+{
+    return empty($this->student_Fname) ||
+       empty($this->student_Mname) ||
+       empty($this->student_Lname) ||
+       empty($this->course_level) ||
+       empty($this->student_address) ||
+       empty($this->student_phone_num) ||
+       empty($this->student_status) ||
+       empty($this->student_citizenship) ||
+       empty($this->student_birthdate) ||
+       empty($this->student_religion) ||
+       empty($this->student_age) ||
+
+       // Father info
+       empty($this->father_Fname) ||
+       empty($this->father_Mname) ||
+       empty($this->father_Lname) ||
+       empty($this->father_address) ||
+       empty($this->father_cell_no) ||
+       empty($this->father_age) ||
+       empty($this->father_religion) ||
+       empty($this->father_birthdate) ||
+       empty($this->father_profession) ||
+       empty($this->father_occupation) ||
+
+       // Mother info
+       empty($this->mother_Fname) ||
+       empty($this->mother_Mname) ||
+       empty($this->mother_Lname) ||
+       empty($this->mother_address) ||
+       empty($this->mother_cell_no) ||
+       empty($this->mother_age) ||
+       empty($this->mother_religion) ||
+       empty($this->mother_birthdate) ||
+       empty($this->mother_profession) ||
+       empty($this->mother_occupation);
+
+}
 }

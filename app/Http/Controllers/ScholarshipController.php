@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Scholarship;
 use Illuminate\Http\Request;
 
+
 class ScholarshipController extends Controller
 {
     /**
