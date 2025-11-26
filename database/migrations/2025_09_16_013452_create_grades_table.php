@@ -12,20 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('grades', function (Blueprint $table) {
-            $table->id('grade_id');
-            $table->unsignedBigInteger('enroll_id');
-            $table->decimal('prelim', 5, 2)->nullable();
-            $table->decimal('midterm', 5, 2)->nullable();
-            $table->decimal('semifinal', 5, 2)->nullable();
-            $table->decimal('final', 5, 2)->nullable();
-            $table->timestamps();
+    $table->id('grade_id');
+    $table->unsignedBigInteger('enroll_id');
+    $table->decimal('prelim', 5, 2)->nullable();
+    $table->decimal('midterm', 5, 2)->nullable();
+    $table->decimal('semifinal', 5, 2)->nullable();
+    $table->decimal('final', 5, 2)->nullable();
+    $table->timestamps();
 
-            // Foreign key constraint
-             $table->foreign('enroll_id')
-          ->references('enroll_id')
-          ->on('enrollments')
-          ->onDelete('cascade');
-        });
+    $table->foreign('enroll_id')->references('enroll_id')->on('enrollments')->onDelete('cascade');
+});
+
     }
 
     /**

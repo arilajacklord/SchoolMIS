@@ -11,23 +11,37 @@
                 @csrf
                 @method('PUT')
 
+                
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
                 {{-- STEP 1 - Student Info --}}
                 <div class="form-step" id="step-1">
                     <h5 class="mb-3"><i class="fa fa-user-graduate text-primary"></i> Student Information</h5>
                     <div class="row mb-3">
                         <div class="col-md-2">
                             <label><strong>First Name</strong></label>
-                            <input type="text" name="student_name" class="form-control" 
+                            <input type="text" name="student_Fname" class="form-control" 
                                 value="{{ old('student_Fname', $student->student_Fname) }}" required>
                         </div>
                         <div class="col-md-2">
                             <label><strong>Middle Name</strong></label>
-                            <input type="text" name="student_name" class="form-control" 
+                            <input type="text" name="student_Mname" class="form-control" 
                                 value="{{ old('student_Mname', $student->student_Mname) }}" required>
                         </div>
                         <div class="col-md-2">
                             <label><strong>Last Name</strong></label>
-                            <input type="text" name="student_name" class="form-control" 
+                            <input type="text" name="student_Lname" class="form-control" 
                                 value="{{ old('student_Lname', $student->student_Lname) }}" required>
                         </div>
                         <div class="col-md-6">
@@ -259,53 +273,87 @@
         </div>
     </div>
 
-    {{-- Step Navigation Script --}}
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const steps = document.querySelectorAll(".form-step");
-            const nextBtns = document.querySelectorAll(".next-step");
-            const prevBtns = document.querySelectorAll(".prev-step");
-            let currentStep = 0;
+    document.addEventListener("DOMContentLoaded", function () {
+        const steps = document.querySelectorAll(".form-step");
+        const nextBtns = document.querySelectorAll(".next-step");
+        const prevBtns = document.querySelectorAll(".prev-step");
+        const form = document.getElementById("editRegistrationForm");
+        let currentStep = 0;
 
-            const validationModal = new bootstrap.Modal(document.getElementById('validationModal'));
+        const validationModal = new bootstrap.Modal(document.getElementById('validationModal'));
 
-            function showStep(step) {
-                steps.forEach((s, i) => {
-                    s.classList.toggle("d-none", i !== step);
-                });
+        function showStep(step) {
+            steps.forEach((s, i) => {
+                s.classList.toggle("d-none", i !== step);
+            });
+        }
+
+        // Validate inputs of a single step
+        function validateStep(step) {
+            const inputs = steps[step].querySelectorAll("input[required]");
+            for (let input of inputs) {
+                if (!input.value.trim()) {
+                    validationModal.show();
+                    input.focus();
+                    return false;
+                }
             }
+            return true;
+        }
 
-            function validateStep(step) {
-                const inputs = steps[step].querySelectorAll("input[required]");
+        // Validate all steps before submitting
+        function validateAllSteps() {
+            for (let i = 0; i < steps.length; i++) {
+                const inputs = steps[i].querySelectorAll("input[required]");
                 for (let input of inputs) {
                     if (!input.value.trim()) {
+                        currentStep = i;  // jump to step with missing input
+                        showStep(currentStep);
                         validationModal.show();
                         input.focus();
                         return false;
                     }
                 }
-                return true;
             }
+            return true;
+        }
 
-            nextBtns.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    if (validateStep(currentStep) && currentStep < steps.length - 1) {
-                        currentStep++;
-                        showStep(currentStep);
-                    }
-                });
+        // Next buttons
+        nextBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (validateStep(currentStep) && currentStep < steps.length - 1) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
             });
-
-            prevBtns.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    if (currentStep > 0) {
-                        currentStep--;
-                        showStep(currentStep);
-                    }
-                });
-            });
-
-            showStep(currentStep);
         });
-    </script>
+
+        // Previous buttons
+        prevBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        // Form submission: validate all steps + confirm before submitting
+        form.addEventListener("submit", function (e) {
+            if (!validateAllSteps()) {
+                e.preventDefault(); // stop submission if validation fails
+            } else {
+                // Show confirmation dialog
+                const confirmed = confirm("Are you sure you want to update this student?");
+                if (!confirmed) {
+                    e.preventDefault(); // stop submission if user cancels
+                }
+            }
+        });
+
+        showStep(currentStep);
+    });
+</script>
+
 </x-app-layout>

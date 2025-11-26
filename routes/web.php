@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\ProspectusController;
+use App\Http\Controllers\ScholarshipController;
 use App\Http\Controllers\SchoolyearController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\RegistrationController;
@@ -11,7 +13,6 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\SubjectModalController;
-use App\Http\Controllers\ScholarshipController;
 
 
 
@@ -25,6 +26,29 @@ use App\Http\Controllers\ScholarshipController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // Show Profile Page
+    Route::get('/profile', [\Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController::class, 'show'])
+        ->name('profile.show');
+
+    // Update Profile Information
+    Route::put('/user/profile-information', [\Laravel\Fortify\Http\Controllers\ProfileInformationController::class, 'update'])
+        ->name('user-profile-information.update');
+
+    // Update Password
+    Route::put('/user/password', [\Laravel\Fortify\Http\Controllers\PasswordController::class, 'update'])
+        ->name('user-password.update');
+
+    // Logout Other Sessions
+    Route::delete('/user/other-browser-sessions', [\Laravel\Jetstream\Http\Controllers\OtherBrowserSessionsController::class, 'destroy'])
+        ->name('other-browser-sessions.destroy');
+
+    // Delete Account
+    Route::delete('/user', [\Laravel\Jetstream\Http\Controllers\DeleteUserController::class, 'destroy'])
+        ->name('user.destroy');
+});
 
 
 
@@ -47,7 +71,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::resource('/users', UserController::class);
+
+
+   
 
     Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
@@ -72,17 +98,12 @@ Route::resource('enrollments', EnrollmentController::class);
  Route::resource('schoolyears', SchoolyearController::class);
 Route::resource('subjects', SubjectController::class);
  
-
-
-
-
-
 Route::resource('/subjectmodals', SubjectModalController::class);
 
 // Invoices
 Route::resource('invoices', InvoiceController::class);
 Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
-Route::resource('scholarships', ScholarshipController::class);
+
 // Payments
 Route::resource('payments', PaymentController::class);
 // Print Payment
@@ -103,16 +124,37 @@ Route::delete('/return/{return}', [App\Http\Controllers\ReturnController::class,
 
 // History Routes
 Route::resource('history', App\Http\Controllers\HistoryController::class);Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');         
+
 // Registration
 Route::resource('/registration', RegistrationController::class);
-Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
+Route::get('studentinfo/{id}', [StudentInfoController::class, 'index'])->name('studentinfo.index');
+
+
+//Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
+Route::get('/studentinfo/{id}', [RegistrationController::class, 'studentinfo_index'])
+    ->name('studentinfo.index');
+
 
 // Grades
-Route::resource('grades', GradeController::class);
-   
-
+// web.php
+Route::prefix('grades')->group(function(){
+    Route::get('/', [GradeController::class, 'index'])->name('grades.index');
+    Route::get('/subject/{schoolyear_id}/{subject_id}', [GradeController::class, 'showSubject'])->name('grades.showSubject');
+    Route::post('/store', [GradeController::class, 'store'])->name('grades.store');
+    Route::get('/get/{enroll_id}', [GradeController::class, 'get']);
+    Route::get('/print/{enroll_id}', [GradeController::class, 'print'])->name('grades.print');
 });
-  
+
+Route::get('prospectus', [ProspectusController::class, 'index'])->name('prospectus.index');
+Route::get('prospectus/print/{schoolyear?}', [ProspectusController::class, 'print'])->name('prospectus.print');
+
+          
+});
+
+
+Route::get('/', function () {
+    return redirect('/login');
+});
 
 
     

@@ -16,24 +16,24 @@ class InvoiceController extends Controller
     /**
      * Display a listing of invoices with related data (enrollment, user, payments, scholarship)
      */
-    public function index()
-    {
-        // Load all invoices with relationships
-        $invoices = Invoice::with(['enrollment.user', 'payments', 'scholar'])
-            ->latest()
-            ->get();
+  public function index()
+{
+    // Load invoices with relationships and paginate (5 per page)
+    $invoices = Invoice::with(['enrollment.user', 'payments', 'scholar'])
+        ->latest()
+        ->paginate(5)
+        ->withQueryString(); // keeps search/filter parameters
 
-        // Update balance for each invoice dynamically
-        foreach ($invoices as $invoice) {
-            $invoice->updateBalance();
-        }
-
-        // Data for the Create Invoice modal
-        $enrollments = Enrollment::with('user')->get();
-        $scholarships = Scholarship::orderBy('name')->get();
-
-        return view('invoices.index', compact('invoices', 'enrollments', 'scholarships'));
+    // Update balance for each invoice dynamically
+    foreach ($invoices as $invoice) {
+        $invoice->updateBalance();
     }
+
+    $enrollments = Enrollment::with('user')->get();
+    $scholarships = Scholarship::orderBy('name')->get();
+
+    return view('invoices.index', compact('invoices', 'enrollments', 'scholarships'));
+}
 
     /**
      * Show the form for creating a new invoice.

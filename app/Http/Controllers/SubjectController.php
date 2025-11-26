@@ -32,7 +32,7 @@ class SubjectController extends Controller
             'pre_requisite' => 'nullable|string|max:255',
         ]);
 
-        $validated['total_units'] = ($validated['lec_units'] ?? 0) + ($validated['lab_units'] ?? 0);
+    
 
         Subject::create($validated);
 

@@ -114,6 +114,32 @@
 
                     <span class="divider"><hr /></span>
 
+                    <!-- Repeat for other menu items, but use unique data-bs-target and id for each dropdown -->
+                    <li class="nav-item nav-item-has-children">
+                        <a
+                            href="#0"
+                            class="collapsed"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#ddmenu_3"
+                            aria-controls="ddmenu_3"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation"
+                        >
+                            <span class="icon">
+                                <!-- SVG omitted for brevity -->
+                            </span>
+                            <span class="text">ProspectusManagement</span>
+                        </a>
+                        <ul id="ddmenu_3" class="collapse dropdown-nav">
+                            <li>
+                               <a href="{{ route('prospectus.index') }}"> Prospectus  </a>
+                         </li>
+                            
+                        </ul>
+                    </li>
+
+                    <span class="divider"><hr /></span>
+
                     <li class="nav-item nav-item-has-children">
                         <a
                             href="#0"
@@ -222,8 +248,8 @@
                                                     <img src="{{ asset('assets/images/profile/profile-image.png') }}" alt="" />
                                                 </div>
                                                 <div>
-                                                    <h6 class="fw-500">Adam Joe</h6>
-                                                    <p>Admin</p>
+                                                    <h6 class="fw-500"> {{ Auth::user()->name }}</h6>
+                                                    <p>{{ Auth::user()->email }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -242,7 +268,7 @@
                                         </li>
                                         <li class="divider"></li>
                                         <li>
-                                            <a href="#0">
+                                            <a href="{{route('profile.show')}}">
                                                 <i class="lni lni-user"></i> View Profile
                                             </a>
                                         </li>
@@ -261,9 +287,9 @@
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}">
                                                 @csrf
-                                                <button type="submit" class="dropdown-item">
-                                                    <i class="lni lni-exit"></i> Sign Out
-                                                </button>
+                                                <a type="submit" class="btn btn-info">
+                                                    <i class="lni lni-exit"></i> <b>Sign Out</b>
+                                                </a>
                                             </form>
                                         </li>
                                     </ul>

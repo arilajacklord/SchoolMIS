@@ -1,58 +1,87 @@
 <!-- jQuery + DataTables -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css" />
-<script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css" />
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.min.js"></script>
 
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="container mt-4">
-    <div class="card shadow border-0 rounded-3">
-        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">🎓 Grade List</h4>
-            <button type="button" class="btn btn-light btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#gradeModal">
-                <i class="bi bi-plus-circle"></i> Add Grade
-            </button>
+
+    {{-- 🔷 STEP 1: SCHOOL YEAR FILTER --}}
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-header bg-gradient-success text-white rounded-top-4 py-3">
+            <h5 class="mb-0"><i class="fa fa-filter"></i> Filter by School Year & Semester</h5>
         </div>
 
         <div class="card-body">
-            {{-- Flash Messages --}}
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
+            <form method="GET" action="{{ route('grades.index') }}">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Select School Year & Semester</label>
+                        <select name="schoolyear_id" class="form-select shadow-sm" required>
+                            <option value="" disabled selected>-- Choose School Year --</option>
+                            @foreach ($schoolyears as $sy)
+                                <option value="{{ $sy->schoolyear_id }}"
+                                    {{ request('schoolyear_id') == $sy->schoolyear_id ? 'selected' : '' }}>
+                                    {{ $sy->schoolyear }} - {{ ucfirst($sy->semester) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-            {{-- Grades Table --}}
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-success w-100 shadow-sm">
+                            <i class="fa fa-search"></i> Apply Filter
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    {{-- 🔷 STEP 2: SUBJECT LIST --}}
+    @if($selectedSchoolyear)
+    <div class="card shadow-sm border-0 rounded-4">
+        
+        <div class="card-header bg-gradient-success text-white rounded-top-4 py-3">
+            <h5 class="mb-0">
+                <i class="fa fa-book"></i> Subjects for 
+                <span class="fw-bold">
+                    {{ $selectedSchoolyear->schoolyear }} - {{ ucfirst($selectedSchoolyear->semester) }}
+                </span>
+            </h5>
+        </div>
+
+        <div class="card-body">
             <div class="table-responsive">
-                <table id="gradeTable" class="table table-striped align-middle text-center">
+                <table id="subjectsTable" class="table table-hover table-bordered align-middle text-center">
                     <thead class="table-success">
                         <tr>
                             <th>#</th>
-                            <th>Student</th>
-                            <th>Subject</th>
-                            <th>School Year / Semester</th>
+                            <th>Course Code</th>
+                            <th>Descriptive Title</th>
+                            <th width="150">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($grades as $index => $grade)
+                        @forelse($subjects as $index => $subject)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
+                                <td class="fw-semibold">{{ $subject->course_code }}</td>
+                                <td>{{ $subject->descriptive_title }}</td>
                                 <td>
-                                    <a href="{{ route('grades.show', $grade->grade_id) }}" class="text-decoration-none">
-                                        {{ $grade->enrollment->registration->student_name ?? 'N/A' }}
+                                    <a href="{{ route('grades.showSubject', [
+                                        'schoolyear_id' => $selectedSchoolyear->schoolyear_id,
+                                        'subject_id' => $subject->subject_id
+                                    ]) }}" 
+                                       class="btn btn-primary btn-sm shadow-sm">
+                                        <i class="fa fa-users"></i> View Students
                                     </a>
-                                </td>
-                                <td>{{ $grade->enrollment->subject->descriptive_title ?? 'N/A' }}</td>
-                                <td>
-                                    {{ $grade->enrollment->schoolyear->schoolyear ?? 'N/A' }}
-                                    {{ $grade->enrollment->schoolyear->semester ? ' - ' . $grade->enrollment->schoolyear->semester : '' }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-muted">No grades found.</td>
+                                <td colspan="4" class="text-muted py-3">No subjects found.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -60,65 +89,20 @@
             </div>
         </div>
     </div>
+    @endif
+
 </div>
 
-<!-- ADD GRADE MODAL -->
-<div class="modal fade" id="gradeModal" data-bs-backdrop="static" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <form class="modal-content" method="POST" action="{{ route('grades.store') }}">
-            @csrf
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="gradeModalTitle">Add New Grade</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label"><b>Enrollment</b></label>
-                        <select name="enroll_id" id="enroll_id" class="form-control" required>
-                            <option value="" disabled selected>Select Enrollment</option>
-                            @foreach ($enrollments as $enroll)
-                                <option value="{{ $enroll->enroll_id }}">
-                                    {{ $enroll->registration->student_name ?? 'N/A' }} - 
-                                    {{ $enroll->subject->descriptive_title ?? 'N/A' }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    @foreach (['prelim', 'midterm', 'semifinal', 'final'] as $term)
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label"><b>{{ ucfirst($term) }}</b></label>
-                            <input type="number" step="0.01" class="form-control" name="{{ $term }}" id="{{ $term }}" placeholder="Enter {{ ucfirst($term) }}">
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary btnSave">Save</button>
-            </div>
-        </form>
-    </div>
-</div>
-@endsection
-
+{{-- DATATABLE SCRIPT --}}
 @push('scripts')
 <script>
-$(document).ready(function() {
-    $('#gradeTable').DataTable();
-
-    // Reset modal on close
-    $('#gradeModal').on('hidden.bs.modal', function() {
-        $(this).find('form')[0].reset();
-        $(this).find('.modal-title').text('Add New Grade');
-        $(this).find('input[name="_method"]').remove();
-        $('#gradeModal form').attr('action', '{{ route('grades.store') }}');
+$(document).ready(function(){
+    $('#subjectsTable').DataTable({
+        pageLength: 10,
+        order: [[1, 'asc']],
+        className: 'table table-striped'
     });
 });
 </script>
 @endpush
+</x-app-layout>

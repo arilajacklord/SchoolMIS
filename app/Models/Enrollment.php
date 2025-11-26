@@ -3,19 +3,40 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
- use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 
 class Enrollment extends Model
- {
+{
     use HasFactory;
 
     protected $table = 'enrollments';
     protected $primaryKey = 'enroll_id';
-    protected $fillable = ['user_id', 'subject_id', 'schoolyear_id'];
+    public $timestamps = true;
 
+    protected $fillable = [
+        'subject_id', 
+        'schoolyear_id', 
+        'user_id'
+    ];
+
+    /**
+     * User relationship
+     * Needed because InvoiceController calls: enrollment.user
+     */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * Registration = optional mapping via user_id
+     */
+    public function Registration()
+    {
+        return $this->belongsTo(Registration::class, 'user_id', 'user_id');
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     public function subject()
