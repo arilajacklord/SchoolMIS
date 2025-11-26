@@ -27,6 +27,29 @@ use App\Http\Controllers\SubjectModalController;
 |
 */
 
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // Show Profile Page
+    Route::get('/profile', [\Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController::class, 'show'])
+        ->name('profile.show');
+
+    // Update Profile Information
+    Route::put('/user/profile-information', [\Laravel\Fortify\Http\Controllers\ProfileInformationController::class, 'update'])
+        ->name('user-profile-information.update');
+
+    // Update Password
+    Route::put('/user/password', [\Laravel\Fortify\Http\Controllers\PasswordController::class, 'update'])
+        ->name('user-password.update');
+
+    // Logout Other Sessions
+    Route::delete('/user/other-browser-sessions', [\Laravel\Jetstream\Http\Controllers\OtherBrowserSessionsController::class, 'destroy'])
+        ->name('other-browser-sessions.destroy');
+
+    // Delete Account
+    Route::delete('/user', [\Laravel\Jetstream\Http\Controllers\DeleteUserController::class, 'destroy'])
+        ->name('user.destroy');
+});
+
 
 
 Route::get('/', function () {
@@ -47,6 +70,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+
+
 
    
 
@@ -126,7 +151,11 @@ Route::get('prospectus/print/{schoolyear?}', [ProspectusController::class, 'prin
 
           
 });
-  
+
+
+Route::get('/', function () {
+    return redirect('/login');
+});
 
 
     

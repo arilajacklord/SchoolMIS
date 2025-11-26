@@ -46,11 +46,11 @@
                                 @forelse($enrollments as $index => $enroll)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $enroll->registration->student_name ?? 'N/A' }}</td>
+                                    <td>{{ $enroll->user->student_name }}</td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-primary btn-sm grade-btn"
                                             data-enroll="{{ $enroll->enroll_id }}"
-                                            data-student="{{ $enroll->registration->student_name }}"
+                                            data-student="{{ $enroll->user->student_name }}"
                                             data-bs-toggle="modal" data-bs-target="#gradeModal">
                                             Add/Edit Grade
                                         </button>

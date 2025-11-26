@@ -31,9 +31,12 @@ class Enrollment extends Model
     /**
      * Registration = optional mapping via user_id
      */
-    public function registration()
+    public function Registration()
     {
         return $this->belongsTo(Registration::class, 'user_id', 'user_id');
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     public function subject()
@@ -44,5 +47,5 @@ class Enrollment extends Model
     public function schoolyear()
     {
         return $this->belongsTo(Schoolyear::class, 'schoolyear_id', 'schoolyear_id');
-    }
+     }
 }

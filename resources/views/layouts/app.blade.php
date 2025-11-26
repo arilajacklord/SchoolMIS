@@ -248,8 +248,8 @@
                                                     <img src="{{ asset('assets/images/profile/profile-image.png') }}" alt="" />
                                                 </div>
                                                 <div>
-                                                    <h6 class="fw-500">Adam Joe</h6>
-                                                    <p>Admin</p>
+                                                    <h6 class="fw-500"> {{ Auth::user()->name }}</h6>
+                                                    <p>{{ Auth::user()->email }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -268,7 +268,7 @@
                                         </li>
                                         <li class="divider"></li>
                                         <li>
-                                            <a href="#0">
+                                            <a href="{{route('profile.show')}}">
                                                 <i class="lni lni-user"></i> View Profile
                                             </a>
                                         </li>
@@ -287,9 +287,9 @@
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}">
                                                 @csrf
-                                                <button type="submit" class="dropdown-item">
-                                                    <i class="lni lni-exit"></i> Sign Out
-                                                </button>
+                                                <a type="submit" class="btn btn-info">
+                                                    <i class="lni lni-exit"></i> <b>Sign Out</b>
+                                                </a>
                                             </form>
                                         </li>
                                     </ul>

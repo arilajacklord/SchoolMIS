@@ -1,4 +1,12 @@
-<x-guest-layout>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <x-guest-layout>
     <style>
         body {
             background: radial-gradient(circle at top left, #1b2735, #090a0f);
@@ -101,26 +109,7 @@
         .text-gray-600 {
             color: #ddd !important;
         }
-    </style>
-
-    <div class="auth-card">
-        <div class="logo text-center">
-            {{-- Optional logo image --}}
-            {{-- <img src="{{ asset('images/school-logo.png') }}" alt="School Logo"> --}}
-        </div>
-
-        <div class="system-title">School Management System</div>
-
-        <x-validation-errors class="mb-4 text-danger" />
-
-        @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-400 text-center">
-                {{ session('status') }}
-            </div>
-        @endif
-
-        /* card */
-        .auth-card {
+          .auth-card {
             width: 100%;
             max-width: 420px;
             background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
@@ -136,8 +125,6 @@
             transform: translateY(-6px);
             box-shadow: 0 18px 40px rgba(2,6,23,0.7);
         }
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
 
             <div>
                 <x-label for="email" value="{{ __('Email') }}" />
