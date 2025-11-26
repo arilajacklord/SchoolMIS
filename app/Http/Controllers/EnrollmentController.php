@@ -7,7 +7,7 @@ use App\Models\User;
  use App\Models\Enrollment;
 use App\Models\Subject;
 use App\Models\Schoolyear;
-use App\Models\User;
+
 
 
 class EnrollmentController extends Controller

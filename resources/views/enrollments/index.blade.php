@@ -1,11 +1,12 @@
 <x-app-layout>
-<div class="card mt-5 shadow-sm">
-    <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
-        <h2 class="mb-0">Enrollment List</h2>
-        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addEnrollmentModal">
+<div class="card mt-5">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2>Enrollment List</h2>
+        <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addEnrollmentModal">
             <i class="lni lni-plus"></i> Add Enrollment
-        </button>
+        </a>
     </div>
+
 
     <div class="card-body">
         {{-- Success Message --}}
@@ -24,7 +25,7 @@
 
         {{-- Table --}}
         <table class="table table-bordered table-striped align-middle text-center">
-            <thead class="table-dark">
+            <thead style="background-color: #084298; color: white;">
                 <tr>
                     <th>User</th>
                     <th>Subject</th>

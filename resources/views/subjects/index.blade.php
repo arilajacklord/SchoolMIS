@@ -31,7 +31,7 @@
 
       {{-- ✅ Table --}}
             <table class="table table-bordered table-striped align-middle text-center" id="subjectsTable">
-                <thead class="table-dark">
+                <thead style="background-color: #084298; color: white;">
                     <tr>
                         <th>ID</th>
                         <th>Course Code</th>
