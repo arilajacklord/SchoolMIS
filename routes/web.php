@@ -104,6 +104,9 @@ Route::resource('/subjectmodals', SubjectModalController::class);
 Route::resource('invoices', InvoiceController::class);
 Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 
+=========
+>>>>>>>>> Temporary merge branch 2
+Route::resource('scholarships', ScholarshipController::class);
 // Payments
 Route::resource('payments', PaymentController::class);
 // Print Payment
