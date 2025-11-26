@@ -13,7 +13,12 @@
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
-                <table class="table table-bordered table-hover text-center">
+                {{-- ✅ Live Search Input --}}
+                <div class="mb-3 d-flex justify-content-end">
+                    <input type="text" id="invoiceSearchInput" class="form-control w-25" placeholder="Search...">
+                </div>
+
+                <table class="table table-bordered table-hover text-center" id="invoiceTable">
                     <thead class="table-white">
                         <tr>
                             <th>#</th>
@@ -29,7 +34,7 @@
                     <tbody>
                         @forelse($invoices as $index => $invoice)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $loop->iteration + ($invoices->currentPage() - 1) * $invoices->perPage() }}</td>
                                 <td>{{ $invoice->enrollment->enroll_id }}</td>
                                 <td>{{ $invoice->enrollment->user->name }}</td>
                                 <td>{{ number_format($invoice->amount, 2) }}</td>
@@ -41,9 +46,6 @@
                                         {{ ucfirst($invoice->status) }}
                                     </span>
                                 </td>
-                                <!-- <td>{{ number_format($invoice->insurance ?? 0, 2) }}</td>
-                                <td>{{ number_format($invoice->sanitation ?? 0, 2) }}</td> -->
-                           
                                 <td>
                                     @if($invoice->scholar)
                                         {{ $invoice->scholar->name }} - {{ number_format($invoice->scholar->amount, 2) }}
@@ -68,10 +70,16 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="9" class="text-center">No invoices found.</td></tr>
+                            <tr><td colspan="8" class="text-center">No invoices found.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
+                {{-- Pagination --}}
+                <div class="d-flex justify-content-end mt-3">
+                    {{ $invoices->links() }}
+                </div>
+            </div>
+        </div>
             </div>
         </div>
 
@@ -89,7 +97,6 @@
                     <form action="{{ route('invoices.store') }}" method="POST" id="invoiceForm">
                         @csrf
                         <div class="modal-body">
-                            {{-- Enrollment Dropdown --}}
                             <div class="mb-3">
                                 <label for="enroll_id" class="form-label"><strong>Enrollment:</strong></label>
                                 <select name="enroll_id" id="enroll_id" class="form-select">
@@ -216,8 +223,7 @@
                                     <select name="scholar_id" id="scholar_id{{ $invoice->invoice_id }}" class="form-select">
                                         <option value="">-- Select Scholarship --</option>
                                         @foreach($scholarships as $scholarship)
-                                            <option value="{{ $scholarship->scholar_id }}"
-                                                {{ old('scholar_id', $invoice->scholar_id) == $scholarship->scholar_id ? 'selected' : '' }}>
+                                            <option value="{{ $scholarship->scholar_id }}" {{ old('scholar_id', $invoice->scholar_id) == $scholarship->scholar_id ? 'selected' : '' }}>
                                                 {{ $scholarship->name }} — ₱{{ number_format($scholarship->amount, 2) }}
                                             </option>
                                         @endforeach
@@ -338,6 +344,27 @@
                     }
                 });
             @endforeach
+        });
+    </script>
+
+    {{-- 🔹 Live Search Script --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('invoiceSearchInput');
+            const tableRows = document.querySelectorAll('#invoiceTable tbody tr');
+
+            searchInput.addEventListener('keyup', function() {
+                const filter = this.value.toLowerCase();
+
+                tableRows.forEach(row => {
+                    const enrollId = row.cells[1].textContent.toLowerCase();
+                    const student = row.cells[2].textContent.toLowerCase();
+                    const status = row.cells[4].textContent.toLowerCase();
+                    const scholar = row.cells[5].textContent.toLowerCase();
+
+                    row.style.display = (enrollId.includes(filter) || student.includes(filter) || status.includes(filter) || scholar.includes(filter)) ? '' : 'none';
+                });
+            });
         });
     </script>
 </x-app-layout>

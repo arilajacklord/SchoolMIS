@@ -136,6 +136,8 @@
             transform: translateY(-6px);
             box-shadow: 0 18px 40px rgba(2,6,23,0.7);
         }
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
             <div>
                 <x-label for="email" value="{{ __('Email') }}" />

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\ProspectusController;
+use App\Http\Controllers\ScholarshipController;
 use App\Http\Controllers\SchoolyearController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\RegistrationController;
@@ -46,7 +48,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::resource('/users', UserController::class);
+   
 
     Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
@@ -98,11 +100,16 @@ Route::delete('/return/{return}', [App\Http\Controllers\ReturnController::class,
 
 // History Routes
 Route::resource('history', App\Http\Controllers\HistoryController::class);Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');         
+
 // Registration
 Route::resource('/registration', RegistrationController::class);
+Route::get('studentinfo/{id}', [StudentInfoController::class, 'index'])->name('studentinfo.index');
+
+
 //Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
-Route::get('/studentinfo', [RegistrationController::class, 'studentinfo_index'])
+Route::get('/studentinfo/{id}', [RegistrationController::class, 'studentinfo_index'])
     ->name('studentinfo.index');
+
 
 // Grades
 // web.php
