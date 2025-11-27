@@ -55,8 +55,7 @@ class Registration extends Model
     }
 
     /**
-     * Relationship to enrollments.
-     * A registration can have multiple enrollments.
+     * A registration can have many enrollments
      */
     public function enrollments()
     {
@@ -64,17 +63,57 @@ class Registration extends Model
     }
 
     /**
-     * Optional: Relationship to grades through enrollments
+     * A registration can access grades through enrollments
      */
     public function grades()
     {
         return $this->hasManyThrough(
             Grade::class,
             Enrollment::class,
-            'user_id',      // Foreign key on enrollments table
-            'enroll_id',    // Foreign key on grades table
-            'user_id',      // Local key on registration table
-            'enroll_id'     // Local key on enrollment table
+            'user_id',
+            'enroll_id',
+            'user_id',
+            'id'
         );
     }
+
+    public function isInfoIncomplete(): bool
+{
+    return empty($this->student_Fname) ||
+       empty($this->student_Mname) ||
+       empty($this->student_Lname) ||
+       empty($this->course_level) ||
+       empty($this->student_address) ||
+       empty($this->student_phone_num) ||
+       empty($this->student_status) ||
+       empty($this->student_citizenship) ||
+       empty($this->student_birthdate) ||
+       empty($this->student_religion) ||
+       empty($this->student_age) ||
+
+       // Father info
+       empty($this->father_Fname) ||
+       empty($this->father_Mname) ||
+       empty($this->father_Lname) ||
+       empty($this->father_address) ||
+       empty($this->father_cell_no) ||
+       empty($this->father_age) ||
+       empty($this->father_religion) ||
+       empty($this->father_birthdate) ||
+       empty($this->father_profession) ||
+       empty($this->father_occupation) ||
+
+       // Mother info
+       empty($this->mother_Fname) ||
+       empty($this->mother_Mname) ||
+       empty($this->mother_Lname) ||
+       empty($this->mother_address) ||
+       empty($this->mother_cell_no) ||
+       empty($this->mother_age) ||
+       empty($this->mother_religion) ||
+       empty($this->mother_birthdate) ||
+       empty($this->mother_profession) ||
+       empty($this->mother_occupation);
+
+}
 }
