@@ -77,18 +77,22 @@ Route::middleware([
 
     Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
-
+Route::resource('borrow', BorrowController::class);
 Route::resource('borrows', App\Http\Controllers\BorrowController::class);
 Route::get('/borrows', [BorrowController::class, 'index'])->name('borrow.index');
 Route::post('/borrows', [BorrowController::class, 'store'])->name('borrow.store');
-Route::put('/borrows/{id}', [BorrowController::class, 'update'])->name('borrow.update');
+Route::put('/borrow/{id}', [BorrowController::class, 'update'])->name('borrow.update');
 Route::delete('/borrows/{id}', [BorrowController::class, 'destroy'])->name('borrow.destroy');
 Route::put('/borrow/{id}/return', [BorrowController::class, 'returnBook'])->name('borrow.return');
+// Return book route
+
+Route::put('borrow/{borrow}/return', [BorrowController::class, 'returnBook'])->name('borrow.return');
 Route::get('/borrows/{borrow}/edit', [App\Http\Controllers\BorrowController::class, 'edit'])->name('borrow.edit');
 Route::get('/returns', [BorrowController::class, 'returnList'])->name('borrow.return_list');
 Route::get('return', [ReturnController::class, 'index'])->name('return.index');
 Route::get('/return', [BorrowController::class, 'returned'])->name('borrow.return');
 Route::get('history', [HistoryController::class, 'index'])->name('history.index');
+Route::get('/borrow/history', [BorrowController::class, 'history'])->name('borrow.history');
 
 Route::resource('borrowedbooks', App\Http\Controllers\BorrowedbookController::class);
 Route::get('/borrowedbooks', [App\Http\Controllers\BorrowedbookController::class, 'index'])->name('borrowedbook.index');
@@ -104,8 +108,6 @@ Route::resource('/subjectmodals', SubjectModalController::class);
 Route::resource('invoices', InvoiceController::class);
 Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 
-=========
->>>>>>>>> Temporary merge branch 2
 Route::resource('scholarships', ScholarshipController::class);
 // Payments
 Route::resource('payments', PaymentController::class);
@@ -126,8 +128,7 @@ Route::put('/return/{return}', [App\Http\Controllers\ReturnController::class, 'u
 Route::delete('/return/{return}', [App\Http\Controllers\ReturnController::class, 'destroy'])->name('return.destroy');
 
 // History Routes
-Route::resource('history', App\Http\Controllers\HistoryController::class);Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');         
-
+Route::get('/history', [App\Http\Controllers\BorrowController::class, 'history'])->name('history.index');
 // Registration
 Route::resource('/registration', RegistrationController::class);
 Route::get('studentinfo/{id}', [StudentInfoController::class, 'index'])->name('studentinfo.index');

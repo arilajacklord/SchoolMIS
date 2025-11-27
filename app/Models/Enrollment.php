@@ -23,10 +23,10 @@ class Enrollment extends Model
      * User relationship
      * Needed because InvoiceController calls: enrollment.user
      */
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class, 'user_id', 'id');
+    // }
 
     /**
      * Registration = optional mapping via user_id

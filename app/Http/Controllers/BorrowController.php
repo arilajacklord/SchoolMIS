@@ -9,94 +9,115 @@ use Illuminate\Http\Request;
 
 class BorrowController extends Controller
 {
-    // Show Borrow List Page
-    public function index()
+    /**
+     * Display a listing of currently borrowed books.
+     */
+public function index()
+{
+    // Get all borrows for display
+    $borrows = Borrow::with(['user', 'book'])
+        ->orderByDesc('borrow_id')
+        ->get();
+
+    $users = User::all();
+
+    // Only books not currently borrowed
+    $borrowedBookIds = Borrow::whereNull('date_returned')->pluck('book_id')->toArray();
+    $books = Book::whereNotIn('book_id', $borrowedBookIds)->get();
+
+    return view('borrow.index', compact('borrows', 'users', 'books'));
+}
+
+public function store(Request $request)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'book_id' => 'required|exists:books,book_id',
+        'due_date' => 'required|date|after_or_equal:date_borrowed',
+    ]);
+
+    // Ensure the book is not already borrowed
+    $alreadyBorrowed = Borrow::where('book_id', $request->book_id)
+        ->whereNull('date_returned')
+        ->exists();
+
+    if ($alreadyBorrowed) {
+        return redirect()->back()->withErrors(['book_id' => 'This book is already borrowed.']);
+    }
+
+    Borrow::create([
+        'user_id' => $request->user_id,
+        'book_id' => $request->book_id,
+        'date_borrowed' => $request->date_borrowed,
+        'date_returned' => null, // mark as borrowed
+    ]);
+
+    return redirect()->route('borrow.index')->with('success', 'Book borrowed successfully!');
+}
+    /**
+     * Show the form for editing a borrow record.
+     */
+    public function edit($borrow_id)
+    {
+        $borrow = Borrow::findOrFail($borrow_id);
+        $users = User::all();
+
+        // Include only books that are available OR the current borrowed book
+        $borrowedBookIds = Borrow::whereNull('date_returned')
+            ->where('borrow_id', '!=', $borrow_id)
+            ->pluck('book_id');
+        $books = Book::whereNotIn('book_id', $borrowedBookIds)->get();
+
+        return view('borrow.edit', compact('borrow', 'users', 'books'));
+    }
+
+    /**
+     * Update the borrow record.
+     */
+public function update(Request $request, $id)
+{
+    $borrow = Borrow::findOrFail($id);
+
+    $borrow->date_borrowed = $request->date_borrowed;
+    $borrow->due_date = $request->due_date;
+
+    $borrow->save();
+
+    return back()->with('success', 'Borrow updated successfully!');
+}
+
+    /**
+     * Delete a borrow record.
+     */
+    public function destroy($borrow_id)
+    {
+        Borrow::findOrFail($borrow_id)->delete();
+        return redirect()->back()->with('success', 'Borrow record deleted successfully.');
+    }
+
+    /**
+     * Mark a borrow as returned.
+     */
+public function returnBook($borrow_id)
+{
+    $borrow = Borrow::findOrFail($borrow_id);
+    
+    // Mark as returned
+    $borrow->date_returned = now();
+    $borrow->save();
+
+    return redirect()->back()->with('success', 'Book returned successfully.');
+}
+
+    /**
+     * Show borrow history (both returned and borrowed).
+     */
+    public function history()
     {
         $borrows = Borrow::with(['user', 'book'])
             ->orderByDesc('borrow_id')
             ->get();
 
-        $users = User::all();
-
-        // Books that are NOT currently borrowed
-        $books = Book::whereNotIn('book_id', function($q) {
-            $q->select('book_id')->from('borrows')->whereNull('date_returned');
-        })->get();
-
-        return view('borrow.index', compact('borrows', 'users', 'books'));
-    }
-
-    // Store New Borrow Record
-  public function store(Request $request)
-{
-    $request->validate([
-        'book_id' => 'required|exists:books,book_id',
-    ]);
-
-    // Check if book is already borrowed
-    $activeBorrow = Borrow::where('book_id', $request->book_id)
-        ->whereNotNull('date_borrowed')
-        ->whereNull('date_returned')
-        ->exists();
-
-    if ($activeBorrow) {
-        return back()->with('error', 'This book is already borrowed.');
-    }
-
-    // Create borrow record
-    $borrow = new Borrow();
-    $borrow->book_id = $request->book_id;
-    $borrow->user_id = auth()->id();
-    $borrow->date_borrowed = now();
-    $borrow->save();
-
-    return back()->with('success', 'Book borrowed successfully!');
-}
-
- public function returnBook($id)
-{
-    // Find the original borrow record (NOT returned yet)
-    $borrow = Borrow::where('borrow_id', $id)
-        ->whereNull('date_returned')
-        ->firstOrFail();
-
-    // Create a new row for the return event
-    $new = new Borrow();
-    $new->book_id = $borrow->book_id;
-    $new->user_id = $borrow->user_id;
-    $new->date_borrowed = $borrow->date_borrowed; // keep original borrow date
-    $new->date_returned = now();                  // set return date
-    $new->save();
-
-    return redirect()->back()->with('success', 'Book return recorded.');
-}
-
-    // Update Borrow Record
-    public function update(Request $request, $id)
-    {
-        $borrow = Borrow::findOrFail($id);
-
-        $request->validate([
-            'book_id' => 'required|exists:books,book_id',
-            'user_id' => 'required|exists:users,id',
-            'date_borrowed' => 'required|date',
-        ]);
-
-        $borrow->update([
-            'book_id' => $request->book_id,
-            'user_id' => $request->user_id,
-            'date_borrowed' => $request->date_borrowed,
-        ]);
-
-        return redirect()->back()->with('success', 'Borrow record updated successfully.');
-    }
-
-    // Delete Borrow Record
-    public function destroy($id)
-    {
-        $borrow = Borrow::findOrFail($id);
-        $borrow->delete();
-
-        return redirect()->back()->with('success', 'Borrow record deleted successfully.');
+        return view('history.index', compact('borrows'));
     }
 }

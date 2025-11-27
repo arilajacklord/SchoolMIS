@@ -9,8 +9,10 @@ class Borrow extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'borrow_id';
-    protected $fillable = ['user_id', 'book_id', 'date_borrowed', 'date_returned', 'status'];
+protected $primaryKey = 'borrow_id';
+protected $fillable = [
+    'user_id', 'book_id', 'date_borrowed', 'date_returned', 'status'
+];
 
     public function user()
     {

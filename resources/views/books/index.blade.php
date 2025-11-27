@@ -11,9 +11,6 @@
                 <i class="bi bi-book me-2 text-primary"></i> Book List
               </h4>
               <div>
-                <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#borrowBookModal">
-                  <i class="bi bi-journal-arrow-down me-1"></i> Borrow Book
-                </button>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBookModal">
                   <i class="bi bi-plus-lg me-1"></i> Add New Book
                 </button>

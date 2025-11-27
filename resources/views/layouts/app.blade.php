@@ -286,11 +286,12 @@
                                         <li class="divider"></li>
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}">
-                                                @csrf
-                                                <a type="submit" class="btn btn-info">
-                                                    <i class="lni lni-exit"></i> <b>Sign Out</b>
-                                                </a>
-                                            </form>
+    @csrf
+    <button type="submit" class="btn btn-info w-100 text-start">
+        <i class="lni lni-exit"></i> <b>Sign Out</b>
+    </button>
+</form>
+
                                         </li>
                                     </ul>
                                 </div>
