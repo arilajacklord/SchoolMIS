@@ -4,20 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Enrollment;
-use App\Models\User;
-use App\Models\Grade;
 
 class Registration extends Model
 {
     use HasFactory;
 
-    // Table name
     protected $table = 'registration';
 
-    // Primary key
     protected $primaryKey = 'id';
-
     public $timestamps = true;
 
     protected $fillable = [
@@ -33,8 +27,6 @@ class Registration extends Model
         'student_birthdate',
         'student_religion',
         'student_age',
-
-        // Father info
         'father_Fname',
         'father_Mname',
         'father_Lname',
@@ -45,8 +37,6 @@ class Registration extends Model
         'father_birthdate',
         'father_profession',
         'father_occupation',
-
-        // Mother info
         'mother_Fname',
         'mother_Mname',
         'mother_Lname',
@@ -59,9 +49,6 @@ class Registration extends Model
         'mother_occupation',
     ];
 
-    /**
-     * A registration belongs to a user
-     */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
