@@ -283,13 +283,16 @@
                                         <li>
                                             <a href="#0"> <i class="lni lni-cog"></i> Settings </a>
                                         </li>
+                                        <li>
+                                            <a href="{{route('registration.index')}}">
+                                                <i class="lni lni-user"></i> Registration
+                                            </a>                                       
+                                        </li>
                                         <li class="divider"></li>
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}">
-                                                @csrf
-                                                <a type="submit" class="btn btn-info">
-                                                    <i class="lni lni-exit"></i> <b>Sign Out</b>
-                                                </a>
+                                               @csrf
+                                             <button type="submit" class="btn btn-info w-100 text-start"><i class="lni lni-exit"></i> <b>Sign Out</b></button>
                                             </form>
                                         </li>
                                     </ul>

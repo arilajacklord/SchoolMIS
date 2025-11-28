@@ -53,10 +53,28 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label><strong>Course Level</strong></label>
-                            <input type="text" name="course_level" class="form-control" 
-                                value="{{ old('course_level', $student->course_level) }}" required>
-                        </div>
+    <label><strong>Course Level</strong></label>
+    <select name="course_level" class="form-control" required>
+        @php
+            $levels = [
+                1 => '1st Year',
+                2 => '2nd Year',
+                3 => '3rd Year',
+                                            4 => '4th Year',
+                                        ];
+
+                                        $selected = old('course_level', $student->course_level);
+                                    @endphp
+
+                                    <option value="" disabled>Select course level</option>
+
+                                    @foreach($levels as $value => $label)
+                                        <option value="{{ $value }}" {{ $selected == $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         <div class="col-md-6">
                             <label><strong>Address</strong></label>
                             <input type="text" name="student_address" class="form-control" 
@@ -71,10 +89,30 @@
                                 value="{{ old('student_phone_num', $student->student_phone_num) }}" required>
                         </div>
                         <div class="col-md-4">
-                            <label><strong>Status</strong></label>
-                            <input type="text" name="student_status" class="form-control" 
-                                value="{{ old('student_status', $student->student_status) }}" required>
-                        </div>
+    <label><strong>Status</strong></label>
+    <select name="student_status" class="form-control" required>
+        @php
+            $statuses = [
+                'Single' => 'Single',
+                'Married' => 'Married',
+                'Widowed' => 'Widowed',
+                'Separated' => 'Separated',
+                'Divorced' => 'Divorced',
+            ];
+
+            $selectedStatus = old('student_status', $student->student_status ?? null);
+        @endphp
+
+        <option value="" disabled {{ $selectedStatus ? '' : 'selected' }}>Select Status</option>
+
+        @foreach($statuses as $value => $label)
+            <option value="{{ $value }}" {{ $selectedStatus == $value ? 'selected' : '' }}>
+                {{ $label }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
                         <div class="col-md-4">
                             <label><strong>Citizenship</strong></label>
                             <input type="text" name="student_citizenship" class="form-control" 

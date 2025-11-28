@@ -128,12 +128,9 @@ Route::resource('history', App\Http\Controllers\HistoryController::class);Route:
 
 // Registration
 Route::resource('/registration', RegistrationController::class);
-Route::get('studentinfo/{id}', [StudentInfoController::class, 'index'])->name('studentinfo.index');
-
-
-//Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
-Route::get('/studentinfo/{id}', [RegistrationController::class, 'studentinfo_index'])
-    ->name('studentinfo.index');
+Route::get('/studentinfo/{id}', [RegistrationController::class, 'studentinfo_index'])->name('studentinfo.index');
+//Route::get('studentinfo/{id}', [StudentInfoController::class, 'index'])->name('studentinfo.index');
+ //Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
 
 
 // Grades

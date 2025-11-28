@@ -448,8 +448,14 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label class="form-label">Course Level</label>
-                                <input type="text" name="course_level" class="form-control" required>
+                                <label class="form-label"><strong>Course Level</strong></label>
+                                <select name="course_level" class="form-control" required>
+                                    <option value="" disabled selected>Select Course Level</option>
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year</option>
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Address</label>
@@ -463,8 +469,15 @@
                                 <input type="text" name="student_phone_num" class="form-control" required>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Status</label>
-                                <input type="text" name="student_status" class="form-control" required>
+                                <label class="form-label"><strong>Status</strong></label>
+                                <select name="student_status" class="form-control" required>
+                                    <option value="" disabled selected>Select Status</option>
+                                    <option value="Single">Single</option>
+                                    <option value="Married">Married</option>
+                                    <option value="Widowed">Widowed</option>
+                                    <option value="Separated">Separated</option>
+                                    <option value="Divorced">Divorced</option>
+                                </select>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Citizenship</label>

@@ -49,7 +49,7 @@ class Registration extends Model
         // Mother info
         'mother_Fname',
         'mother_Mname',
-        'mother_Lname',
+        'mother_Lname', 
         'mother_address',
         'mother_cell_no',
         'mother_age',
