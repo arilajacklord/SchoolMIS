@@ -26,178 +26,103 @@
         <!-- ======== sidebar-nav start =========== -->
         <aside class="sidebar-nav-wrapper">
             <div class="navbar-logo">
-                <a href="{{ url('/') }}">
-                    <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="logo" />
-                </a>
+               
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li class="nav-item nav-item-has-children">
-                        <a
-                            href="#0"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#ddmenu_1"
-                            aria-controls="ddmenu_1"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation"
-                        >
-                            <span class="icon">
-                                <!-- SVG omitted for brevity -->
-                            </span>
-                            <span class="text">Dashboard</span>
-                        </a>
-                        <ul id="ddmenu_1" class="collapse show dropdown-nav">
-                            <li>
-                                <a href="{{ url('/') }}" class="active"> Feature </a>
-                            </li>
-                        </ul>
-                    </li>
+                    <!-- Dashboard -->
+<li class="nav-item nav-item-has-children">
+    <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_1" 
+       aria-controls="ddmenu_1" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="icon"></span>
+        <span class="text">Dashboard</span>
+    </a>
+    <ul id="ddmenu_1" class="collapse show dropdown-nav">
+        <li><a href="{{ url('/') }}" class="active">Feature</a></li>
+    </ul>
+</li>
 
-                    <span class="divider"><hr /></span>
+<span class="divider"><hr /></span>
 
-                    <li class="nav-item nav-item-has-children">
-                        <a
-                            href="#0"
-                            class="collapsed"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#ddmenu_2"
-                            aria-controls="ddmenu_2"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation"
-                        >
-                            <span class="icon">
-                                <!-- SVG omitted for brevity -->
-                            </span>
-                            <span class="text">Enrollment</span>
-                        </a>
-                        <ul id="ddmenu_2" class="collapse dropdown-nav">
 
-                            <li>
-                               <a href="{{ route('enrollments.index') }}"> Enrollments </a>
-                            </li>
-                            <li>
-                                 <a href="{{ route('subjects.index') }}"> Subject </a>
-                            </li>
-                            <li>
-                               <a href="{{ route('schoolyears.index') }}"> Schoolyear </a>
-                            </li>
-                        </ul>
-                    </li>
+<!-- Enrollment -->
+<li class="nav-item nav-item-has-children">
+    <a href="#0" class="collapsed" data-bs-toggle="collapse"
+       data-bs-target="#ddmenu_2" aria-controls="ddmenu_2">
+        <span class="icon"></span>
+        <span class="text">Enrollment</span>
+    </a>
+    <ul id="ddmenu_2" class="collapse dropdown-nav">
+        <li><a href="{{ route('enrollments.index') }}">Enrollments</a></li>
+        <li><a href="{{ route('subjects.index') }}">Subject</a></li>
+    </ul>
+</li>
 
-                    <span class="divider"><hr /></span>
+<span class="divider"><hr /></span>
 
-                    <!-- Repeat for other menu items, but use unique data-bs-target and id for each dropdown -->
-                    <li class="nav-item nav-item-has-children">
-                        <a
-                            href="#0"
-                            class="collapsed"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#ddmenu_3"
-                            aria-controls="ddmenu_3"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation"
-                        >
-                            <span class="icon">
-                                <!-- SVG omitted for brevity -->
-                            </span>
-                            <span class="text">GradeManagement</span>
-                        </a>
-                        <ul id="ddmenu_3" class="collapse dropdown-nav">
-                            <li>
-                                <a href= "{{route('grades.index')}}">grade</a>
-                            </li>
-                            <li>
-                                <a href="#"> Sample Page </a>
-                            </li>
-                        </ul>
-                    </li>
 
-                    <span class="divider"><hr /></span>
+<!-- Grade Management -->
+<li class="nav-item nav-item-has-children">
+    <a href="#0" class="collapsed" data-bs-toggle="collapse"
+       data-bs-target="#ddmenu_3" aria-controls="ddmenu_3">
+        <span class="icon"></span>
+        <span class="text">Grade Management</span>
+    </a>
+    <ul id="ddmenu_3" class="collapse dropdown-nav">
+        <li><a href="{{ route('grades.index') }}">Grade</a></li>
+        <li><a href="#">Sample Page</a></li>
+    </ul>
+</li>
 
-                    <!-- Repeat for other menu items, but use unique data-bs-target and id for each dropdown -->
-                    <li class="nav-item nav-item-has-children">
-                        <a
-                            href="#0"
-                            class="collapsed"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#ddmenu_3"
-                            aria-controls="ddmenu_3"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation"
-                        >
-                            <span class="icon">
-                                <!-- SVG omitted for brevity -->
-                            </span>
-                            <span class="text">ProspectusManagement</span>
-                        </a>
-                        <ul id="ddmenu_3" class="collapse dropdown-nav">
-                            <li>
-                               <a href="{{ route('prospectus.index') }}"> Prospectus  </a>
-                         </li>
-                            
-                        </ul>
-                    </li>
+<span class="divider"><hr /></span>
 
-                    <span class="divider"><hr /></span>
 
-                    <li class="nav-item nav-item-has-children">
-                        <a
-                            href="#0"
-                            class="collapsed"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#ddmenu_4"
-                            aria-controls="ddmenu_4"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation"
-                        >
-                            <span class="icon">
-                                <!-- SVG omitted for brevity -->
-                            </span>
-                            <span class="text">BillingManagement</span>
-                        </a>
-                        <ul id="ddmenu_4" class="collapse dropdown-nav">
-                            <li>
-                                <a href="{{route('invoices.index')}}"> invoice  </a>
-                            </li>
-                            <li>
-                                <a href="{{route('scholarships.index')}}">scholarship</a>
-                            </li>
-                        </ul>
-                    </li>
+<!-- Prospectus Management -->
+<li class="nav-item nav-item-has-children">
+    <a href="#0" class="collapsed" data-bs-toggle="collapse"
+       data-bs-target="#ddmenu_4" aria-controls="ddmenu_4">
+        <span class="icon"></span>
+        <span class="text">Prospectus Management</span>
+    </a>
+    <ul id="ddmenu_4" class="collapse dropdown-nav">
+        <li><a href="{{ route('prospectus.index') }}">Prospectus</a></li>
+    </ul>
+</li>
 
-                    <span class="divider"><hr /></span>
+<span class="divider"><hr /></span>
 
-                    <li class="nav-item nav-item-has-children">
-                        <a
-                            href="#0"
-                            class="collapsed"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#ddmenu_5"
-                            aria-controls="ddmenu_5"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation"
-                        >
-                            <span class="icon">
-                                <!-- SVG omitted for brevity -->
-                            </span>
-                            <span class="text">LibraryManagement</span>
-                        </a>
-                        <ul id="ddmenu_5" class="collapse dropdown-nav">
-                            <li>
-                                <a href="{{route('books.index')}}"> Book</a>
-                            </li>
-                            <li>
-                                <a href="{{route('borrow.index')}}"> Borrow Book</a>
-                            </li>
-                            <li>
-                                <a href="{{route('returns.index')}}"> Return Book</a>
-                            </li>
-                                                        <li>
-                                <a href="{{route('history.index')}}"> History</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+
+<!-- Billing Management -->
+<li class="nav-item nav-item-has-children">
+    <a href="#0" class="collapsed" data-bs-toggle="collapse"
+       data-bs-target="#ddmenu_5" aria-controls="ddmenu_5">
+        <span class="icon"></span>
+        <span class="text">Billing Management</span>
+    </a>
+    <ul id="ddmenu_5" class="collapse dropdown-nav">
+        <li><a href="{{ route('invoices.index') }}">Invoice</a></li>
+    </ul>
+</li>
+
+<span class="divider"><hr /></span>
+
+
+<!-- Library Management -->
+<li class="nav-item nav-item-has-children">
+    <a href="#0" class="collapsed" data-bs-toggle="collapse"
+       data-bs-target="#ddmenu_6" aria-controls="ddmenu_6">
+        <span class="icon"></span>
+        <span class="text">Library Management</span>
+    </a>
+    <ul id="ddmenu_6" class="collapse dropdown-nav">
+        <li><a href="{{ route('books.index') }}">Book</a></li>
+        <li><a href="{{ route('borrows.index') }}">Borrow Book</a></li>
+        <li><a href="{{ route('return.index') }}">Return Book</a></li>
+        <li><a href="{{ route('history.index') }}">History</a></li>
+    </ul>
+</li>
+
+
             </nav>
             <div class="promo-box">
                 <div class="promo-icon">

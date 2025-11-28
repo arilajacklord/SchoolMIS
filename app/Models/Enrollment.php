@@ -48,4 +48,10 @@ class Enrollment extends Model
     {
         return $this->belongsTo(Schoolyear::class, 'schoolyear_id', 'schoolyear_id');
      }
+
+     public function grades() {
+    return $this->hasOne(Grade::class, 'enroll_id', 'enroll_id');
+}
+
+
 }

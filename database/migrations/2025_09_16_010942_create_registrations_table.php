@@ -6,62 +6,53 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('registration', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
 
-            // Student info
             $table->string('student_Fname');
-            $table->string('student_Mname');
+            $table->string('student_Mname')->nullable();
             $table->string('student_Lname');
-            $table->string('course_level');
-            $table->string('student_address');
-            $table->string('student_phone_num');
-            $table->string('student_status');
-            $table->string('student_citizenship');
-            $table->date('student_birthdate');
-            $table->string('student_religion');
-            $table->integer('student_age');
+
+            $table->string('course_level')->nullable();
+            $table->string('student_address')->nullable();
+            $table->string('student_phone_num')->nullable();
+            $table->string('student_status')->nullable();
+            $table->string('student_citizenship')->nullable();
+            $table->date('student_birthdate')->nullable();
+            $table->string('student_religion')->nullable();
+            $table->integer('student_age')->nullable();
 
             // Father info
-            $table->string('father_Fname');
-            $table->string('father_Mname');
-            $table->string('father_Lname');
-            $table->string('father_address');
-            $table->string('father_cell_no');
-            $table->integer('father_age');
-            $table->string('father_religion');
-            $table->date('father_birthdate');
-            $table->string('father_profession');
-            $table->string('father_occupation');
+            $table->string('father_Fname')->nullable();
+            $table->string('father_Mname')->nullable();
+            $table->string('father_Lname')->nullable();
+            $table->string('father_address')->nullable();
+            $table->string('father_cell_no')->nullable();
+            $table->integer('father_age')->nullable();
+            $table->string('father_religion')->nullable();
+            $table->date('father_birthdate')->nullable();
+            $table->string('father_profession')->nullable();
+            $table->string('father_occupation')->nullable();
 
             // Mother info
-            $table->string('mother_Fname');
-            $table->string('mother_Mname');
-            $table->string('mother_Lname');
-            $table->string('mother_address');
-            $table->string('mother_cell_no');
-            $table->integer('mother_age');
-            $table->string('mother_religion');
-            $table->date('mother_birthdate');
-            $table->string('mother_profession');
-            $table->string('mother_occupation');
+            $table->string('mother_Fname')->nullable();
+            $table->string('mother_Mname')->nullable();
+            $table->string('mother_Lname')->nullable();
+            $table->string('mother_address')->nullable();
+            $table->string('mother_cell_no')->nullable();
+            $table->integer('mother_age')->nullable();
+            $table->string('mother_religion')->nullable();
+            $table->date('mother_birthdate')->nullable();
+            $table->string('mother_profession')->nullable();
+            $table->string('mother_occupation')->nullable();
 
             $table->timestamps();
-
-            // Optional foreign key to users table
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('registration');

@@ -3,89 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <x-guest-layout>
+    <title>Login — School Management System</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
-            background: radial-gradient(circle at top left, #1b2735, #090a0f);
-            font-family: 'Poppins', sans-serif;
+            background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1950&q=80')
+                center center / cover no-repeat;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            margin: 0;
+            padding: 0;
             position: relative;
+            font-family: 'Poppins', sans-serif;
         }
 
+        /* Dark overlay like your welcome page */
         body::before {
-            content: '';
+            content: "";
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(60deg, #004e92, #000428, #1b2735, #0f2027);
-            background-size: 300% 300%;
-            z-index: -1;
-            animation: gradientMove 15s ease infinite;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 0;
         }
 
         .auth-card {
             width: 100%;
             max-width: 420px;
             background: rgba(255, 255, 255, 0.08);
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(14px);
             border-radius: 20px;
             backdrop-filter: blur(12px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             padding: 45px 40px;
             color: white;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-            transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
         }
 
-        .auth-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 40px rgba(2,6,23,0.7);
-        }
-
-        .auth-card .logo img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-bottom: 10px;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity:1; transform: translateY(0); }
         }
 
         .system-title {
             font-size: 1.8rem;
             font-weight: 600;
-            color: #FFD700;
             text-align: center;
+            color: #FFD700;
             margin-bottom: 25px;
         }
 
         label {
-            color: #eee !important;
             font-weight: 500;
+            color: #eee !important;
         }
 
         input[type="email"], input[type="password"] {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             border-radius: 8px;
         }
 
         input:focus {
             border-color: #FFD700 !important;
-            box-shadow: 0 0 8px rgba(255, 215, 0, 0.4) !important;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
         }
 
         .btn-login {
@@ -93,89 +83,80 @@
             border: none;
             color: #000;
             font-weight: 600;
+            width: 100%;
             border-radius: 50px;
             padding: 10px 30px;
+            margin-top: 20px;
             transition: 0.3s;
         }
 
         .btn-login:hover {
             background-color: #FFC300;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 5px 15px rgba(255,215,0,0.4);
         }
 
-        a {
+        .text-sm a {
             color: #FFD700;
             text-decoration: none;
         }
 
-        a:hover {
+        .text-sm a:hover {
             text-decoration: underline;
         }
 
         .text-gray-600 {
             color: #ddd !important;
         }
-    </style>
-
-    <div class="auth-card">
-
-        <div class="logo text-center">
-            {{-- <img src="{{ asset('images/school-logo.png') }}" alt="School Logo"> --}}
-        </div>
-
-        <div class="system-title">School Management System</div>
-
-        <x-validation-errors class="mb-4 text-danger" />
-
-        @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-400 text-center">
-                {{ session('status') }}
-            </div>
-        @endif
-
-        {{-- Login Form --}}
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+          .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+            backdrop-filter: blur(8px);
+            transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+            transform: translateY(0);
+        }
+        .auth-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(2,6,23,0.7);
+        }
 
             <div>
-                <x-label for="email" value="{{ __('Email') }}" />
+                <x-label for="email" value="Email" />
                 <x-input id="email"
                          class="block mt-1 w-full"
                          type="email"
                          name="email"
                          :value="old('email')"
-                         required autofocus autocomplete="username" />
+                         required autofocus />
             </div>
 
             <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
+                <x-label for="password" value="Password" />
                 <x-input id="password"
                          class="block mt-1 w-full"
                          type="password"
                          name="password"
-                         required autocomplete="current-password" />
+                         required />
             </div>
 
-            @if (session('status'))
-                <div class="status">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            <div class="flex items-center justify-between mt-4">
+            <div class="d-flex justify-content-between align-items-center mt-3">
                 @if (Route::has('password.request'))
-                    <a class="text-sm" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
+                <div class="text-sm">
+                    <a href="{{ route('password.request') }}">Forgot password?</a>
+                </div>
                 @endif
-
-                <button type="submit" class="btn btn-login ms-4">
-                    {{ __('Log in') }}
-                </button>
             </div>
+
+            <button type="submit" class="btn-login">
+                Log in
+            </button>
+
         </form>
 
     </div>
-
 </x-guest-layout>
