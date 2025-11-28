@@ -72,6 +72,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('subjects', SubjectController::class);
     Route::resource('subjectmodals', SubjectModalController::class);
 
+// Registration
+Route::resource('/registration', RegistrationController::class);
+Route::get('/studentinfo/{id}', [RegistrationController::class, 'studentinfo_index'])->name('studentinfo.index');
+//Route::get('studentinfo/{id}', [StudentInfoController::class, 'index'])->name('studentinfo.index');
+ //Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');
+
     // Registration
     Route::resource('registration', RegistrationController::class);
     Route::post('/register-student', [RegistrationController::class, 'store'])->name('register.store');

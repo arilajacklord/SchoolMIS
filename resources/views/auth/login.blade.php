@@ -36,17 +36,16 @@
         }
 
         .auth-card {
-            z-index: 1;
             width: 100%;
             max-width: 420px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(14px);
             border-radius: 20px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             padding: 45px 40px;
             color: white;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            animation: fadeInUp .7s ease;
         }
 
         @keyframes fadeInUp {
@@ -109,30 +108,22 @@
         .text-gray-600 {
             color: #ddd !important;
         }
-    </style>
-</head>
-
-<body>
-
-    <div class="auth-card">
-
-        <div class="logo text-center">
-            {{-- <img src="{{ asset('images/school-logo.png') }}" alt="School Logo"> --}}
-        </div>
-
-        <div class="system-title">School Management System</div>
-
-        <x-validation-errors class="mb-3 text-danger" />
-
-        @if (session('status'))
-            <div class="mb-4 text-center text-success fw-bold">
-                {{ session('status') }}
-            </div>
-        @endif
-
-        {{-- Login Form --}}
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+          .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+            backdrop-filter: blur(8px);
+            transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+            transform: translateY(0);
+        }
+        .auth-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(2,6,23,0.7);
+        }
 
             <div>
                 <x-label for="email" value="Email" />
@@ -168,9 +159,4 @@
         </form>
 
     </div>
-
-</body>
-</html>
-
-
-
+</x-guest-layout>
